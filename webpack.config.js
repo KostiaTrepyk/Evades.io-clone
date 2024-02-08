@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = config = {
   mode: process.env.NODE_ENV ?? "development",
-  entry: "./src/index.tsx",
+  entry: "./src/index.ts",
   module: {
     rules: [
       {
@@ -18,7 +18,7 @@ module.exports = config = {
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".ts", ".js"],
   },
   output: {
     filename: "bundle.js",
