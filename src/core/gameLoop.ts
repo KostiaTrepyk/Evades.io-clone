@@ -4,7 +4,7 @@ export class GameLoop {
 
   constructor() {}
 
-  start(
+  public start(
     timestamp: number,
     onUpdate: (progress: number) => void,
     onRender: (progress: number) => void
@@ -22,7 +22,7 @@ export class GameLoop {
   }
 
   /** MB bug with progress */
-  stop() {
+  public stop() {
     if (this.animationId) cancelAnimationFrame(this.animationId);
   }
 }
