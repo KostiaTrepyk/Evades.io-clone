@@ -17,6 +17,13 @@ module.exports = config = {
       },
     ],
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "/src/public"),
+    },
+    compress: true,
+    port: 3000,
+  },
   resolve: {
     extensions: [".ts", ".js"],
   },
@@ -27,7 +34,7 @@ module.exports = config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/public/index.html",
     }),
   ],
 };
