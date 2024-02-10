@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "strict": true,
     "allowUnusedLabels": false,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "noImplicitOverride": true
   },
   "include": ["**/*.ts", "**/*.tsx", "webpack.config.js"]
 }

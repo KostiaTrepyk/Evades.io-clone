@@ -1,18 +1,25 @@
+import { gameObjectsManager, gameloop } from "../global";
+import { UniqueId } from "../helpers/uniqueId";
 import { Position } from "../types/Position";
 
-export abstract class GameObject {
+const gameObjectsId = new UniqueId();
+
+export class GameObject {
+  public id: number;
   public position: Position;
 
-  public updateId: number | undefined;
-  public renderId: number | undefined;
-
-  constructor(position: Position) {
-    this.position = position;
+  constructor(startPosition: Position) {
+    this.id = gameObjectsId.get();
+    this.position = startPosition;
   }
 
-  abstract create(): void;
-  abstract delete(): void;
+  public create(): void {
+    gameObjectsManager.addItem(this)
+  }
+  public delete(): void {
+    gameObjectsManager.removeItem(this.id)
+  }
 
-  abstract onUpdate(progress: number): void;
-  abstract onRender(progress: number, ctx: CanvasRenderingContext2D): void;
+  public onUpdate(progress: number): void {}
+  public onRender(ctx: CanvasRenderingContext2D): void {}
 }
