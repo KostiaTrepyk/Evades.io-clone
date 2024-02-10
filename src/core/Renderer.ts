@@ -12,12 +12,12 @@ export class Renderer {
     window.addEventListener("resize", this.setCanvasSize.bind(this));
   }
 
-  public render(cb: (ctx: CanvasRenderingContext2D) => void) {
-    this.beforeRender();
+  public renderFrame(cb: (ctx: CanvasRenderingContext2D) => void) {
+    this.beforeFrameRendering();
     cb(this.ctx);
   }
 
-  private beforeRender() {
+  private beforeFrameRendering() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 

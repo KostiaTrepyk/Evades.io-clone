@@ -1,5 +1,19 @@
-import { Game } from "./core/game";
+import { Game } from "./Game";
 
-const game = new Game();
+window.onload = init;
 
-game.start();
+function init(e: Event) {
+  const game = new Game();
+
+  game.start();
+
+  /* 
+    setTimeout(() => {
+      game.pause();
+    }, 2000);
+
+    setTimeout(() => {
+      game.start();
+    }, 5000); 
+  */
+}
