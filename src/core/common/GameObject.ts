@@ -1,25 +1,30 @@
-import { gameObjectsManager, gameloop } from "../global";
-import { UniqueId } from "../helpers/uniqueId";
+import { gameObjectManager } from "../global";
+import { UniqueId } from "../helpers/UniqueId";
 import { Position } from "../types/Position";
+import { Shape } from "../types/Shape";
 
 const gameObjectsId = new UniqueId();
 
-export class GameObject {
+export type ObjectModel<S extends Shape> = S extends "circle"
+  ? { shape: "circle"; size: number }
+  : S extends "rectangular"
+  ? { shape: "rectangular"; size: { x: number; y: number } }
+  : never;
+
+export class GameObject<S extends Shape> {
   public id: number;
   public position: Position;
+  public objectModel: ObjectModel<S>;
 
-  constructor(startPosition: Position) {
+  constructor(startPosition: Position, objectModel: ObjectModel<S>) {
     this.id = gameObjectsId.get();
     this.position = startPosition;
+    this.objectModel = objectModel;
   }
 
-  public create(): void {
-    gameObjectsManager.addItem(this)
-  }
-  public delete(): void {
-    gameObjectsManager.removeItem(this.id)
-  }
+  public create(): void {}
+  public delete(): void {}
 
-  public onUpdate(progress: number): void {}
+  public onUpdate(deltaTime: number): void {}
   public onRender(ctx: CanvasRenderingContext2D): void {}
 }

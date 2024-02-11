@@ -1,9 +1,11 @@
 import { GameLoop } from "./GameLoop";
-import { GameObjectsManager } from "./GameObjectsManager";
+import { GameObjectManager } from "./GameObjectManager";
 import { Renderer } from "./Renderer";
+import { CameraController } from "./camera.controller";
 
 const gameloop = new GameLoop();
-const renderer: Renderer = new Renderer();
-const gameObjectsManager = new GameObjectsManager();
+const renderer = new Renderer();
+const gameObjectManager = new GameObjectManager();
+const camera = new CameraController()
 
-export { gameloop, renderer, gameObjectsManager };
+export { gameloop, renderer, gameObjectManager, camera };
