@@ -1,25 +1,37 @@
-import { Position } from "../core/types/Position";
+import { Position } from "../../core/types/Position";
 
 const characterSlow = 0.5;
 
 export class CharacterMovement {
-  position: Position;
-  speed: number;
+  public position: Position;
+  public speed: number;
+  public isBlocked: boolean;
+  public size: number;
 
   private pressedKeys: ("KeyW" | "KeyA" | "KeyS" | "KeyD" | "ShiftLeft")[];
 
-  constructor(startPosition: Position) {
+  constructor(startPosition: Position, size: number) {
     this.position = startPosition;
-    this.speed = 600;
+    this.speed = 400;
     this.pressedKeys = [];
+    this.isBlocked = false;
+    this.size = size;
   }
 
-  bind() {
+  public unblock(): void {
+    this.isBlocked = false;
+  }
+
+  public block(): void {
+    this.isBlocked = true;
+  }
+
+  public bind() {
     document.addEventListener("keydown", this.movementStart.bind(this), false);
     document.addEventListener("keyup", this.movementEnd.bind(this), false);
   }
 
-  unbind() {
+  public unbind() {
     document.removeEventListener(
       "keydown",
       this.movementStart.bind(this),
@@ -57,7 +69,9 @@ export class CharacterMovement {
     }
   }
 
-  onUpdate(progress: number) {
+  public onUpdate(progress: number) {
+    if (this.isBlocked) return;
+
     let isMovingY =
       this.pressedKeys.includes("KeyW") || this.pressedKeys.includes("KeyS");
     let isMovingX =
@@ -69,23 +83,27 @@ export class CharacterMovement {
 
     if (this.pressedKeys.includes("ShiftLeft")) speed *= characterSlow;
 
-    /* if (
-      this.pressedKeys.includes("KeyW") &&
-      this.pressedKeys.includes("KeyS")
-    ) {
-    } else  */
-
-    /* Fix При нажатии двух клавиш A и D, W и S */
+    /* Fix При нажатии двух клавиш A и D, W и S. Performance optimization!!! */
     if (this.pressedKeys.includes("KeyW")) {
       this.position.y -= speed * progress;
-    } else if (this.pressedKeys.includes("KeyS")) {
+    }
+    if (this.pressedKeys.includes("KeyS")) {
       this.position.y += speed * progress;
     }
 
     if (this.pressedKeys.includes("KeyA")) {
       this.position.x -= speed * progress;
-    } else if (this.pressedKeys.includes("KeyD")) {
+    }
+    if (this.pressedKeys.includes("KeyD")) {
       this.position.x += speed * progress;
     }
+
+    /* Ты куда? Не убегай за екран!!! */
+    if (this.position.x < this.size / 2) this.position.x = this.size / 2;
+    else if (this.position.x > window.innerWidth - this.size / 2)
+      this.position.x = window.innerWidth - this.size / 2;
+    if (this.position.y < this.size / 2) this.position.y = this.size / 2;
+    else if (this.position.y > window.innerHeight - this.size / 2)
+      this.position.y = window.innerHeight - this.size / 2;
   }
 }
