@@ -14,10 +14,17 @@ export class Renderer {
 
   public renderFrame(cb: (ctx: CanvasRenderingContext2D) => void) {
     this.beforeFrameRendering();
+
     cb(this.ctx);
+
+    /* Canvas border */
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeStyle = "#888";
+    this.ctx.strokeRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 
   private beforeFrameRendering() {
+    this.ctx.resetTransform();
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 

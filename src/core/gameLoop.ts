@@ -1,4 +1,4 @@
-import { gameObjectsManager, renderer } from "./global";
+import { camera, gameObjectManager, renderer } from "./global";
 
 export class GameLoop {
   private lastRender: number;
@@ -8,20 +8,16 @@ export class GameLoop {
   }
 
   public start(timestamp: number): void {
-    let progress = (timestamp - this.lastRender) / 1000;
+    let deltaTime = (timestamp - this.lastRender) / 1000;
 
     // Updates
-    gameObjectsManager.player?.onUpdate(progress);
-    gameObjectsManager.items.forEach((item) => {
-      item.onUpdate(progress);
-    });
+    gameObjectManager.updateAll(deltaTime);
 
     // Renders
     renderer.renderFrame((ctx) => {
-      gameObjectsManager.player?.onRender(ctx);
-      gameObjectsManager.items.forEach((item) => {
-        item.onRender(ctx);
-      });
+      /* Order important */
+      camera.onRender(ctx);
+      gameObjectManager.renderAll(ctx);
     });
 
     this.lastRender = timestamp;
