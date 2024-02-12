@@ -1,9 +1,7 @@
-import { Game } from "./Game";
+import { game } from "./core/global";
 
 window.onload = init;
 
 function init(e: Event) {
-  const game = new Game();
-
   game.start();
 }
