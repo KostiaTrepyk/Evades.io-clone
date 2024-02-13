@@ -1,4 +1,3 @@
-import { gameObjectManager } from "../global";
 import { UniqueId } from "../helpers/UniqueId";
 import { Position } from "../types/Position";
 import { Shape } from "../types/Shape";
@@ -25,6 +24,6 @@ export class GameObject<S extends Shape> {
   public create(): void {}
   public delete(): void {}
 
-  public onUpdate(deltaTime: number): void {}
-  public onRender(ctx: CanvasRenderingContext2D): void {}
+  public onUpdate?(deltaTime: number): void 
+  public onRender?(ctx: CanvasRenderingContext2D): void 
 }

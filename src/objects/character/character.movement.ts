@@ -1,3 +1,4 @@
+import { renderer } from "../../core/global";
 import { Position } from "../../core/types/Position";
 
 const characterSlow = 0.5;
@@ -100,10 +101,10 @@ export class CharacterMovement {
 
     /* Ты куда? Не убегай за екран!!! */
     if (this.position.x < this.size / 2) this.position.x = this.size / 2;
-    else if (this.position.x > window.innerWidth - this.size / 2)
-      this.position.x = window.innerWidth - this.size / 2;
+    else if (this.position.x > renderer.canvasSize.x - this.size / 2)
+      this.position.x = renderer.canvasSize.x - this.size / 2;
     if (this.position.y < this.size / 2) this.position.y = this.size / 2;
-    else if (this.position.y > window.innerHeight - this.size / 2)
-      this.position.y = window.innerHeight - this.size / 2;
+    else if (this.position.y > renderer.canvasSize.y - this.size / 2)
+      this.position.y = renderer.canvasSize.y - this.size / 2;
   }
 }

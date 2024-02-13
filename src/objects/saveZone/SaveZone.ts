@@ -13,7 +13,7 @@ export class SaveZone extends GameObject<"rectangular"> {
 
   public override delete(): void {
     gameObjectManager.saveZones = gameObjectManager.saveZones.filter(
-      (saveZone) => saveZone.id !== this.id
+      (saveZone) => saveZone !== this
     );
   }
 

@@ -20,12 +20,6 @@ export class GameObjectManager {
     this.enemies.forEach((gameObject) => {
       gameObject.onUpdate(deltaTime);
     });
-    this.pointOrbs.forEach((pointOrb) => {
-      pointOrb.onUpdate(deltaTime);
-    });
-    this.saveZones.forEach((saveZone) => {
-      saveZone.onUpdate(deltaTime);
-    });
   }
 
   public renderAll(ctx: CanvasRenderingContext2D): void {

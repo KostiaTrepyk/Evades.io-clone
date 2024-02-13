@@ -1,6 +1,7 @@
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
+  public canvasSize = { x: 5000, y: 1000 };
 
   constructor() {
     this.canvas = document.getElementById("game")! as HTMLCanvasElement;
@@ -20,7 +21,7 @@ export class Renderer {
     /* Canvas border */
     this.ctx.lineWidth = 2;
     this.ctx.strokeStyle = "#888";
-    this.ctx.strokeRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.ctx.strokeRect(0, 0, this.canvasSize.x, this.canvasSize.y);
   }
 
   private beforeFrameRendering() {
