@@ -1,13 +1,12 @@
 import { Character } from "./objects/character/character";
-import { gameloop, renderer } from "./core/global";
-import { generateLevel } from "./core/Level/LevelGenerator";
+import { gameloop, levelManager, renderer } from "./core/global";
 
 export class Game {
   private character: Character;
 
   constructor() {
     this.character = new Character(
-      { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+      { x: renderer.canvasSize.x / 2, y: renderer.canvasSize.y / 2 },
       40
     );
   }
@@ -16,12 +15,7 @@ export class Game {
     renderer.init();
 
     this.character.create();
-    generateLevel({
-      enemyCount: 50,
-      pointOrbCount: 70,
-      difficulty: 2,
-      enemySize: { min: 40, max: 80 },
-    });
+    levelManager.start();
 
     gameloop.start(0);
   }

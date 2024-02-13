@@ -1,5 +1,5 @@
 import { GameObject } from "../../core/common/GameObject";
-import { gameObjectManager } from "../../core/global";
+import { gameObjectManager, renderer } from "../../core/global";
 import { Position } from "../../core/types/Position";
 import { RenderEnemyModel } from "./enemy.model";
 
@@ -32,14 +32,14 @@ export class Enemy extends GameObject<"circle"> {
     // Check for collisions with walls
     if (
       this.position.x - this.objectModel.size / 2 < 0 ||
-      this.position.x + this.objectModel.size / 2 > window.innerWidth
+      this.position.x + this.objectModel.size / 2 > renderer.canvasSize.x
     ) {
       this.velocity.x = -this.velocity.x; // Reverse the x-direction velocity
     }
 
     if (
       this.position.y - this.objectModel.size / 2 < 0 ||
-      this.position.y + this.objectModel.size / 2 > window.innerHeight
+      this.position.y + this.objectModel.size / 2 > renderer.canvasSize.y
     ) {
       this.velocity.y = -this.velocity.y; // Reverse the y-direction velocity
     }
@@ -61,45 +61,53 @@ export class Enemy extends GameObject<"circle"> {
         this.position.y + this.objectModel.size / 2 > saveZoneTop
       ) {
         // Calculate the overlap on each side
-        const overlapLeft =
-          saveZoneRight - this.position.x + this.objectModel.size / 2;
-        const overlapRight =
-          this.position.x + this.objectModel.size / 2 - saveZoneLeft;
-        const overlapTop =
-          saveZoneBottom - this.position.y + this.objectModel.size / 2;
-        const overlapBottom =
-          this.position.y + this.objectModel.size / 2 - saveZoneTop;
+        const overlaps = {
+          left: saveZoneRight - this.position.x + this.objectModel.size / 2,
+          right: this.position.x + this.objectModel.size / 2 - saveZoneLeft,
+          top: saveZoneBottom - this.position.y + this.objectModel.size / 2,
+          bottom: this.position.y + this.objectModel.size / 2 - saveZoneTop,
+        };
 
         // Find the minimum overlap
         const minOverlap = Math.min(
-          overlapLeft,
-          overlapRight,
-          overlapTop,
-          overlapBottom
+          overlaps.left,
+          overlaps.right,
+          overlaps.top,
+          overlaps.bottom
         );
 
         // Adjust the position based on the minimum overlap
-        if (minOverlap === overlapLeft) {
+        if (minOverlap === overlaps.left) {
+          // this.position.x = saveZoneRight + this.objectModel.size / 2;
           this.velocity.x = -this.velocity.x; // Reverse the x-direction velocity
-        } else if (minOverlap === overlapRight) {
+        } else if (minOverlap === overlaps.right) {
+          // this.position.x = saveZoneLeft - this.objectModel.size / 2;
           this.velocity.x = -this.velocity.x; // Reverse the x-direction velocity
-        } else if (minOverlap === overlapTop) {
+        } else if (minOverlap === overlaps.top) {
+          // this.position.y = saveZoneBottom + this.objectModel.size / 2;
           this.velocity.y = -this.velocity.y; // Reverse the y-direction velocity
-        } else if (minOverlap === overlapBottom) {
+        } else if (minOverlap === overlaps.bottom) {
+          // this.position.y = saveZoneTop - this.objectModel.size / 2;
           this.velocity.y = -this.velocity.y; // Reverse the y-direction velocity
         }
       }
     });
 
-    /* Ты куда? Не убегай за екран!!! */
+    /* Ты куда? Не убегай за canvas!!! */
     if (this.position.x < this.objectModel.size / 2)
       this.position.x = this.objectModel.size / 2;
-    else if (this.position.x > window.innerWidth - this.objectModel.size / 2)
-      this.position.x = window.innerWidth - this.objectModel.size / 2;
+    else if (
+      this.position.x >
+      renderer.canvasSize.x - this.objectModel.size / 2
+    )
+      this.position.x = renderer.canvasSize.x - this.objectModel.size / 2;
     if (this.position.y < this.objectModel.size / 2)
       this.position.y = this.objectModel.size / 2;
-    else if (this.position.y > window.innerHeight - this.objectModel.size / 2)
-      this.position.y = window.innerHeight - this.objectModel.size / 2;
+    else if (
+      this.position.y >
+      renderer.canvasSize.y - this.objectModel.size / 2
+    )
+      this.position.y = renderer.canvasSize.y - this.objectModel.size / 2;
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

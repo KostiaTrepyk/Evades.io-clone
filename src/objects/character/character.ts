@@ -1,6 +1,6 @@
 import { Interaction } from "../../core/Interaction";
 import { GameObject } from "../../core/common/GameObject";
-import { gameObjectManager } from "../../core/global";
+import { gameObjectManager, levelManager, renderer } from "../../core/global";
 import { Position } from "../../core/types/Position";
 import { RenderCharacterModel } from "./character.model";
 import { CharacterMovement } from "./character.movement";
@@ -86,6 +86,16 @@ export class Character extends GameObject<"circle"> {
         this.lvlSystem.addPointOrb();
       }
     });
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if(this.position.x - this.objectModel.size / 2 === 0){
+      levelManager.prevLevel()
+    }
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if(this.position.x + this.objectModel.size / 2 === renderer.canvasSize.x){
+      levelManager.nextLevel()
+    }
   }
 
   public override onRender(ctx: CanvasRenderingContext2D) {
