@@ -1,5 +1,6 @@
 import { GameObject } from "../../core/common/GameObject";
 import { gameObjectManager, renderer } from "../../core/global";
+import { handleBoundaryCollision } from "./handleBoundaryCollision";
 import { Position } from "../../core/types/Position";
 import { RenderEnemyModel } from "./enemy.model";
 
@@ -30,19 +31,13 @@ export class Enemy extends GameObject<"circle"> {
     this.position.y += this.velocity.y * deltaTime;
 
     // Check for collisions with walls
-    if (
-      this.position.x - this.objectModel.size / 2 < 0 ||
-      this.position.x + this.objectModel.size / 2 > renderer.canvasSize.x
-    ) {
-      this.velocity.x = -this.velocity.x; // Reverse the x-direction velocity
-    }
-
-    if (
-      this.position.y - this.objectModel.size / 2 < 0 ||
-      this.position.y + this.objectModel.size / 2 > renderer.canvasSize.y
-    ) {
-      this.velocity.y = -this.velocity.y; // Reverse the y-direction velocity
-    }
+    const { newPosition, newVelocity } = handleBoundaryCollision(
+      this.position,
+      this.velocity,
+      this.objectModel.size
+    );
+    this.position = newPosition;
+    this.velocity = newVelocity;
 
     // Check for collisions with save zones
     gameObjectManager.saveZones.forEach((saveZone) => {
@@ -92,22 +87,6 @@ export class Enemy extends GameObject<"circle"> {
         }
       }
     });
-
-    /* Ты куда? Не убегай за canvas!!! */
-    if (this.position.x < this.objectModel.size / 2)
-      this.position.x = this.objectModel.size / 2;
-    else if (
-      this.position.x >
-      renderer.canvasSize.x - this.objectModel.size / 2
-    )
-      this.position.x = renderer.canvasSize.x - this.objectModel.size / 2;
-    if (this.position.y < this.objectModel.size / 2)
-      this.position.y = this.objectModel.size / 2;
-    else if (
-      this.position.y >
-      renderer.canvasSize.y - this.objectModel.size / 2
-    )
-      this.position.y = renderer.canvasSize.y - this.objectModel.size / 2;
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
