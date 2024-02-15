@@ -27,11 +27,9 @@ export function generateLevel({
     const player = gameObjectManager.player;
     if (playerPosition === "start") {
       player.position.x = player.objectModel.size / 2 + 1;
-      player.position.y = renderer.canvasSize.y / 2;
     } else if (playerPosition === "end") {
       player.position.x =
         renderer.canvasSize.x - player.objectModel.size / 2 - 1;
-      player.position.y = renderer.canvasSize.y / 2;
     }
   }
 
@@ -60,10 +58,7 @@ export function generateLevel({
         maxY: renderer.canvasSize.y - (enemySize.max / 2 + 2),
       }),
       getRandomSize(enemySize.min, enemySize.max),
-      {
-        x: (Math.random() - 0.5) * enemySpeed * 2 * 25,
-        y: (Math.random() - 0.5) * enemySpeed * 2 * 25,
-      }
+      getRandomVelocity(enemySpeed * 25)
     );
 
     enemy.create();
@@ -106,6 +101,19 @@ function getRandomPosition({
     x: Math.random() * (maxX - minX) + minX,
     y: Math.random() * (maxY - minY) + minY,
   };
+}
+
+function getRandomVelocity(speed: number): { x: number; y: number } {
+  const randomX = Math.random() * speed;
+  const randomY = speed - randomX;
+
+  const xDirection = Math.random() < 0.5 ? -1 : 1;
+  const x = randomX * xDirection;
+
+  const yDirection = Math.random() < 0.5 ? -1 : 1;
+  const y = randomY * yDirection;
+
+  return { x, y };
 }
 
 function getRandomSize(minSize: number, maxSize: number) {

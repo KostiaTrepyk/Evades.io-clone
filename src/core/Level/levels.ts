@@ -8,21 +8,21 @@ export const defaultLevels: GenerateLevelOptions[] = [
     pointOrbCount: 100,
   },
   {
-    enemyCount: 30,
+    enemyCount: 35,
     enemySize: { min: 40, max: 60 },
-    enemySpeed: 4,
+    enemySpeed: 8,
     pointOrbCount: 100,
   },
   {
-    enemyCount: 35,
+    enemyCount: 40,
     enemySize: { min: 40, max: 60 },
-    enemySpeed: 6,
+    enemySpeed: 10,
     pointOrbCount: 100,
   },
   {
     enemyCount: 50,
     enemySize: { min: 40, max: 60 },
-    enemySpeed: 6,
+    enemySpeed: 12,
     pointOrbCount: 100,
   },
   {

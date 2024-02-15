@@ -1,10 +1,9 @@
 import { GameObject } from "../../core/common/GameObject";
 import { gameObjectManager } from "../../core/global";
 import { Position } from "../../core/types/Position";
-import { Shape } from "../../core/types/Shape";
 import { RenderPointOrb } from "./PoinOrb.model";
 
-const pointOrbSize: number = 15;
+const pointOrbSize: number = 20;
 
 export class PointOrb extends GameObject<"circle"> {
   constructor(startPosition: Position) {

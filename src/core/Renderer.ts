@@ -1,7 +1,7 @@
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
-  public canvasSize = { x: 5000, y: 1000 };
+  public canvasSize = { x: 4000, y: 800 };
 
   constructor() {
     this.canvas = document.getElementById("game")! as HTMLCanvasElement;

@@ -16,13 +16,14 @@ export function handleBoundaryCollision(
 
     const axisPosition = position[axis];
     const halfSize = size / 2;
+    const minAxisPosition = halfSize;
     const maxAxisPosition = renderer.canvasSize[axis] - halfSize;
 
     if (axisPosition - halfSize < 0) {
-      newPosition = halfSize;
+      newPosition = minAxisPosition;
       newVelocity = -velocity[axis];
-    } else if (axisPosition + halfSize > maxAxisPosition) {
-      newPosition = maxAxisPosition - halfSize;
+    } else if (axisPosition > maxAxisPosition) {
+      newPosition = maxAxisPosition;
       newVelocity = -velocity[axis];
     } else {
       newPosition = position[axis];
