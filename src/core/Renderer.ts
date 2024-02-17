@@ -1,3 +1,5 @@
+import { camera, renderer } from "./global";
+
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
@@ -15,13 +17,16 @@ export class Renderer {
 
   public renderFrame(cb: (ctx: CanvasRenderingContext2D) => void) {
     this.beforeFrameRendering();
+    // Set camera transform
+    camera.onRender(this.ctx);
+
+    // Set bgcolor
+    this.ctx.fillStyle = "#ffe";
+    this.ctx.fillRect(0, 0, renderer.canvasSize.x, renderer.canvasSize.y);
+
+    this.drawCells(this.ctx);
 
     cb(this.ctx);
-
-    /* Canvas border */
-    this.ctx.lineWidth = 2;
-    this.ctx.strokeStyle = "#888";
-    this.ctx.strokeRect(0, 0, this.canvasSize.x, this.canvasSize.y);
   }
 
   private beforeFrameRendering() {
@@ -32,5 +37,20 @@ export class Renderer {
   private setCanvasSize() {
     this.ctx.canvas.width = window.innerWidth;
     this.ctx.canvas.height = window.innerHeight;
+  }
+
+  private drawCells(ctx: CanvasRenderingContext2D) {
+    const cellSize = 50;
+    const horizontalCells = renderer.canvasSize.x / cellSize;
+    const verticalCells = renderer.canvasSize.y / cellSize;
+    ctx.strokeStyle = "#ddd";
+    ctx.lineWidth = 3;
+    for (let i = 0; i < horizontalCells; i++) {
+      for (let j = 0; j < verticalCells; j++) {
+        const x = i * cellSize;
+        const y = j * cellSize;
+        ctx.strokeRect(x, y, cellSize, cellSize);
+      }
+    }
   }
 }

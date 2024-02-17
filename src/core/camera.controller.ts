@@ -1,6 +1,8 @@
 import { Character } from "../objects/character/character";
 import { gameObjectManager } from "./global";
 
+const zoom = 0.85;
+
 export class CameraController {
   public player: Character | undefined;
 
@@ -13,12 +15,12 @@ export class CameraController {
     }
 
     ctx.setTransform(
-      1,
+      zoom,
       0,
       0,
-      1,
-      -this.player.position.x + ctx.canvas.width / 2,
-      -this.player.position.y + ctx.canvas.height / 2
+      zoom,
+      -this.player.position.x * zoom + ctx.canvas.width / 2,
+      -this.player.position.y * zoom + ctx.canvas.height / 2
     );
   }
 }

@@ -9,9 +9,9 @@ export function RenderEnemyModel(
 ) {
   ctx.beginPath();
   ctx.arc(position.x, position.y, size / 2, 0, 2 * Math.PI);
-  ctx.fillStyle = "#faa";
-  ctx.strokeStyle = "#888";
-  ctx.lineWidth = 3;
+  ctx.fillStyle = "#aaa";
+  ctx.strokeStyle = "#555";
+  ctx.lineWidth = 4;
   ctx.fill();
   ctx.stroke();
 }
