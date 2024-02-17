@@ -1,4 +1,4 @@
-import { Interaction } from "../../core/Interaction";
+import { doItemsIntersect } from "../../core/doItemsIntersect";
 import { GameObject } from "../../core/common/GameObject";
 import { gameObjectManager, levelManager, renderer } from "../../core/global";
 import { Position } from "../../core/types/Position";
@@ -37,22 +37,8 @@ export class Character extends GameObject<"circle"> {
 
   public revive(): void {
     let canBeRevived: boolean = true;
-    const intersection = new Interaction();
-    gameObjectManager.enemies.forEach((gameObject) => {
-      if (
-        intersection.intersect(
-          {
-            position: this.position,
-            shape: "circle",
-            size: this.objectModel.size,
-          },
-          {
-            position: gameObject.position,
-            shape: "circle",
-            size: gameObject.objectModel.size,
-          }
-        )
-      ) {
+    gameObjectManager.enemies.forEach((enemy) => {
+      if (doItemsIntersect(this, enemy)) {
         canBeRevived = false;
       }
     });
@@ -89,56 +75,19 @@ export class Character extends GameObject<"circle"> {
 
     this.characterMovement.onUpdate(deltaTime);
 
-    const intersection = new Interaction();
-    gameObjectManager.enemies.forEach((gameObject) => {
-      if (
-        intersection.intersect(
-          {
-            position: this.position,
-            shape: "circle",
-            size: this.objectModel.size,
-          },
-          {
-            position: gameObject.position,
-            shape: "circle",
-            size: gameObject.objectModel.size,
-          }
-        )
-      ) {
+    gameObjectManager.enemies.forEach((enemy) => {
+      if (doItemsIntersect(this, enemy)) {
         if (!this.isDead) {
           this.die();
         }
       }
     });
     gameObjectManager.pointOrbs.forEach((pointOrb) => {
-      if (
-        intersection.intersect(
-          {
-            position: this.position,
-            shape: "circle",
-            size: this.objectModel.size,
-          },
-          {
-            position: pointOrb.position,
-            shape: "circle",
-            size: pointOrb.objectModel.size,
-          }
-        )
-      ) {
+      if (doItemsIntersect(this, pointOrb)) {
         pointOrb.delete();
         this.lvlSystem.addPointOrb();
       }
     });
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if (this.position.x - this.objectModel.size / 2 === 0) {
-      levelManager.prevLevel();
-    }
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if (this.position.x + this.objectModel.size / 2 === renderer.canvasSize.x) {
-      levelManager.nextLevel();
-    }
   }
 
   public override onRender(ctx: CanvasRenderingContext2D) {

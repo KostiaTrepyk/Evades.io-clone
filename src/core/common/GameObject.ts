@@ -6,8 +6,8 @@ const gameObjectsId = new UniqueId();
 
 export type ObjectModel<S extends Shape> = S extends "circle"
   ? { shape: "circle"; size: number }
-  : S extends "rectangular"
-  ? { shape: "rectangular"; size: { x: number; y: number } }
+  : S extends "rectangle"
+  ? { shape: "rectangle"; size: { x: number; y: number } }
   : never;
 
 export class GameObject<S extends Shape> {

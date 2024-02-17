@@ -1,1 +1,1 @@
-export type Shape = "circle" | "rectangular";
+export type Shape = "circle" | "rectangle";

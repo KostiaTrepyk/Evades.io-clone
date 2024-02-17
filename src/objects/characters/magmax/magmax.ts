@@ -1,5 +1,5 @@
-import { Position } from "../../core/types/Position";
-import { Character } from "../character/character";
+import { Position } from "../../../core/types/Position";
+import { Character } from "../../character/character";
 import { RenderMagmaxModel } from "./magmax.model";
 
 export class Magmax extends Character {

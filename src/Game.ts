@@ -1,6 +1,6 @@
 import { Character } from "./objects/character/character";
 import { gameloop, levelManager, renderer } from "./core/global";
-import { Magmax } from "./objects/characters/magmax";
+import { Magmax } from "./objects/characters/magmax/magmax";
 
 export class Game {
   private character: Character;

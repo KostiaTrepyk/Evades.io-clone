@@ -3,6 +3,7 @@ import { gameObjectManager, renderer } from "../../core/global";
 import { Position } from "../../core/types/Position";
 import { RenderEnemyModel } from "./enemy.model";
 import { SaveZone } from "../saveZone/SaveZone";
+import { doItemsIntersect } from "../../core/doItemsIntersect";
 
 export class Enemy extends GameObject<"circle"> {
   private velocity: { x: number; y: number };
@@ -52,12 +53,7 @@ export class Enemy extends GameObject<"circle"> {
     const saveZoneBottom =
       saveZone.position.y + saveZone.objectModel.size.y / 2;
 
-    if (
-      this.position.x - this.objectModel.size / 2 < saveZoneRight &&
-      this.position.x + this.objectModel.size / 2 > saveZoneLeft &&
-      this.position.y - this.objectModel.size / 2 < saveZoneBottom &&
-      this.position.y + this.objectModel.size / 2 > saveZoneTop
-    ) {
+    if (doItemsIntersect(this, saveZone)) {
       // Calculate the overlap on each side
       const overlaps = {
         left: saveZoneRight - this.position.x + this.objectModel.size / 2,

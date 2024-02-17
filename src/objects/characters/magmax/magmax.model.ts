@@ -1,4 +1,4 @@
-import { Position } from "../../core/types/Position";
+import { Position } from "../../../core/types/Position";
 
 const defaultFillColor = "hsl(0, 85%, 50%)";
 const firstSpellFillColor = "hsl(15, 85%, 50%)";

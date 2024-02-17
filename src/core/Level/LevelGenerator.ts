@@ -1,5 +1,6 @@
 import { Enemy } from "../../objects/enemy/enemy";
 import { PointOrb } from "../../objects/pointOrb/PointOrb";
+import { Portal } from "../../objects/portal/portal";
 import { SaveZone } from "../../objects/saveZone/SaveZone";
 import { gameObjectManager, renderer } from "../global";
 
@@ -26,10 +27,10 @@ export function generateLevel({
   if (gameObjectManager.player) {
     const player = gameObjectManager.player;
     if (playerPosition === "start") {
-      player.position.x = player.objectModel.size / 2 + 1;
+      player.position.x = player.objectModel.size / 2 + 50;
     } else if (playerPosition === "end") {
       player.position.x =
-        renderer.canvasSize.x - player.objectModel.size / 2 - 1;
+        renderer.canvasSize.x - player.objectModel.size / 2 - 50;
     }
   }
 
@@ -47,6 +48,23 @@ export function generateLevel({
   );
   saveZoneStart.create();
   saveZoneEnd.create();
+
+  // Create Portals
+  const portalStart = new Portal(
+    { x: 25, y: renderer.canvasSize.y / 2 },
+    { x: 50, y: renderer.canvasSize.y },
+    "prevLevel"
+  );
+  const portalEnd = new Portal(
+    {
+      x: renderer.canvasSize.x - 25,
+      y: renderer.canvasSize.y / 2,
+    },
+    { x: 50, y: renderer.canvasSize.y },
+    "nextLevel"
+  );
+  portalStart.create();
+  portalEnd.create();
 
   // Create enemies
   Array.from({ length: enemyCount }).forEach(() => {
@@ -84,6 +102,7 @@ function clearLevel() {
   gameObjectManager.enemies = [];
   gameObjectManager.pointOrbs = [];
   gameObjectManager.saveZones = [];
+  gameObjectManager.portals = [];
 }
 
 function getRandomPosition({
