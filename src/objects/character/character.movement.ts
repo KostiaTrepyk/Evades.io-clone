@@ -5,7 +5,8 @@ const characterSlow = 0.5;
 
 export class CharacterMovement {
   public position: Position;
-  public speed: number;
+  public defaultSpeed: number;
+  public currentSpeed: number;
   public isBlocked: boolean;
   public size: number;
 
@@ -13,7 +14,8 @@ export class CharacterMovement {
 
   constructor(startPosition: Position, size: number) {
     this.position = startPosition;
-    this.speed = 400;
+    this.defaultSpeed = 400;
+    this.currentSpeed = this.defaultSpeed;
     this.pressedKeys = [];
     this.isBlocked = false;
     this.size = size;
@@ -77,26 +79,27 @@ export class CharacterMovement {
       this.pressedKeys.includes("KeyW") || this.pressedKeys.includes("KeyS");
     let isMovingX =
       this.pressedKeys.includes("KeyA") || this.pressedKeys.includes("KeyD");
-    let speed = this.speed;
 
     /* normalizing the speed of the character */
-    if (isMovingY && isMovingX) speed /= 1.333;
+    let normalizedSpeed = this.currentSpeed;
+    if (isMovingY && isMovingX) normalizedSpeed /= 1.333;
 
-    if (this.pressedKeys.includes("ShiftLeft")) speed *= characterSlow;
+    if (this.pressedKeys.includes("ShiftLeft"))
+      normalizedSpeed *= characterSlow;
 
     /* Fix При нажатии двух клавиш A и D, W и S. Performance optimization!!! */
     if (this.pressedKeys.includes("KeyW")) {
-      this.position.y -= speed * progress;
+      this.position.y -= normalizedSpeed * progress;
     }
     if (this.pressedKeys.includes("KeyS")) {
-      this.position.y += speed * progress;
+      this.position.y += normalizedSpeed * progress;
     }
 
     if (this.pressedKeys.includes("KeyA")) {
-      this.position.x -= speed * progress;
+      this.position.x -= normalizedSpeed * progress;
     }
     if (this.pressedKeys.includes("KeyD")) {
-      this.position.x += speed * progress;
+      this.position.x += normalizedSpeed * progress;
     }
 
     /* Ты куда? Не убегай за екран!!! */
