@@ -1,4 +1,5 @@
 import { Game } from "../Game";
+import { UIRenderer } from "../ui/UIRenderer";
 import { GameLoop } from "./GameLoop";
 import { GameObjectManager } from "./GameObjectManager";
 import { LevelManager } from "./Level/LevelManager";
@@ -11,5 +12,6 @@ const gameObjectManager = new GameObjectManager();
 const camera = new CameraController();
 const game = new Game();
 const levelManager = new LevelManager()
+const uiRenderer = new UIRenderer()
 
-export { gameloop, renderer, gameObjectManager, camera, game, levelManager };
+export { gameloop, renderer, gameObjectManager, camera, game, levelManager, uiRenderer };

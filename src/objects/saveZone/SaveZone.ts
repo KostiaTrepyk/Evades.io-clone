@@ -18,15 +18,8 @@ export class SaveZone extends GameObject<"rectangular"> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = "#bfa";
-    ctx.strokeStyle = "#7b6";
+    ctx.fillStyle = "hsla(100, 100%, 50%, 0.3)";
     ctx.fillRect(
-      this.position.x - this.objectModel.size.x / 2,
-      this.position.y - this.objectModel.size.y / 2,
-      this.objectModel.size.x,
-      this.objectModel.size.y
-    );
-    ctx.strokeRect(
       this.position.x - this.objectModel.size.x / 2,
       this.position.y - this.objectModel.size.y / 2,
       this.objectModel.size.x,

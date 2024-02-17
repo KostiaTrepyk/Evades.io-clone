@@ -1,13 +1,14 @@
 import { Character } from "./objects/character/character";
 import { gameloop, levelManager, renderer } from "./core/global";
+import { Magmax } from "./objects/characters/magmax";
 
 export class Game {
   private character: Character;
 
   constructor() {
-    this.character = new Character(
+    this.character = new Magmax(
       { x: renderer.canvasSize.x / 2, y: renderer.canvasSize.y / 2 },
-      40
+      46
     );
   }
 
@@ -17,6 +18,16 @@ export class Game {
     this.character.create();
     levelManager.start();
 
-    gameloop.start(0);
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    window.addEventListener("blur", () => {
+      gameloop.stop();
+    });
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    window.addEventListener("focus", () => {
+      gameloop.start();
+    });
+
+    gameloop.start();
   }
 }
