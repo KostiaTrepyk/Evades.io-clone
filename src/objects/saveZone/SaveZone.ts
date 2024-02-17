@@ -26,4 +26,25 @@ export class SaveZone extends GameObject<"rectangular"> {
       this.objectModel.size.y
     );
   }
+
+  /** You can use this method to check collision between `SaveZone` and `GameObject<"circle">` */
+  public isInside(gameObject: GameObject<"circle">) {
+    const enemyHalfSize = gameObject.objectModel.size / 2;
+    const saveZoneHalfSize = {
+      x: this.objectModel.size.x / 2,
+      y: this.objectModel.size.y / 2,
+    };
+
+    const saveZoneLeft = this.position.x - saveZoneHalfSize.x;
+    const saveZoneRight = this.position.x + saveZoneHalfSize.x;
+    const saveZoneTop = this.position.y - saveZoneHalfSize.y;
+    const saveZoneBottom = this.position.y + saveZoneHalfSize.y;
+
+    return (
+      gameObject.position.x - enemyHalfSize < saveZoneRight &&
+      gameObject.position.x + enemyHalfSize > saveZoneLeft &&
+      gameObject.position.y - enemyHalfSize < saveZoneBottom &&
+      gameObject.position.y + enemyHalfSize > saveZoneTop
+    );
+  }
 }

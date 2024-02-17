@@ -45,7 +45,6 @@ export class LevelManager {
     this.stageLevel += delta;
     this.currentLevel += delta;
     this.currentStage = this.getLevelStage();
-    console.log(this.difficulty);
 
     const levelOptions = getStageConfiguration(
       this.difficulty * levelsPerStage * 2 + this.stageLevel * 2,
