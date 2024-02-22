@@ -1,8 +1,5 @@
-import { UniqueId } from "../helpers/UniqueId";
 import { Position } from "../types/Position";
 import { Shape } from "../types/Shape";
-
-const gameObjectsId = new UniqueId();
 
 export type ObjectModel<S extends Shape> = S extends "circle"
   ? { shape: "circle"; size: number }
@@ -11,12 +8,10 @@ export type ObjectModel<S extends Shape> = S extends "circle"
   : never;
 
 export class GameObject<S extends Shape> {
-  public id: number;
   public position: Position;
   public objectModel: ObjectModel<S>;
 
   constructor(startPosition: Position, objectModel: ObjectModel<S>) {
-    this.id = gameObjectsId.get();
     this.position = startPosition;
     this.objectModel = objectModel;
   }

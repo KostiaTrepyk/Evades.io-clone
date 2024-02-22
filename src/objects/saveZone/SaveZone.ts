@@ -8,13 +8,11 @@ export class SaveZone extends GameObject<"rectangle"> {
   }
 
   public override create(): void {
-    gameObjectManager.saveZones.push(this);
+    gameObjectManager.addGameObject(this);
   }
 
   public override delete(): void {
-    gameObjectManager.saveZones = gameObjectManager.saveZones.filter(
-      (saveZone) => saveZone !== this
-    );
+    gameObjectManager.removeGameObject(this);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

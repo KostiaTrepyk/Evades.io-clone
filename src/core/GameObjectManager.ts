@@ -3,6 +3,8 @@ import { Enemy } from "../objects/enemy/enemy";
 import { PointOrb } from "../objects/pointOrb/PointOrb";
 import { Portal } from "../objects/portal/portal";
 import { SaveZone } from "../objects/saveZone/SaveZone";
+import { GameObject } from "./common/GameObject";
+import { Shape } from "./types/Shape";
 
 export class GameObjectManager {
   public player: Character | undefined;
@@ -33,25 +35,47 @@ export class GameObjectManager {
     this.enemies.forEach((object) => object.onRender(ctx));
   }
 
-  public getPlayer(): Character | undefined {
-    return this.player;
+  public addGameObject<S extends Shape>(gameObject: GameObject<S>): void {
+    switch (true) {
+      case gameObject instanceof Character:
+        this.player = gameObject;
+        break;
+      case gameObject instanceof Enemy:
+        this.enemies.push(gameObject);
+        break;
+      case gameObject instanceof PointOrb:
+        this.pointOrbs.push(gameObject);
+        break;
+      case gameObject instanceof SaveZone:
+        this.saveZones.push(gameObject);
+        break;
+      case gameObject instanceof Portal:
+        this.portals.push(gameObject);
+        break;
+      default:
+        throw new Error("Unknown game object");
+    }
   }
 
-  public setPlayer(player: Character | undefined): void {
-    this.player = player;
-  }
-
-  public addEnemy(item: Enemy): void {
-    this.enemies.push(item);
-  }
-  public removeEnemy(id: number): void {
-    this.enemies = this.enemies.filter((item) => item.id !== id);
-  }
-
-  public addPointOrb(item: PointOrb): void {
-    this.pointOrbs.push(item);
-  }
-  public removePointOrb(id: number): void {
-    this.pointOrbs = this.pointOrbs.filter((pointOrb) => pointOrb.id !== id);
+  public removeGameObject<S extends Shape>(gameObject: GameObject<S>) {
+    switch (true) {
+      case gameObject instanceof Character:
+        this.player = undefined;
+        break;
+      case gameObject instanceof Enemy:
+        this.enemies = this.enemies.filter((item) => item !== gameObject);
+        break;
+      case gameObject instanceof PointOrb:
+        this.pointOrbs = this.pointOrbs.filter((item) => item !== gameObject);
+        break;
+      case gameObject instanceof SaveZone:
+        this.saveZones = this.saveZones.filter((item) => item !== gameObject);
+        break;
+      case gameObject instanceof Portal:
+        this.portals = this.portals.filter((item) => item !== gameObject);
+        break;
+      default:
+        throw new Error("Unknown game object");
+    }
   }
 }

@@ -18,11 +18,11 @@ export class Enemy extends GameObject<"circle"> {
   }
 
   public override create(): void {
-    gameObjectManager.addEnemy(this);
+    gameObjectManager.addGameObject(this);
   }
 
   public override delete(): void {
-    gameObjectManager.removeEnemy(this.id);
+    gameObjectManager.removeGameObject(this);
   }
 
   public override onUpdate(deltaTime: number): void {

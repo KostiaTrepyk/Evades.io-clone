@@ -1,4 +1,5 @@
-import { camera, renderer } from "./global";
+import { camera } from "./global";
+import { cellSize } from "../consts/consts";
 
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
@@ -16,22 +17,18 @@ export class Renderer {
   }
 
   public renderFrame(cb: (ctx: CanvasRenderingContext2D) => void) {
-    this.beforeFrameRendering();
+    this.ctx.reset();
+
     // Set camera transform
     camera.onRender(this.ctx);
 
     // Set bgcolor
     this.ctx.fillStyle = "#ffe";
-    this.ctx.fillRect(0, 0, renderer.canvasSize.x, renderer.canvasSize.y);
+    this.ctx.fillRect(0, 0, this.canvasSize.x, this.canvasSize.y);
 
     this.drawCells(this.ctx);
 
     cb(this.ctx);
-  }
-
-  private beforeFrameRendering() {
-    this.ctx.resetTransform();
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 
   private setCanvasSize() {
@@ -40,9 +37,8 @@ export class Renderer {
   }
 
   private drawCells(ctx: CanvasRenderingContext2D) {
-    const cellSize = 50;
-    const horizontalCells = renderer.canvasSize.x / cellSize;
-    const verticalCells = renderer.canvasSize.y / cellSize;
+    const horizontalCells = this.canvasSize.x / cellSize;
+    const verticalCells = this.canvasSize.y / cellSize;
     ctx.strokeStyle = "#ddd";
     ctx.lineWidth = 3;
     for (let i = 0; i < horizontalCells; i++) {

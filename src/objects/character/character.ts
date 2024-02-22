@@ -1,37 +1,43 @@
 import { doItemsIntersect } from "../../core/doItemsIntersect";
 import { GameObject } from "../../core/common/GameObject";
-import { gameObjectManager, levelManager, renderer } from "../../core/global";
+import { gameObjectManager } from "../../core/global";
 import { Position } from "../../core/types/Position";
 import { RenderCharacterModel } from "./character.model";
 import { CharacterMovement } from "./character.movement";
-import { LVLSystem } from "./lvl.system";
+import { CharacterLevels } from "./character.levels";
+import { HSLA } from "../../core/helpers/hsla";
+
+type Status = "immortal" | "speedBoost";
 
 export class Character extends GameObject<"circle"> {
   public characterMovement: CharacterMovement;
-  private lvlSystem: LVLSystem;
+  public level: CharacterLevels;
   public isDead: boolean;
-  public mana: { max: number; current: number };
+  public energy: { max: number; current: number; regen: number };
   public timeToDeath: number | undefined;
+  public statuses: Status[];
+  public color: HSLA;
 
-  public statuses: ("immortal" | "")[];
-
-  constructor(startPsition: Position, size: number) {
+  constructor(startPsition: Position, size: number, color: HSLA) {
     super(startPsition, { shape: "circle", size });
-    this.characterMovement = new CharacterMovement(startPsition, size);
-    this.lvlSystem = new LVLSystem();
+    this.color = color;
+    this.characterMovement = new CharacterMovement(this, startPsition, size);
+    this.level = new CharacterLevels(this);
     this.isDead = false;
-    this.mana = { max: 30, current: 30 };
+    this.energy = { max: 30, current: 30, regen: 1 };
     this.statuses = [];
   }
 
   public override create() {
-    gameObjectManager.setPlayer(this);
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gameObjectManager.addGameObject(this);
     this.characterMovement.bind();
+    this.level.init();
   }
 
   public override delete() {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    gameObjectManager.setPlayer(undefined);
+    gameObjectManager.removeGameObject(this);
     this.characterMovement.unbind();
   }
 
@@ -59,8 +65,16 @@ export class Character extends GameObject<"circle"> {
   }
 
   public override onUpdate(deltaTime: number): void {
+    this.level.onUpdate();
+
     // Mana regeneration
-    if (this.mana.current < this.mana.max) this.mana.current += 2 * deltaTime;
+    if (this.energy.current < this.energy.max) {
+      if (this.energy.regen * deltaTime > this.energy.max) {
+        this.energy.current += this.energy.max;
+      }
+      this.energy.current += this.energy.regen * deltaTime;
+    }
+
     // Update death timer
     if (this.isDead) {
       if (!this.timeToDeath) return;
@@ -85,31 +99,18 @@ export class Character extends GameObject<"circle"> {
     gameObjectManager.pointOrbs.forEach((pointOrb) => {
       if (doItemsIntersect(this, pointOrb)) {
         pointOrb.delete();
-        this.lvlSystem.addPointOrb();
+        this.level.addPointOrb();
       }
     });
   }
 
   public override onRender(ctx: CanvasRenderingContext2D) {
-    RenderCharacterModel.showMana(
-      ctx,
-      this.position,
-      this.objectModel.size,
-      this.mana
-    );
+    RenderCharacterModel.showMana(ctx, this);
 
     if (this.isDead) {
-      RenderCharacterModel.dead(
-        ctx,
-        this.characterMovement.position,
-        this.objectModel.size
-      );
+      RenderCharacterModel.dead(ctx, this);
     } else {
-      RenderCharacterModel.default(
-        ctx,
-        this.characterMovement.position,
-        this.objectModel.size
-      );
+      RenderCharacterModel.default(ctx, this);
     }
   }
 }

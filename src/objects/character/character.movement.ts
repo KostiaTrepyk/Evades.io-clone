@@ -1,9 +1,12 @@
+import { characterSpeedPerPoint } from "../../consts/consts";
 import { renderer } from "../../core/global";
 import { Position } from "../../core/types/Position";
+import { Character } from "./character";
 
 const characterSlow = 0.5;
 
 export class CharacterMovement {
+  public player: Character;
   public position: Position;
   public defaultSpeed: number;
   public currentSpeed: number;
@@ -12,9 +15,10 @@ export class CharacterMovement {
 
   private pressedKeys: ("KeyW" | "KeyA" | "KeyS" | "KeyD" | "ShiftLeft")[];
 
-  constructor(startPosition: Position, size: number) {
+  constructor(player: Character, startPosition: Position, size: number) {
+    this.player = player;
     this.position = startPosition;
-    this.defaultSpeed = 400;
+    this.defaultSpeed = 5 * characterSpeedPerPoint;
     this.currentSpeed = this.defaultSpeed;
     this.pressedKeys = [];
     this.isBlocked = false;

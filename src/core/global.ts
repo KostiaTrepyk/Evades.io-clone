@@ -10,8 +10,16 @@ const gameloop = new GameLoop();
 const renderer = new Renderer();
 const gameObjectManager = new GameObjectManager();
 const camera = new CameraController();
+const levelManager = new LevelManager();
+const uiRenderer = new UIRenderer();
 const game = new Game();
-const levelManager = new LevelManager()
-const uiRenderer = new UIRenderer()
 
-export { gameloop, renderer, gameObjectManager, camera, game, levelManager, uiRenderer };
+export {
+  gameloop,
+  renderer,
+  gameObjectManager,
+  camera,
+  game,
+  levelManager,
+  uiRenderer,
+};

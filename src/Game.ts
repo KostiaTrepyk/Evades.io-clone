@@ -18,12 +18,10 @@ export class Game {
     this.character.create();
     levelManager.start();
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     window.addEventListener("blur", () => {
       gameloop.stop();
     });
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     window.addEventListener("focus", () => {
       gameloop.start();
     });

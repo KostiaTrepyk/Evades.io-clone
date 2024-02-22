@@ -16,13 +16,11 @@ export class Portal extends GameObject<"rectangle"> {
   }
 
   public override create(): void {
-    gameObjectManager.portals.push(this);
+    gameObjectManager.addGameObject(this)
   }
 
   public override delete(): void {
-    gameObjectManager.portals = gameObjectManager.portals.filter(
-      (saveZone) => saveZone !== this
-    );
+    gameObjectManager.removeGameObject(this)
   }
 
   public nextLevel() {

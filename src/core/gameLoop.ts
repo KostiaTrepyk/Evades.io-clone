@@ -1,4 +1,4 @@
-import { camera, gameObjectManager, renderer, uiRenderer } from "./global";
+import { gameObjectManager, renderer, uiRenderer } from "./global";
 
 export class GameLoop {
   private lastRender: number | undefined;
@@ -7,18 +7,13 @@ export class GameLoop {
   constructor() {}
 
   public start(): void {
-    if (!this.lastRender) this.lastRender = Date.now();
-    const now = Date.now();
+    if (!this.lastRender) this.lastRender = performance.now();
+    const now = performance.now();
 
     let deltaTime = (now - this.lastRender) / 1000;
 
-    // Update
     gameObjectManager.updateAll(deltaTime);
-
-    // Render
-    renderer.renderFrame((ctx) => {
-      gameObjectManager.renderAll(ctx);
-    });
+    renderer.renderFrame((ctx) => gameObjectManager.renderAll(ctx));
     uiRenderer.render();
 
     this.lastRender = now;

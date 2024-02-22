@@ -8,17 +8,21 @@ const pointOrbColors = ["pink", "lightgreen", "#fa7", "lightblue"] as const;
 
 export class PointOrb extends GameObject<"circle"> {
   private color: string;
+
   constructor(startPosition: Position) {
     super(startPosition, { shape: "circle", size: pointOrbSize });
-    this.color = pointOrbColors[Math.round(Math.random() * pointOrbColors.length)];
+    this.color =
+      pointOrbColors.at(
+        Math.round(Math.random() * (pointOrbColors.length - 1))
+      ) ?? "lightblue";
   }
 
   public override create(): void {
-    gameObjectManager.addPointOrb(this);
+    gameObjectManager.addGameObject(this);
   }
 
   public override delete(): void {
-    gameObjectManager.removePointOrb(this.id);
+    gameObjectManager.removeGameObject(this);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
