@@ -1,4 +1,3 @@
-import { characterSpeedPerPoint } from "../../consts/consts";
 import { renderer } from "../../core/global";
 import { Position } from "../../core/types/Position";
 import { Character } from "./character";
@@ -8,8 +7,6 @@ const characterSlow = 0.5;
 export class CharacterMovement {
   public player: Character;
   public position: Position;
-  public defaultSpeed: number;
-  public currentSpeed: number;
   public isBlocked: boolean;
   public size: number;
 
@@ -18,8 +15,6 @@ export class CharacterMovement {
   constructor(player: Character, startPosition: Position, size: number) {
     this.player = player;
     this.position = startPosition;
-    this.defaultSpeed = 5 * characterSpeedPerPoint;
-    this.currentSpeed = this.defaultSpeed;
     this.pressedKeys = [];
     this.isBlocked = false;
     this.size = size;
@@ -84,14 +79,14 @@ export class CharacterMovement {
     let isMovingX =
       this.pressedKeys.includes("KeyA") || this.pressedKeys.includes("KeyD");
 
-    /* normalizing the speed of the character */
-    let normalizedSpeed = this.currentSpeed;
+    // normalizing the speed of the character
+    let normalizedSpeed = this.player.characteristics.speed;
     if (isMovingY && isMovingX) normalizedSpeed /= 1.333;
 
     if (this.pressedKeys.includes("ShiftLeft"))
       normalizedSpeed *= characterSlow;
 
-    /* Fix При нажатии двух клавиш A и D, W и S. Performance optimization!!! */
+    // Fix При нажатии двух клавиш A и D, W и S. Performance optimization!!!
     if (this.pressedKeys.includes("KeyW")) {
       this.position.y -= normalizedSpeed * progress;
     }
@@ -105,13 +100,5 @@ export class CharacterMovement {
     if (this.pressedKeys.includes("KeyD")) {
       this.position.x += normalizedSpeed * progress;
     }
-
-    /* Ты куда? Не убегай за екран!!! */
-    if (this.position.x < this.size / 2) this.position.x = this.size / 2;
-    else if (this.position.x > renderer.canvasSize.x - this.size / 2)
-      this.position.x = renderer.canvasSize.x - this.size / 2;
-    if (this.position.y < this.size / 2) this.position.y = this.size / 2;
-    else if (this.position.y > renderer.canvasSize.y - this.size / 2)
-      this.position.y = renderer.canvasSize.y - this.size / 2;
   }
 }

@@ -32,6 +32,7 @@ export function drawText(
     ...options,
   };
 
+  ctx.beginPath();
   ctx.fillStyle = fillColor;
   ctx.textBaseline = textBaseline;
   ctx.textAlign = textAlign;

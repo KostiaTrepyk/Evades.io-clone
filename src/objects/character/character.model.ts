@@ -18,7 +18,9 @@ export const RenderCharacterModel = {
     ctx.fillRect(
       position.x,
       position.y,
-      size * (character.energy.current / character.energy.max),
+      size *
+        (character.characteristics.energy.current /
+          character.characteristics.energy.max),
       8
     );
   },
@@ -27,10 +29,10 @@ export const RenderCharacterModel = {
     const color = character.color.clone();
 
     switch (true) {
-      case character.statuses.includes("immortal"):
+      case character.characteristics.statuses.includes("immortal"):
         color.setLightness = 35;
         break;
-      case character.statuses.includes("speedBoost"):
+      case character.characteristics.statuses.includes("speedBoost"):
         color.setLightness = 70;
         break;
     }

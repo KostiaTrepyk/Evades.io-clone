@@ -54,7 +54,7 @@ export class UIRenderer {
 
     const sections: Section[] = [
       {
-        width: barHeight + 20,
+        width: barHeight + 40,
         draw: (ctx, centeredPosition) => {
           RenderCharacterModel.static(ctx, {
             position: centeredPosition,
@@ -66,6 +66,19 @@ export class UIRenderer {
             fontSize: 36,
             ...drawTextOptions,
           });
+
+          ctx.beginPath();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "#333";
+          ctx.moveTo(
+            centeredPosition.x + (barHeight + 20) / 2,
+            centeredPosition.y - barHeight / 2
+          );
+          ctx.lineTo(
+            centeredPosition.x + (barHeight + 20) / 2,
+            centeredPosition.y + barHeight / 2
+          );
+          ctx.stroke();
         },
       },
       {
@@ -85,7 +98,7 @@ export class UIRenderer {
 
           drawText(
             ctx,
-            (player.characterMovement.defaultSpeed / characterSpeedPerPoint)
+            (player.characteristics.speed / characterSpeedPerPoint)
               .toFixed(1)
               .toString(),
             {
@@ -100,8 +113,12 @@ export class UIRenderer {
             ...drawTextOptions,
           });
 
-          if (player.level.points > 0) {
-            drawHelper(ctx, "1", centeredPosition);
+          if (
+            player.level.points > 0 &&
+            player.level.upgrades.speed.current <
+              player.level.upgrades.speed.max
+          ) {
+            drawUpgradeHelper(ctx, "1", centeredPosition);
           }
         },
       },
@@ -110,7 +127,9 @@ export class UIRenderer {
         draw: (ctx, centeredPosition) => {
           drawText(
             ctx,
-            `${player.energy.current.toFixed(0)}/${player.energy.max}`,
+            `${player.characteristics.energy.current.toFixed(0)}/${
+              player.characteristics.energy.max
+            }`,
             {
               position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
               fontSize: text.fontSize.main,
@@ -123,34 +142,46 @@ export class UIRenderer {
             ...drawTextOptions,
           });
 
-          if (player.level.points > 0) {
-            drawHelper(ctx, "2", centeredPosition);
+          if (
+            player.level.points > 0 &&
+            player.level.upgrades.maxEnergy.current <
+              player.level.upgrades.maxEnergy.max
+          ) {
+            drawUpgradeHelper(ctx, "2", centeredPosition);
           }
         },
       },
       {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
-          drawText(ctx, player.energy.regen.toFixed(1).toString(), {
-            position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
-            fontSize: text.fontSize.main,
-            ...drawTextOptions,
-          });
+          drawText(
+            ctx,
+            player.characteristics.energy.regen.toFixed(1).toString(),
+            {
+              position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
+              fontSize: text.fontSize.main,
+              ...drawTextOptions,
+            }
+          );
           drawText(ctx, "Regen", {
             position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
             fontSize: text.fontSize.secondary,
             ...drawTextOptions,
           });
 
-          if (player.level.points > 0) {
-            drawHelper(ctx, "3", centeredPosition);
+          if (
+            player.level.points > 0 &&
+            player.level.upgrades.regen.current <
+              player.level.upgrades.regen.max
+          ) {
+            drawUpgradeHelper(ctx, "3", centeredPosition);
           }
         },
       },
       {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
-          drawText(ctx, player.level.upgrades.firstSpell.toString(), {
+          drawText(ctx, player.level.upgrades.firstSpell.current.toString(), {
             position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
             fontSize: 26,
             ...drawTextOptions,
@@ -166,18 +197,24 @@ export class UIRenderer {
               x: centeredPosition.x,
               y: centeredPosition.y - barHeight / 2 + 20,
             },
-            player.level.upgrades.firstSpell
+            player.level.upgrades.firstSpell.current
           );
 
-          if (player.level.points > 0) {
-            drawHelper(ctx, "4", centeredPosition);
+          if (
+            player.level.points > 0 &&
+            player.level.upgrades.firstSpell.current <
+              player.level.upgrades.firstSpell.max
+          ) {
+            drawUpgradeHelper(ctx, "4", centeredPosition);
+          } else if (player.level.upgrades.firstSpell.current > 0) {
+            drawUseHelper(ctx, "[ J ]", centeredPosition);
           }
         },
       },
       {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
-          drawText(ctx, player.level.upgrades.secondSpell.toString(), {
+          drawText(ctx, player.level.upgrades.secondSpell.current.toString(), {
             position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
             fontSize: 26,
             ...drawTextOptions,
@@ -193,11 +230,17 @@ export class UIRenderer {
               x: centeredPosition.x,
               y: centeredPosition.y - barHeight / 2 + 20,
             },
-            player.level.upgrades.secondSpell
+            player.level.upgrades.secondSpell.current
           );
 
-          if (player.level.points > 0) {
-            drawHelper(ctx, "5", centeredPosition);
+          if (
+            player.level.points > 0 &&
+            player.level.upgrades.secondSpell.current <
+              player.level.upgrades.secondSpell.max
+          ) {
+            drawUpgradeHelper(ctx, "5", centeredPosition);
+          } else if (player.level.upgrades.secondSpell.current > 0) {
+            drawUseHelper(ctx, "[ K ]", centeredPosition);
           }
         },
       },
@@ -286,7 +329,7 @@ export class UIRenderer {
       this.ctx.strokeRect(position.x + 1, position.y, barWidth - 2, 20);
     };
 
-    const drawHelper = (
+    const drawUpgradeHelper = (
       ctx: CanvasRenderingContext2D,
       hint: string,
       centeredPosition: Position
@@ -305,6 +348,22 @@ export class UIRenderer {
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
         fontSize: text.fontSize.t,
         fillColor: "black",
+        strokeColor: "transparent",
+        isBold: true,
+        textAlign: "center",
+        textBaseline: "middle",
+      });
+    };
+
+    const drawUseHelper = (
+      ctx: CanvasRenderingContext2D,
+      hint: string,
+      centeredPosition: Position
+    ) => {
+      drawText(ctx, hint, {
+        position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
+        fontSize: text.fontSize.t + 1,
+        fillColor: "#eee",
         strokeColor: "transparent",
         isBold: true,
         textAlign: "center",

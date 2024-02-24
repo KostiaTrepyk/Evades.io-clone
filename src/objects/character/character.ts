@@ -2,30 +2,31 @@ import { doItemsIntersect } from "../../core/doItemsIntersect";
 import { GameObject } from "../../core/common/GameObject";
 import { gameObjectManager } from "../../core/global";
 import { Position } from "../../core/types/Position";
+import { HSLA } from "../../core/helpers/hsla";
 import { RenderCharacterModel } from "./character.model";
 import { CharacterMovement } from "./character.movement";
 import { CharacterLevels } from "./character.levels";
-import { HSLA } from "../../core/helpers/hsla";
-
-type Status = "immortal" | "speedBoost";
+import { CharacterCharacteristics } from "./character.characteristics";
+import { CharacterCollision } from "./character.collision";
 
 export class Character extends GameObject<"circle"> {
   public characterMovement: CharacterMovement;
+  public characteristics: CharacterCharacteristics;
+  public collision: CharacterCollision;
   public level: CharacterLevels;
   public isDead: boolean;
-  public energy: { max: number; current: number; regen: number };
   public timeToDeath: number | undefined;
-  public statuses: Status[];
   public color: HSLA;
 
   constructor(startPsition: Position, size: number, color: HSLA) {
     super(startPsition, { shape: "circle", size });
-    this.color = color;
+
     this.characterMovement = new CharacterMovement(this, startPsition, size);
     this.level = new CharacterLevels(this);
+    this.characteristics = new CharacterCharacteristics(this);
+    this.collision = new CharacterCollision(this);
+    this.color = color;
     this.isDead = false;
-    this.energy = { max: 30, current: 30, regen: 1 };
-    this.statuses = [];
   }
 
   public override create() {
@@ -57,7 +58,7 @@ export class Character extends GameObject<"circle"> {
   }
 
   public die(): void {
-    if (this.statuses.includes("immortal")) return;
+    if (this.characteristics.statuses.includes("immortal")) return;
 
     this.isDead = true;
     this.characterMovement.block();
@@ -65,16 +66,6 @@ export class Character extends GameObject<"circle"> {
   }
 
   public override onUpdate(deltaTime: number): void {
-    this.level.onUpdate();
-
-    // Mana regeneration
-    if (this.energy.current < this.energy.max) {
-      if (this.energy.regen * deltaTime > this.energy.max) {
-        this.energy.current += this.energy.max;
-      }
-      this.energy.current += this.energy.regen * deltaTime;
-    }
-
     // Update death timer
     if (this.isDead) {
       if (!this.timeToDeath) return;
@@ -87,21 +78,11 @@ export class Character extends GameObject<"circle"> {
       }
     }
 
+    this.characteristics.onUpdate(deltaTime);
     this.characterMovement.onUpdate(deltaTime);
+    this.collision.onUpdate(deltaTime);
 
-    gameObjectManager.enemies.forEach((enemy) => {
-      if (doItemsIntersect(this, enemy)) {
-        if (!this.isDead) {
-          this.die();
-        }
-      }
-    });
-    gameObjectManager.pointOrbs.forEach((pointOrb) => {
-      if (doItemsIntersect(this, pointOrb)) {
-        pointOrb.delete();
-        this.level.addPointOrb();
-      }
-    });
+    this.characteristics.reset();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D) {

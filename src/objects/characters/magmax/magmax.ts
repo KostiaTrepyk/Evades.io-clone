@@ -24,29 +24,15 @@ export class Magmax extends Character {
 
   private keydownHandler(e: KeyboardEvent) {
     if (e.code === "KeyJ") {
-      this.firstSpell();
+      this.toggleSpell("first");
     } else if (e.code === "KeyK") {
-      this.secondSpell();
-    }
-  }
-
-  public firstSpell() {
-    if (this.spells.first.isActive) this.spells.first.isActive = false;
-    else {
-      this.spells.first.isActive = true;
-      this.spells.second.isActive = false;
-    }
-  }
-
-  public secondSpell() {
-    if (this.spells.second.isActive) this.spells.second.isActive = false;
-    else {
-      this.spells.second.isActive = true;
-      this.spells.first.isActive = false;
+      this.toggleSpell("second");
     }
   }
 
   public override onUpdate(deltaTime: number): void {
+    super.onUpdate(deltaTime);
+
     const { first, second } = this.spells;
 
     if (first.isActive && this.canActivateSpell("first", deltaTime)) {
@@ -56,12 +42,7 @@ export class Magmax extends Character {
     } else {
       this.spells.first.isActive = false;
       this.spells.second.isActive = false;
-      this.characterMovement.currentSpeed = this.characterMovement.defaultSpeed;
-      this.statuses = this.statuses.filter((status) => status !== "immortal");
-      this.statuses = this.statuses.filter((status) => status !== "speedBoost");
     }
-
-    super.onUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
@@ -69,7 +50,7 @@ export class Magmax extends Character {
   }
 
   private toggleSpell(spellType: "first" | "second") {
-    if (this.spells[spellType].isActive) this.activateSpell(spellType);
+    if (!this.spells[spellType].isActive) this.activateSpell(spellType);
     else this.deactivateSpell(spellType);
   }
 
@@ -88,23 +69,28 @@ export class Magmax extends Character {
     deltaTime: number
   ): boolean {
     return (
-      this.energy.current > this.spells[spellType].manaUsage * deltaTime &&
+      this.characteristics.energy.current >
+        this.spells[spellType].manaUsage * deltaTime &&
       !this.isDead &&
-      this.level.upgrades.firstSpell > 0
+      this.level.upgrades.firstSpell.current > 0
     );
   }
 
   private applySpeedBoost(deltaTime: number) {
-    this.characterMovement.currentSpeed =
-      this.characterMovement.defaultSpeed +
-      this.spells.first.speed[this.level.upgrades.firstSpell - 1] * 60;
-    this.energy.current -= this.spells.first.manaUsage * deltaTime;
-    this.statuses.push("speedBoost");
+    this.characteristics.applyEffect(
+      {
+        speed:
+          this.spells.first.speed[this.level.upgrades.firstSpell.current - 1],
+      },
+      "speedBoost"
+    );
+    this.characteristics.energy.current -=
+      this.spells.first.manaUsage * deltaTime;
   }
 
   private applyImmortality(deltaTime: number) {
-    this.energy.current -= this.spells.second.manaUsage * deltaTime;
-    this.characterMovement.currentSpeed = 0;
-    this.statuses.push("immortal");
+    this.characteristics.energy.current -=
+      this.spells.second.manaUsage * deltaTime;
+    this.characteristics.applyEffect({ speed: -9999 }, "immortal");
   }
 }
