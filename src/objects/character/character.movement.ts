@@ -1,6 +1,6 @@
-import { renderer } from "../../core/global";
-import { Position } from "../../core/types/Position";
-import { Character } from "./character";
+import { userInput } from '../../core/global';
+import { Position } from '../../core/types/Position';
+import { Character } from './character';
 
 const characterSlow = 0.5;
 
@@ -10,12 +10,9 @@ export class CharacterMovement {
   public isBlocked: boolean;
   public size: number;
 
-  private pressedKeys: ("KeyW" | "KeyA" | "KeyS" | "KeyD" | "ShiftLeft")[];
-
   constructor(player: Character, startPosition: Position, size: number) {
     this.player = player;
     this.position = startPosition;
-    this.pressedKeys = [];
     this.isBlocked = false;
     this.size = size;
   }
@@ -28,76 +25,30 @@ export class CharacterMovement {
     this.isBlocked = true;
   }
 
-  public bind() {
-    document.addEventListener("keydown", this.movementStart.bind(this), false);
-    document.addEventListener("keyup", this.movementEnd.bind(this), false);
-  }
-
-  public unbind() {
-    document.removeEventListener(
-      "keydown",
-      this.movementStart.bind(this),
-      false
-    );
-    document.removeEventListener("keyup", this.movementEnd.bind(this), false);
-  }
-
-  private movementStart(e: KeyboardEvent) {
-    if (e.code === "KeyW") {
-      if (!this.pressedKeys.includes("KeyW")) this.pressedKeys.push("KeyW");
-    } else if (e.code === "KeyA") {
-      if (!this.pressedKeys.includes("KeyA")) this.pressedKeys.push("KeyA");
-    } else if (e.code === "KeyS") {
-      if (!this.pressedKeys.includes("KeyS")) this.pressedKeys.push("KeyS");
-    } else if (e.code === "KeyD") {
-      if (!this.pressedKeys.includes("KeyD")) this.pressedKeys.push("KeyD");
-    } else if (e.code === "ShiftLeft") {
-      if (!this.pressedKeys.includes("ShiftLeft"))
-        this.pressedKeys.push("ShiftLeft");
-    }
-  }
-
-  private movementEnd(e: KeyboardEvent) {
-    if (e.code === "KeyW") {
-      this.pressedKeys = this.pressedKeys.filter((a) => a !== "KeyW");
-    } else if (e.code === "KeyA") {
-      this.pressedKeys = this.pressedKeys.filter((a) => a !== "KeyA");
-    } else if (e.code === "KeyS") {
-      this.pressedKeys = this.pressedKeys.filter((a) => a !== "KeyS");
-    } else if (e.code === "KeyD") {
-      this.pressedKeys = this.pressedKeys.filter((a) => a !== "KeyD");
-    } else if (e.code === "ShiftLeft") {
-      this.pressedKeys = this.pressedKeys.filter((a) => a !== "ShiftLeft");
-    }
-  }
-
   public onUpdate(progress: number) {
     if (this.isBlocked) return;
 
-    let isMovingY =
-      this.pressedKeys.includes("KeyW") || this.pressedKeys.includes("KeyS");
-    let isMovingX =
-      this.pressedKeys.includes("KeyA") || this.pressedKeys.includes("KeyD");
+    let isMovingY = userInput.isKeypress('KeyW') || userInput.isKeypress('KeyS');
+    let isMovingX = userInput.isKeypress('KeyA') || userInput.isKeypress('KeyD');
 
     // normalizing the speed of the character
     let normalizedSpeed = this.player.characteristics.speed;
     if (isMovingY && isMovingX) normalizedSpeed /= 1.333;
 
-    if (this.pressedKeys.includes("ShiftLeft"))
-      normalizedSpeed *= characterSlow;
+    if (userInput.isKeypress('ShiftLeft')) normalizedSpeed *= characterSlow;
 
     // Fix При нажатии двух клавиш A и D, W и S. Performance optimization!!!
-    if (this.pressedKeys.includes("KeyW")) {
+    if (userInput.isKeypress('KeyW')) {
       this.position.y -= normalizedSpeed * progress;
     }
-    if (this.pressedKeys.includes("KeyS")) {
+    if (userInput.isKeypress('KeyS')) {
       this.position.y += normalizedSpeed * progress;
     }
 
-    if (this.pressedKeys.includes("KeyA")) {
+    if (userInput.isKeypress('KeyA')) {
       this.position.x -= normalizedSpeed * progress;
     }
-    if (this.pressedKeys.includes("KeyD")) {
+    if (userInput.isKeypress('KeyD')) {
       this.position.x += normalizedSpeed * progress;
     }
   }

@@ -1,6 +1,6 @@
-import { Character } from "./objects/character/character";
-import { gameloop, levelManager, renderer } from "./core/global";
-import { Magmax } from "./objects/characters/magmax/magmax";
+import { Character } from './objects/character/character';
+import { gameloop, levelManager, renderer, userInput } from './core/global';
+import { Magmax } from './objects/characters/magmax/magmax';
 
 export class Game {
   private character: Character;
@@ -14,15 +14,16 @@ export class Game {
 
   start() {
     renderer.init();
+    userInput.bind();
 
     this.character.create();
     levelManager.start();
 
-    window.addEventListener("blur", () => {
+    window.addEventListener('blur', () => {
       gameloop.stop();
     });
 
-    window.addEventListener("focus", () => {
+    window.addEventListener('focus', () => {
       gameloop.start();
     });
 

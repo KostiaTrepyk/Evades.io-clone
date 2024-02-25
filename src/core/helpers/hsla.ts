@@ -19,8 +19,8 @@ export class HSLA {
   public static fromString(colorString: string): HSLA {
     const [hue, saturation, light, alpha] = colorString
       .substring(5, colorString.length - 1)
-      .split(",")
-      .map((value) => parseFloat(value.trim()));
+      .split(',')
+      .map(value => parseFloat(value.trim()));
 
     return new HSLA(hue, saturation, light, alpha);
   }
@@ -94,12 +94,15 @@ export class HSLA {
   set setHue(hue: number) {
     this.hue = this.clampValue(hue, 0, 360);
   }
+
   set setSaturation(saturation: number) {
     this.saturation = this.clampValue(saturation, 0, 100);
   }
+
   set setLightness(lightness: number) {
     this.lightness = this.clampValue(lightness, 0, 100);
   }
+
   set setAlpha(alpha: number) {
     this.alpha = this.clampValue(alpha, 0, 1);
   }

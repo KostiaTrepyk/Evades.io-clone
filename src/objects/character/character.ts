@@ -1,15 +1,15 @@
-import { doItemsIntersect } from "../../core/doItemsIntersect";
-import { GameObject } from "../../core/common/GameObject";
-import { gameObjectManager } from "../../core/global";
-import { Position } from "../../core/types/Position";
-import { HSLA } from "../../core/helpers/hsla";
-import { RenderCharacterModel } from "./character.model";
-import { CharacterMovement } from "./character.movement";
-import { CharacterLevels } from "./character.levels";
-import { CharacterCharacteristics } from "./character.characteristics";
-import { CharacterCollision } from "./character.collision";
+import { doItemsIntersect } from '../../core/doItemsIntersect';
+import { GameObject } from '../../core/common/GameObject';
+import { gameObjectManager } from '../../core/global';
+import { Position } from '../../core/types/Position';
+import { HSLA } from '../../core/helpers/hsla';
+import { RenderCharacterModel } from './character.model';
+import { CharacterMovement } from './character.movement';
+import { CharacterLevels } from './character.levels';
+import { CharacterCharacteristics } from './character.characteristics';
+import { CharacterCollision } from './character.collision';
 
-export class Character extends GameObject<"circle"> {
+export class Character extends GameObject<'circle'> {
   public characterMovement: CharacterMovement;
   public characteristics: CharacterCharacteristics;
   public collision: CharacterCollision;
@@ -19,7 +19,7 @@ export class Character extends GameObject<"circle"> {
   public color: HSLA;
 
   constructor(startPsition: Position, size: number, color: HSLA) {
-    super(startPsition, { shape: "circle", size });
+    super(startPsition, { shape: 'circle', size });
 
     this.characterMovement = new CharacterMovement(this, startPsition, size);
     this.level = new CharacterLevels(this);
@@ -32,19 +32,17 @@ export class Character extends GameObject<"circle"> {
   public override create() {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     gameObjectManager.addGameObject(this);
-    this.characterMovement.bind();
     this.level.init();
   }
 
   public override delete() {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     gameObjectManager.removeGameObject(this);
-    this.characterMovement.unbind();
   }
 
   public revive(): void {
     let canBeRevived: boolean = true;
-    gameObjectManager.enemies.forEach((enemy) => {
+    gameObjectManager.enemies.forEach(enemy => {
       if (doItemsIntersect(this, enemy)) {
         canBeRevived = false;
       }
@@ -58,7 +56,7 @@ export class Character extends GameObject<"circle"> {
   }
 
   public die(): void {
-    if (this.characteristics.statuses.includes("immortal")) return;
+    if (this.characteristics.statuses.includes('immortal')) return;
 
     this.isDead = true;
     this.characterMovement.block();

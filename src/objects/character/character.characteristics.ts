@@ -5,9 +5,9 @@ type Status = "immortal" | "speedBoost";
 
 export class CharacterCharacteristics {
   private player: Character;
+
   public speed: number;
   public energy: { current: number; max: number; regen: number };
-
   /** Can be used to increase/decrease speed, increase/decrease mana regeneration, etc. Remember to apply the correct status. */
   public effects: { speed: number; energy: { max: number; regen: number } };
   public statuses: Status[];
@@ -47,7 +47,7 @@ export class CharacterCharacteristics {
     }
   }
 
-  /* Reset effects and statuses */
+  /** Reset effects and statuses. */
   public reset(): void {
     this.effects = { speed: 0, energy: { max: 0, regen: 0 } };
     this.statuses = [];

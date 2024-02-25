@@ -1,8 +1,8 @@
-import { gameObjectManager, renderer, uiRenderer } from "./global";
+import { gameObjectManager, renderer, uiRenderer, userInput } from './global';
 
 export class GameLoop {
   private lastRender: number | undefined;
-  private animationId: number = 0;
+  private animationId: number | undefined;
 
   constructor() {}
 
@@ -12,8 +12,14 @@ export class GameLoop {
 
     let deltaTime = (now - this.lastRender) / 1000;
 
+    // updates
     gameObjectManager.updateAll(deltaTime);
+    userInput.afterUpdate();
+
+    // gameObjects render
     renderer.renderFrame((ctx) => gameObjectManager.renderAll(ctx));
+
+    // UI render
     uiRenderer.render();
 
     this.lastRender = now;
@@ -24,8 +30,7 @@ export class GameLoop {
   }
 
   public stop(): void {
-    cancelAnimationFrame(this.animationId);
-    this.lastRender;
+    if (this.animationId) cancelAnimationFrame(this.animationId);
     this.lastRender = undefined;
   }
 }
