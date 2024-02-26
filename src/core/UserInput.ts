@@ -20,17 +20,29 @@ export class UserInput {
   }
 
   public bind() {
-    document.addEventListener('keydown', this.keyDownHandler.bind(this), false);
-    document.addEventListener('keyup', this.keyUpHandler.bind(this), false);
+    document.addEventListener(
+      'keydown',
+      this.keydownEventHandler.bind(this),
+      false
+    );
+    document.addEventListener(
+      'keyup',
+      this.keyupEventHandler.bind(this),
+      false
+    );
   }
 
   public unbind() {
     document.removeEventListener(
       'keydown',
-      this.keyDownHandler.bind(this),
+      this.keydownEventHandler.bind(this),
       false
     );
-    document.removeEventListener('keyup', this.keyUpHandler.bind(this), false);
+    document.removeEventListener(
+      'keyup',
+      this.keyupEventHandler.bind(this),
+      false
+    );
 
     this.keydown = new Set<string>();
     this.keypress = new Set<string>();
@@ -54,12 +66,18 @@ export class UserInput {
     this.keyup.clear();
   }
 
-  private keyDownHandler({ code }: KeyboardEvent) {
+  private keydownEventHandler(event: KeyboardEvent): void {
+    const { code, repeat } = event;
+
+    if (repeat) return;
+
     this.keydown.add(code);
     this.keypress.add(code);
   }
 
-  private keyUpHandler({ code }: KeyboardEvent) {
+  private keyupEventHandler(event: KeyboardEvent): void {
+    const { code } = event;
+
     this.keyup.add(code);
     this.keypress.delete(code);
   }
