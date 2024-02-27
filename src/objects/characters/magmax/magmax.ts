@@ -1,11 +1,12 @@
 import { HSLA } from '../../../core/helpers/hsla';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
+import { ISkill } from '../../character/skills/ISkill';
 import { ToggleSkill } from '../../character/skills/toggleSkill';
 
 export class Magmax extends Character {
-  private firstSkill: ToggleSkill;
-  private secondSkill: ToggleSkill;
+  public override firstSkill: ISkill;
+  public override secondSkill: ISkill;
 
   private spellsUpgrades = {
     first: { manaUsage: 2, speed: [2, 4, 6, 8, 10] },
@@ -19,12 +20,22 @@ export class Magmax extends Character {
       cooldown: 0,
       energyUsage: 2,
       whenActive: this.applySpeedBoost.bind(this),
+      condition: () => {
+        if (this.isDead) return false;
+        if (this.level.upgrades.firstSpell.current <= 0) return false;
+        return true;
+      },
     });
     this.secondSkill = new ToggleSkill(this, {
       key: 'KeyK',
-      cooldown: 0,
+      cooldown: 5_000,
       energyUsage: 12,
       whenActive: this.applyImmortality.bind(this),
+      condition: () => {
+        if (this.isDead) return false;
+        if (this.level.upgrades.secondSpell.current <= 0) return false;
+        return true;
+      },
     });
   }
 
