@@ -1,13 +1,18 @@
 import { KeyCode } from '../../../core/UserInput';
-import { userInput } from '../../../core/global';
+import { time, userInput } from '../../../core/global';
 import { Character } from '../character';
 
 export interface ToggleSkillOptions {
   key: KeyCode;
+
   /** In milliseconds */
   cooldown: number;
+
   energyUsage: number;
+
   whenActive: (deltaTime: number) => void;
+
+  condition?: () => boolean;
 }
 
 export class ToggleSkill {
@@ -20,27 +25,41 @@ export class ToggleSkill {
   private lastUsedTimestamp: number;
   private isActive: boolean;
 
+  private conditionUpdater: () => boolean;
+  private condition: boolean;
+
   constructor(player: Character, options: ToggleSkillOptions) {
-    const { key, cooldown, energyUsage, whenActive } = options;
+    const { key, cooldown, energyUsage, whenActive, condition } = options;
 
     this.player = player;
     this.key = key;
     this.cooldown = Math.max(0, cooldown);
     this.energyUsage = Math.min(0, energyUsage);
     this.whenActive = whenActive;
-    this.lastUsedTimestamp = 0;
+    this.lastUsedTimestamp = -cooldown / 1000;
     this.isActive = false;
+
+    this.conditionUpdater = condition ?? (() => true);
+    this.condition = false;
   }
 
   public onUpdate(deltaTime: number): void {
+    this.condition = this.conditionUpdater();
+
     if (userInput.isKeydown(this.key)) {
-      this.toggle(this.cooldown);
+      this.toggle(time.getInGameTime);
     }
 
     if (this.isActive) {
       this.whenActive(deltaTime);
       this.applyEnergyUsage(deltaTime);
     }
+    console.log(this.isAvailable(time.getInGameTime));
+  }
+
+  private toggle(currentTimestamp: number): void {
+    if (this.isActive) this.deactivate(currentTimestamp);
+    else this.activate(currentTimestamp);
   }
 
   private activate(currentTimestamp: number): void {
@@ -53,16 +72,11 @@ export class ToggleSkill {
     this.lastUsedTimestamp = currentTimestamp;
   }
 
-  private toggle(currentTimestamp: number): void {
-    if (this.isActive) this.deactivate(currentTimestamp);
-    else this.activate(currentTimestamp);
-  }
-
   private isAvailable(currentTimestamp: number): boolean {
-    if (this.cooldown <= 0) return true;
+    if (!this.condition) return false;
 
     const elapsedTime = currentTimestamp - this.lastUsedTimestamp;
-    return elapsedTime >= this.cooldown;
+    return elapsedTime >= this.cooldown / 1000;
   }
 
   private applyEnergyUsage(deltaTime: number) {
@@ -80,5 +94,10 @@ export class ToggleSkill {
 
   public get isActives(): boolean {
     return this.isActive;
+  }
+
+  public get cooldownPersentage(): number {
+    const elapsedTime = time.getInGameTime - this.lastUsedTimestamp;
+    return Math.min(elapsedTime / (this.cooldown / 1000), 1);
   }
 }
