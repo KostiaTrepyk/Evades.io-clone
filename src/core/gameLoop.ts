@@ -1,4 +1,10 @@
-import { gameObjectManager, renderer, uiRenderer, userInput } from './global';
+import {
+  gameObjectManager,
+  renderer,
+  time,
+  uiRenderer,
+  userInput,
+} from './global';
 
 export class GameLoop {
   private lastRender: number | undefined;
@@ -13,6 +19,7 @@ export class GameLoop {
     let deltaTime = (now - this.lastRender) / 1000;
 
     // updates
+    time.onUpdate(deltaTime);
     gameObjectManager.updateAll(deltaTime);
     userInput.afterUpdate();
 
