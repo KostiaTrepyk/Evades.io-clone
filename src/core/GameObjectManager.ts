@@ -1,10 +1,10 @@
-import { Character } from "../objects/character/character";
-import { Enemy } from "../objects/enemy/enemy";
-import { PointOrb } from "../objects/pointOrb/PointOrb";
-import { Portal } from "../objects/portal/portal";
-import { SaveZone } from "../objects/saveZone/SaveZone";
-import { GameObject } from "./common/GameObject";
-import { Shape } from "./types/Shape";
+import { Character } from '../objects/character/character';
+import { Enemy } from '../objects/enemy/enemy';
+import { PointOrb } from '../objects/pointOrb/PointOrb';
+import { Portal } from '../objects/portal/portal';
+import { SaveZone } from '../objects/saveZone/SaveZone';
+import { GameObject } from './common/GameObject';
+import { Shape } from './types/Shape';
 
 export class GameObjectManager {
   public player: Character | undefined;
@@ -53,7 +53,7 @@ export class GameObjectManager {
         this.portals.push(gameObject);
         break;
       default:
-        throw new Error("Unknown game object");
+        throw new Error('Unknown game object');
     }
   }
 
@@ -75,7 +75,7 @@ export class GameObjectManager {
         this.portals = this.portals.filter((item) => item !== gameObject);
         break;
       default:
-        throw new Error("Unknown game object");
+        throw new Error('Unknown game object');
     }
   }
 }

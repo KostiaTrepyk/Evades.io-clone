@@ -20,33 +20,20 @@ export class UserInput {
   }
 
   public bind() {
-    document.addEventListener(
-      'keydown',
-      this.keydownEventHandler.bind(this),
-      false
-    );
-    document.addEventListener(
-      'keyup',
-      this.keyupEventHandler.bind(this),
-      false
-    );
+    document.addEventListener('keydown', this.keydownEventHandler.bind(this));
+    document.addEventListener('keyup', this.keyupEventHandler.bind(this));
   }
 
   public unbind() {
     document.removeEventListener(
       'keydown',
-      this.keydownEventHandler.bind(this),
-      false
+      this.keydownEventHandler.bind(this)
     );
-    document.removeEventListener(
-      'keyup',
-      this.keyupEventHandler.bind(this),
-      false
-    );
+    document.removeEventListener('keyup', this.keyupEventHandler.bind(this));
 
-    this.keydown = new Set<string>();
-    this.keypress = new Set<string>();
-    this.keyup = new Set<string>();
+    this.keydown.clear();
+    this.keypress.clear();
+    this.keyup.clear();
   }
 
   public isKeypress(key: KeyCode): boolean {
@@ -69,10 +56,10 @@ export class UserInput {
   private keydownEventHandler(event: KeyboardEvent): void {
     const { code, repeat } = event;
 
-    if (repeat) return;
-
-    this.keydown.add(code);
-    this.keypress.add(code);
+    if (!repeat) {
+      this.keydown.add(code);
+      this.keypress.add(code);
+    }
   }
 
   private keyupEventHandler(event: KeyboardEvent): void {

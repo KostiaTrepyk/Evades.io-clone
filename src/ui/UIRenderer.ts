@@ -1,11 +1,11 @@
-import { characterSpeedPerPoint } from "../consts/consts";
-import { gameObjectManager, levelManager } from "../core/global";
+import { characterSpeedPerPoint } from '../consts/consts';
+import { gameObjectManager, levelManager } from '../core/global';
 import {
   ExtendedDrawTextOptions,
   drawText,
-} from "../core/helpers/canvas/drawText";
-import { Position } from "../core/types/Position";
-import { RenderCharacterModel } from "../objects/character/character.model";
+} from '../core/helpers/canvas/drawText';
+import { Position } from '../core/types/Position';
+import { RenderCharacterModel } from '../objects/character/character.model';
 
 type Section = {
   width: number;
@@ -17,10 +17,10 @@ export class UIRenderer {
   private ctx: CanvasRenderingContext2D;
 
   constructor() {
-    this.canvas = document.getElementById("interface")! as HTMLCanvasElement;
-    this.ctx = this.canvas.getContext("2d")!;
+    this.canvas = document.getElementById('interface')! as HTMLCanvasElement;
+    this.ctx = this.canvas.getContext('2d')!;
 
-    window.addEventListener("resize", this.setCanvasSize.bind(this));
+    window.addEventListener('resize', this.setCanvasSize.bind(this));
     this.setCanvasSize();
   }
 
@@ -36,20 +36,20 @@ export class UIRenderer {
 
     const barHeight = 120;
     const text = {
-      outlineColor: "#333",
+      outlineColor: '#333',
       fontSize: { main: 26, secondary: 14, t: 14 },
     };
 
     const drawTextOptions: Omit<
       ExtendedDrawTextOptions,
-      "position" | "fontSize"
+      'position' | 'fontSize'
     > = {
-      fillColor: "#fff",
+      fillColor: '#fff',
       lineWidth: 1,
-      strokeColor: "#444",
+      strokeColor: '#444',
       isBold: false,
-      textAlign: "center",
-      textBaseline: "middle",
+      textAlign: 'center',
+      textBaseline: 'middle',
     };
 
     const sections: Section[] = [
@@ -69,7 +69,7 @@ export class UIRenderer {
 
           ctx.beginPath();
           ctx.lineWidth = 2;
-          ctx.strokeStyle = "#333";
+          ctx.strokeStyle = '#333';
           ctx.moveTo(
             centeredPosition.x + (barHeight + 20) / 2,
             centeredPosition.y - barHeight / 2
@@ -92,22 +92,20 @@ export class UIRenderer {
                 y: centeredPosition.y - barHeight / 2 + 20,
               },
               fontSize: 16,
-              fillColor: "white",
+              fillColor: 'white',
             });
           }
 
           drawText(
             ctx,
-            (player.characteristics.speed / characterSpeedPerPoint)
-              .toFixed(1)
-              .toString(),
+            (player.characteristics.speed / characterSpeedPerPoint).toFixed(1),
             {
               position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
               fontSize: text.fontSize.main,
               ...drawTextOptions,
             }
           );
-          drawText(ctx, "Speed", {
+          drawText(ctx, 'Speed', {
             position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
             fontSize: text.fontSize.secondary,
             ...drawTextOptions,
@@ -118,7 +116,7 @@ export class UIRenderer {
             player.level.upgrades.speed.current <
               player.level.upgrades.speed.max
           ) {
-            drawUpgradeHelper(ctx, "1", centeredPosition);
+            drawUpgradeHelper(ctx, '1', centeredPosition);
           }
         },
       },
@@ -136,7 +134,7 @@ export class UIRenderer {
               ...drawTextOptions,
             }
           );
-          drawText(ctx, "Energy", {
+          drawText(ctx, 'Energy', {
             position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
             fontSize: text.fontSize.secondary,
             ...drawTextOptions,
@@ -147,23 +145,19 @@ export class UIRenderer {
             player.level.upgrades.maxEnergy.current <
               player.level.upgrades.maxEnergy.max
           ) {
-            drawUpgradeHelper(ctx, "2", centeredPosition);
+            drawUpgradeHelper(ctx, '2', centeredPosition);
           }
         },
       },
       {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
-          drawText(
-            ctx,
-            player.characteristics.energy.regen.toFixed(1).toString(),
-            {
-              position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
-              fontSize: text.fontSize.main,
-              ...drawTextOptions,
-            }
-          );
-          drawText(ctx, "Regen", {
+          drawText(ctx, player.characteristics.energy.regen.toFixed(1), {
+            position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
+            fontSize: text.fontSize.main,
+            ...drawTextOptions,
+          });
+          drawText(ctx, 'Regen', {
             position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
             fontSize: text.fontSize.secondary,
             ...drawTextOptions,
@@ -174,23 +168,29 @@ export class UIRenderer {
             player.level.upgrades.regen.current <
               player.level.upgrades.regen.max
           ) {
-            drawUpgradeHelper(ctx, "3", centeredPosition);
+            drawUpgradeHelper(ctx, '3', centeredPosition);
           }
         },
       },
       {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
+          if (!player.firstSkill) return;
+
           drawText(ctx, player.level.upgrades.firstSpell.current.toString(), {
             position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
             fontSize: 26,
             ...drawTextOptions,
           });
-          drawText(ctx, "First spell", {
-            position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
-            fontSize: 12,
-            ...drawTextOptions,
-          });
+          drawText(
+            ctx,
+            (player.firstSkill.cooldownPersentage * 100).toFixed(0),
+            {
+              position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
+              fontSize: 12,
+              ...drawTextOptions,
+            }
+          );
           drawSkillPoints(
             ctx,
             {
@@ -205,25 +205,31 @@ export class UIRenderer {
             player.level.upgrades.firstSpell.current <
               player.level.upgrades.firstSpell.max
           ) {
-            drawUpgradeHelper(ctx, "4", centeredPosition);
+            drawUpgradeHelper(ctx, '4', centeredPosition);
           } else if (player.level.upgrades.firstSpell.current > 0) {
-            drawUseHelper(ctx, "[ J ]", centeredPosition);
+            drawUseHelper(ctx, '[ J ]', centeredPosition);
           }
         },
       },
       {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
+          if (!player.secondSkill) return;
+
           drawText(ctx, player.level.upgrades.secondSpell.current.toString(), {
             position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
             fontSize: 26,
             ...drawTextOptions,
           });
-          drawText(ctx, "Second spell", {
-            position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
-            fontSize: 12,
-            ...drawTextOptions,
-          });
+          drawText(
+            ctx,
+            (player.secondSkill.cooldownPersentage * 100).toFixed(0),
+            {
+              position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
+              fontSize: 12,
+              ...drawTextOptions,
+            }
+          );
           drawSkillPoints(
             ctx,
             {
@@ -238,9 +244,9 @@ export class UIRenderer {
             player.level.upgrades.secondSpell.current <
               player.level.upgrades.secondSpell.max
           ) {
-            drawUpgradeHelper(ctx, "5", centeredPosition);
+            drawUpgradeHelper(ctx, '5', centeredPosition);
           } else if (player.level.upgrades.secondSpell.current > 0) {
-            drawUseHelper(ctx, "[ K ]", centeredPosition);
+            drawUseHelper(ctx, '[ K ]', centeredPosition);
           }
         },
       },
@@ -262,7 +268,7 @@ export class UIRenderer {
         const element = sections.at(i);
 
         if (element) position.x += element.width;
-        else throw new Error("Section does not exist");
+        else throw new Error('Section does not exist');
       }
 
       if (section.draw) {
@@ -279,8 +285,8 @@ export class UIRenderer {
       centeredPosition: Position,
       count: number
     ) => {
-      ctx.fillStyle = "yellow";
-      ctx.strokeStyle = "#666";
+      ctx.fillStyle = 'yellow';
+      ctx.strokeStyle = '#666';
       ctx.lineWidth = 2;
       let i = -2;
       Array(5)
@@ -323,7 +329,7 @@ export class UIRenderer {
     ) => {
       ctx.beginPath();
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "000d";
+      ctx.strokeStyle = '000d';
       ctx.fillStyle = color;
       ctx.fillRect(position.x, position.y, barWidth * (value / maxValue), 20);
       this.ctx.strokeRect(position.x + 1, position.y, barWidth - 2, 20);
@@ -335,7 +341,7 @@ export class UIRenderer {
       centeredPosition: Position
     ) => {
       ctx.beginPath();
-      ctx.fillStyle = "yellow";
+      ctx.fillStyle = 'yellow';
       ctx.roundRect(
         centeredPosition.x - 10,
         centeredPosition.y + 32,
@@ -347,11 +353,11 @@ export class UIRenderer {
       drawText(ctx, hint, {
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
         fontSize: text.fontSize.t,
-        fillColor: "black",
-        strokeColor: "transparent",
+        fillColor: 'black',
+        strokeColor: 'transparent',
         isBold: true,
-        textAlign: "center",
-        textBaseline: "middle",
+        textAlign: 'center',
+        textBaseline: 'middle',
       });
     };
 
@@ -363,16 +369,16 @@ export class UIRenderer {
       drawText(ctx, hint, {
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
         fontSize: text.fontSize.t + 1,
-        fillColor: "#eee",
-        strokeColor: "transparent",
+        fillColor: '#eee',
+        strokeColor: 'transparent',
         isBold: true,
-        textAlign: "center",
-        textBaseline: "middle",
+        textAlign: 'center',
+        textBaseline: 'middle',
       });
     };
 
     // bg color
-    this.ctx.fillStyle = "#000d";
+    this.ctx.fillStyle = '#000d';
     this.ctx.fillRect(barPosition.x, barPosition.y, barWidth, barHeight);
 
     // Draw Exp bar
@@ -393,13 +399,13 @@ export class UIRenderer {
       this.ctx,
       `Central Core: Area ${levelManager.currentLevel} (${levelManager.currentStage})`,
       {
-        fillColor: "#fff",
+        fillColor: '#fff',
         fontSize: 42,
         position: { x: this.ctx.canvas.width / 2, y: 40 },
-        textAlign: "center",
-        textBaseline: "middle",
+        textAlign: 'center',
+        textBaseline: 'middle',
         lineWidth: 2.5,
-        strokeColor: "#666",
+        strokeColor: '#666',
       }
     );
   }
