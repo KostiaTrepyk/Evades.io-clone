@@ -8,8 +8,12 @@ import { CharacterMovement } from './character.movement';
 import { CharacterLevels } from './character.levels';
 import { CharacterCharacteristics } from './character.characteristics';
 import { CharacterCollision } from './character.collision';
+import { ISkill } from './skills/ISkill';
 
 export class Character extends GameObject<'circle'> {
+  public firstSkill: ISkill | undefined;
+  public secondSkill: ISkill | undefined;
+
   public characterMovement: CharacterMovement;
   public characteristics: CharacterCharacteristics;
   public collision: CharacterCollision;
@@ -42,7 +46,7 @@ export class Character extends GameObject<'circle'> {
 
   public revive(): void {
     let canBeRevived: boolean = true;
-    gameObjectManager.enemies.forEach(enemy => {
+    gameObjectManager.enemies.forEach((enemy) => {
       if (doItemsIntersect(this, enemy)) {
         canBeRevived = false;
       }

@@ -28,7 +28,7 @@ export class Magmax extends Character {
     });
     this.secondSkill = new ToggleSkill(this, {
       key: 'KeyK',
-      cooldown: 5_000,
+      cooldown: 5,
       energyUsage: 12,
       whenActive: this.applyImmortality.bind(this),
       condition: () => {
