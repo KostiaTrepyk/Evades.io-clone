@@ -20,5 +20,6 @@ export class GameObject<S extends Shape> {
   public delete(): void {}
 
   public onUpdate?(deltaTime: number): void 
+  public afterUpdate?(deltaTime: number): void 
   public onRender?(ctx: CanvasRenderingContext2D): void 
 }

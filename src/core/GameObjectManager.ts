@@ -24,6 +24,8 @@ export class GameObjectManager {
     this.player?.onUpdate(deltaTime);
     this.enemies.forEach((enemy) => enemy.onUpdate(deltaTime));
     this.portals.forEach((portal) => portal.onUpdate(deltaTime));
+
+    this.player?.afterUpdate(deltaTime);
   }
 
   public renderAll(ctx: CanvasRenderingContext2D): void {

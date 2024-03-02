@@ -1,6 +1,6 @@
-import { doItemsIntersect } from "../../core/doItemsIntersect";
-import { gameObjectManager, renderer } from "../../core/global";
-import { Character } from "./character";
+import { doItemsIntersect } from '../../core/doItemsIntersect';
+import { gameObjectManager, renderer } from '../../core/global';
+import { Character } from './character';
 
 export class CharacterCollision {
   private player: Character;
@@ -9,24 +9,18 @@ export class CharacterCollision {
     this.player = player;
   }
 
-  public onUpdate(deltaTime: number): void {
-    // Ты куда? Не убегай за екран!!!
-    if (this.player.position.x < this.player.objectModel.size / 2)
-      this.player.position.x = this.player.objectModel.size / 2;
-    else if (
-      this.player.position.x >
-      renderer.canvasSize.x - this.player.objectModel.size / 2
-    )
-      this.player.position.x =
-        renderer.canvasSize.x - this.player.objectModel.size / 2;
-    if (this.player.position.y < this.player.objectModel.size / 2)
-      this.player.position.y = this.player.objectModel.size / 2;
-    else if (
-      this.player.position.y >
-      renderer.canvasSize.y - this.player.objectModel.size / 2
-    )
-      this.player.position.y =
-        renderer.canvasSize.y - this.player.objectModel.size / 2;
+  public afterUpdate(deltaTime: number): void {
+    // Collision with walls
+    const halfSize = this.player.objectModel.size / 2;
+    const position = this.player.position;
+
+    if (position.x - halfSize < 0) position.x = halfSize;
+    else if (position.x + halfSize > renderer.canvasSize.x)
+      position.x = renderer.canvasSize.x - halfSize;
+
+    if (position.y - halfSize < 0) position.y = halfSize;
+    else if (position.y + halfSize > renderer.canvasSize.y)
+      position.y = renderer.canvasSize.y - halfSize;
 
     // Check collision
     gameObjectManager.enemies.forEach((enemy) => {

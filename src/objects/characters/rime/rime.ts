@@ -1,6 +1,6 @@
 import { GameObject } from '../../../core/common/GameObject';
 import { doItemsIntersect } from '../../../core/doItemsIntersect';
-import { gameObjectManager, userInput } from '../../../core/global';
+import { gameObjectManager, renderer, userInput } from '../../../core/global';
 import { HSLA } from '../../../core/helpers/hsla';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
@@ -81,11 +81,11 @@ export class Rime extends Character {
     if (this.secondSkillRangeVisibility) {
       const currentSkillLevel = this.level.upgrades.secondSpell.current;
       const radius = this.spellsUpgrades.second.radius[currentSkillLevel - 1];
-      const freezeDuration = 2;
+      const freezeDuration = 1.5;
 
       this.secondSkill.applyEnergyUsage();
       this.freezeEnemy(radius, freezeDuration);
-      this.secondSkill.setCooldown = 1;
+      this.secondSkill.setCooldown = 0.5;
       this.secondSkillRangeVisibility = false;
     } else {
       this.secondSkillRangeVisibility = true;

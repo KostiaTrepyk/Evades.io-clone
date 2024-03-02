@@ -82,9 +82,12 @@ export class Character extends GameObject<'circle'> {
 
     this.characteristics.onUpdate(deltaTime);
     this.characterMovement.onUpdate(deltaTime);
-    this.collision.onUpdate(deltaTime);
 
     this.characteristics.reset();
+  }
+
+  public override afterUpdate(deltaTime: number): void {
+    this.collision.afterUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D) {

@@ -1,26 +1,30 @@
-import { Character } from "../objects/character/character";
-import { gameObjectManager } from "./global";
+import { gameObjectManager } from './global';
+import { Position } from './types/Position';
 
 const zoom = 0.85;
 
 export class CameraController {
-  public player: Character | undefined;
-
   constructor() {}
 
   public onRender(ctx: CanvasRenderingContext2D) {
-    if (!this.player) {
-      this.player = gameObjectManager.player;
-      return;
-    }
+    const player = gameObjectManager.player;
 
+    if (player) this.setTrasform(ctx, player.position, zoom);
+    else this.setTrasform(ctx, { x: 0, y: 0 }, zoom);
+  }
+
+  private setTrasform(
+    ctx: CanvasRenderingContext2D,
+    position: Position,
+    zoom: number
+  ): void {
     ctx.setTransform(
       zoom,
       0,
       0,
       zoom,
-      -this.player.position.x * zoom + ctx.canvas.width / 2,
-      -this.player.position.y * zoom + ctx.canvas.height / 2
+      -position.x * zoom + ctx.canvas.width / 2,
+      -position.y * zoom + ctx.canvas.height / 2
     );
   }
 }
