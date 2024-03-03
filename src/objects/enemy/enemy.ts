@@ -1,5 +1,6 @@
 import { GameObject } from '../../core/common/GameObject';
 import { gameObjectManager, time } from '../../core/global';
+import { HSLA } from '../../core/helpers/hsla';
 import { Position } from '../../core/types/Position';
 import { EnemyCollision } from './enemy.collision';
 import { RenderEnemyModel } from './enemy.model';
@@ -8,6 +9,7 @@ export class Enemy extends GameObject<'circle'> {
   private collision: EnemyCollision;
   public velocity: { x: number; y: number };
   private freezeStatus: { from: number; duration: number };
+  public color: HSLA;
 
   constructor(
     position: Position,
@@ -19,6 +21,7 @@ export class Enemy extends GameObject<'circle'> {
     this.collision = new EnemyCollision(this);
     this.velocity = velocity;
     this.freezeStatus = { from: 0, duration: 0 };
+    this.color = new HSLA(0, 0, 60, 1);
   }
 
   public override create(): void {
@@ -44,7 +47,7 @@ export class Enemy extends GameObject<'circle'> {
   public override onRender(ctx: CanvasRenderingContext2D): void {
     if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
 
-    RenderEnemyModel(ctx, this.position, this.objectModel.size);
+    RenderEnemyModel(ctx, this.position, this.objectModel.size, this.color);
   }
 
   public isFreezed(): boolean {
