@@ -24,14 +24,6 @@ export class Enemy extends GameObject<'circle'> {
     this.color = new HSLA(0, 0, 60, 1);
   }
 
-  public override create(): void {
-    gameObjectManager.addGameObject(this);
-  }
-
-  public override delete(): void {
-    gameObjectManager.removeGameObject(this);
-  }
-
   public override onUpdate(deltaTime: number): void {
     if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
 

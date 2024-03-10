@@ -3,19 +3,17 @@ import { UIRenderer } from '../ui/UIRenderer';
 import { GameLoop } from './GameLoop';
 import { GameObjectManager } from './GameObjectManager';
 import { UserInput } from './UserInput';
-import { LevelManager } from './Level/LevelManager';
 import { Renderer } from './Renderer';
 import { CameraController } from './camera.controller';
 import { Time } from './Time';
 
-const gameloop = new GameLoop();
+const time = new Time();
 const userInput = new UserInput();
-const renderer = new Renderer();
 const gameObjectManager = new GameObjectManager();
 const camera = new CameraController();
-const levelManager = new LevelManager();
 const uiRenderer = new UIRenderer();
-const time = new Time();
+const renderer = new Renderer(camera);
+const gameloop = new GameLoop();
 
 const game = new Game();
 
@@ -24,8 +22,6 @@ export {
   userInput,
   renderer,
   gameObjectManager,
-  camera,
-  levelManager,
   uiRenderer,
   time,
   game,

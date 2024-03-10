@@ -1,7 +1,8 @@
 import { Character } from './objects/character/character';
-import { gameloop, levelManager, renderer, userInput } from './core/global';
+import { gameloop, renderer, userInput } from './core/global';
 import { Magmax } from './objects/characters/magmax/magmax';
 import { Rime } from './objects/characters/rime/rime';
+import { gameMap } from './core/GameMap/GameMapConfiguration';
 
 export class Game {
   private character: Character;
@@ -18,7 +19,7 @@ export class Game {
     userInput.bind();
 
     this.character.create();
-    levelManager.start();
+    gameMap.generateCurrentLevel('start');
 
     window.addEventListener('blur', () => {
       gameloop.stop();

@@ -1,5 +1,6 @@
 import { characterSpeedPerPoint } from '../consts/consts';
-import { gameObjectManager, levelManager } from '../core/global';
+import { gameMap } from '../core/GameMap/GameMapConfiguration';
+import { gameObjectManager } from '../core/global';
 import {
   ExtendedDrawTextOptions,
   drawText,
@@ -395,19 +396,15 @@ export class UIRenderer {
   }
 
   private renderLevelDescription() {
-    drawText(
-      this.ctx,
-      `Central Core: Area ${levelManager.currentLevel} (${levelManager.currentStage})`,
-      {
-        fillColor: '#fff',
-        fontSize: 42,
-        position: { x: this.ctx.canvas.width / 2, y: 40 },
-        textAlign: 'center',
-        textBaseline: 'middle',
-        lineWidth: 2.5,
-        strokeColor: '#666',
-      }
-    );
+    drawText(this.ctx, `${gameMap.getCurrentTunelName()}`, {
+      fillColor: '#fff',
+      fontSize: 42,
+      position: { x: this.ctx.canvas.width / 2, y: 40 },
+      textAlign: 'center',
+      textBaseline: 'middle',
+      lineWidth: 2.5,
+      strokeColor: '#666',
+    });
   }
 
   private setCanvasSize() {

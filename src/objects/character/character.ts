@@ -34,14 +34,8 @@ export class Character extends GameObject<'circle'> {
   }
 
   public override create() {
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    gameObjectManager.addGameObject(this);
+    super.create();
     this.level.init();
-  }
-
-  public override delete() {
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    gameObjectManager.removeGameObject(this);
   }
 
   public revive(): void {
