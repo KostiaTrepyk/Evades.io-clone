@@ -1,22 +1,22 @@
 import { GenerateLevelOptions } from './LevelGenerator/LevelGenerator';
 
 export class Stage {
-  private levelCount: number;
-  private levelConfiguration: Omit<GenerateLevelOptions, 'portals'>;
+  private _levelCount: number;
+  private _levelConfiguration: Omit<GenerateLevelOptions, 'portals'>;
 
   constructor(
     levelCount: number,
     levelConfiguration: Omit<GenerateLevelOptions, 'portals'>
   ) {
-    this.levelCount = levelCount;
-    this.levelConfiguration = {
+    this._levelCount = levelCount;
+    this._levelConfiguration = {
       ...levelConfiguration,
     };
   }
 
   public getLevelConfiguration(level: number): GenerateLevelOptions {
     const result: GenerateLevelOptions = {
-      ...this.levelConfiguration,
+      ...this._levelConfiguration,
       portals: {},
     };
 
@@ -31,7 +31,7 @@ export class Stage {
     return result;
   }
 
-  public getLevelCount(): number {
-    return this.levelCount;
+  public get levelCount(): number {
+    return this._levelCount;
   }
 }

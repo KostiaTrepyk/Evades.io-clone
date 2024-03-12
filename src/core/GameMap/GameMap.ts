@@ -5,49 +5,49 @@ import {
 import { Tunel } from './Tunel';
 
 export class GameMap {
-  private tunels: Tunel[];
-  private playerPositionOnMap: { tunel: number; level: number };
+  private _tunels: Tunel[];
+  private _playerPositionOnMap: { tunel: number; level: number };
 
   constructor(tunels: Tunel[]) {
-    this.tunels = tunels;
-    this.playerPositionOnMap = { tunel: 0, level: 0 };
+    this._tunels = tunels;
+    this._playerPositionOnMap = { tunel: 0, level: 0 };
   }
 
   public prevLevel(): void {
-    if (this.playerPositionOnMap.level > 0) {
-      this.playerPositionOnMap.level--;
+    if (this._playerPositionOnMap.level > 0) {
+      this._playerPositionOnMap.level--;
       this.generateCurrentLevel('end');
     }
   }
 
   public prevTunel(): void {
-    if (this.playerPositionOnMap.tunel <= 0) {
-      this.playerPositionOnMap.tunel = this.tunels.length - 1;
+    if (this._playerPositionOnMap.tunel <= 0) {
+      this._playerPositionOnMap.tunel = this._tunels.length - 1;
     } else {
-      this.playerPositionOnMap.tunel--;
+      this._playerPositionOnMap.tunel--;
     }
-    this.playerPositionOnMap.level = 0;
+    this._playerPositionOnMap.level = 0;
     this.generateCurrentLevel('start');
   }
 
   public nextTunel(): void {
-    if (this.playerPositionOnMap.tunel >= this.tunels.length - 1) {
-      this.playerPositionOnMap.tunel = 0;
+    if (this._playerPositionOnMap.tunel >= this._tunels.length - 1) {
+      this._playerPositionOnMap.tunel = 0;
     } else {
-      this.playerPositionOnMap.tunel++;
+      this._playerPositionOnMap.tunel++;
     }
-    this.playerPositionOnMap.level = 0;
+    this._playerPositionOnMap.level = 0;
     this.generateCurrentLevel('start');
   }
 
   public nextLevel(): void {
     if (
-      this.tunels[this.playerPositionOnMap.tunel].getLevelsToWin() <=
-      this.playerPositionOnMap.level + 1
+      this._tunels[this._playerPositionOnMap.tunel].levelsToWin <=
+      this._playerPositionOnMap.level + 1
     ) {
       console.log('win');
     } else {
-      this.playerPositionOnMap.level++;
+      this._playerPositionOnMap.level++;
       this.generateCurrentLevel('start');
     }
   }
@@ -57,12 +57,19 @@ export class GameMap {
   }
 
   public getCurrentLevelConfiguration(): GenerateLevelOptions {
-    return this.tunels[this.playerPositionOnMap.tunel].getlevelConfiguration(
-      this.playerPositionOnMap.level
+    return this._tunels[this._playerPositionOnMap.tunel].getlevelConfiguration(
+      this._playerPositionOnMap.level
     );
   }
 
-  public getCurrentTunelName(): string {
-    return this.tunels[this.playerPositionOnMap.tunel].getName();
+  public getCurrentTunelDetails(): {
+    currentLevel: number;
+    tunel: Tunel;
+  } {
+    const currentTunnel = this._tunels[this._playerPositionOnMap.tunel];
+    return {
+      currentLevel: this._playerPositionOnMap.level,
+      tunel: currentTunnel,
+    };
   }
 }

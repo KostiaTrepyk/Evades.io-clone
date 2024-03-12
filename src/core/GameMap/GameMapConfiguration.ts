@@ -39,7 +39,7 @@ const commonTunelStages: Stage[] = [
     ],
   }),
 ];
-const commonTunel = new Tunel('Central Core', 40, commonTunelStages);
+const commonTunel = new Tunel('Central Core', 40, commonTunelStages, 'Area');
 
 // Seccond Tunel
 const secondTunelStages: Stage[] = [
@@ -77,7 +77,7 @@ const secondTunelStages: Stage[] = [
     ],
   }),
 ];
-const secondTunel = new Tunel('Second Tunel', 20, secondTunelStages);
+const secondTunel = new Tunel('Second Tunel', 20, secondTunelStages, 'Tunel');
 
 // Third Tunel
 const thirdTunelStages: Stage[] = [
@@ -98,6 +98,6 @@ const thirdTunelStages: Stage[] = [
     ],
   }),
 ];
-const thirdTunel = new Tunel('Third Tunel', 5, thirdTunelStages);
+const thirdTunel = new Tunel('Third Tunel', 5, thirdTunelStages, 'Tunel');
 
 export const gameMap = new GameMap([commonTunel, secondTunel, thirdTunel]);

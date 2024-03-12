@@ -396,15 +396,22 @@ export class UIRenderer {
   }
 
   private renderLevelDescription() {
-    drawText(this.ctx, `${gameMap.getCurrentTunelName()}`, {
-      fillColor: '#fff',
-      fontSize: 42,
-      position: { x: this.ctx.canvas.width / 2, y: 40 },
-      textAlign: 'center',
-      textBaseline: 'middle',
-      lineWidth: 2.5,
-      strokeColor: '#666',
-    });
+    const currentTunelDetails = gameMap.getCurrentTunelDetails();
+    drawText(
+      this.ctx,
+      `${currentTunelDetails.tunel.name}: ${currentTunelDetails.tunel.type} ${
+        currentTunelDetails.currentLevel + 1
+      }`,
+      {
+        fillColor: '#fff',
+        fontSize: 42,
+        position: { x: this.ctx.canvas.width / 2, y: 40 },
+        textAlign: 'center',
+        textBaseline: 'middle',
+        lineWidth: 2.5,
+        strokeColor: '#666',
+      }
+    );
   }
 
   private setCanvasSize() {
