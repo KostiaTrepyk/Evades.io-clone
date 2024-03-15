@@ -25,7 +25,7 @@ export class Tunel {
       0
     );
 
-    let levels = level % maxLevels;
+    let levels = (level + 1) % maxLevels;
     let currentStage;
 
     for (const stage of this._stages) {

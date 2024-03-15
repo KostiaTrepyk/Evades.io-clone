@@ -39,18 +39,15 @@ export class Character extends GameObject<'circle'> {
   }
 
   public revive(): void {
-    let canBeRevived: boolean = true;
+    this.isDead = false;
+    this.characterMovement.unblock();
+    this.timeToDeath = undefined;
+
     gameObjectManager.enemies.forEach((enemy) => {
       if (doItemsIntersect(this, enemy)) {
-        canBeRevived = false;
+        this.die();
       }
     });
-
-    if (canBeRevived) {
-      this.isDead = false;
-      this.characterMovement.unblock();
-      this.timeToDeath = undefined;
-    }
   }
 
   public die(): void {

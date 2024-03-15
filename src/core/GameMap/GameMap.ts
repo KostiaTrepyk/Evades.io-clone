@@ -20,6 +20,18 @@ export class GameMap {
     }
   }
 
+  public nextLevel(): void {
+    if (
+      this._tunels[this._playerPositionOnMap.tunel].levelsToWin <=
+      this._playerPositionOnMap.level + 1
+    ) {
+      console.log('win');
+    } else {
+      this._playerPositionOnMap.level++;
+      this.generateCurrentLevel('start');
+    }
+  }
+
   public prevTunel(): void {
     if (this._playerPositionOnMap.tunel <= 0) {
       this._playerPositionOnMap.tunel = this._tunels.length - 1;
@@ -38,18 +50,6 @@ export class GameMap {
     }
     this._playerPositionOnMap.level = 0;
     this.generateCurrentLevel('start');
-  }
-
-  public nextLevel(): void {
-    if (
-      this._tunels[this._playerPositionOnMap.tunel].levelsToWin <=
-      this._playerPositionOnMap.level + 1
-    ) {
-      console.log('win');
-    } else {
-      this._playerPositionOnMap.level++;
-      this.generateCurrentLevel('start');
-    }
   }
 
   public generateCurrentLevel(playerPosition: 'start' | 'end'): void {

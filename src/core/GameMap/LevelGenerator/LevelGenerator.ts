@@ -5,7 +5,7 @@ import { PointOrb } from '../../../objects/pointOrb/PointOrb';
 import { Portal } from '../../../objects/portal/portal';
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
 import { gameObjectManager, renderer } from '../../global';
-import { gameMap } from '../GameMapConfiguration';
+import { gameMap } from '../Configuration/GameMapConfiguration';
 import { createCommonEnemy } from './create/createCommonEnemy';
 import {
   getRandomPosition,

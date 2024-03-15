@@ -2,7 +2,7 @@ import { Character } from './objects/character/character';
 import { gameloop, renderer, userInput } from './core/global';
 import { Magmax } from './objects/characters/magmax/magmax';
 import { Rime } from './objects/characters/rime/rime';
-import { gameMap } from './core/GameMap/GameMapConfiguration';
+import { gameMap } from './core/GameMap/Configuration/GameMapConfiguration';
 
 export class Game {
   private character: Character;
@@ -20,6 +20,11 @@ export class Game {
 
     this.character.create();
     gameMap.generateCurrentLevel('start');
+
+    window.addEventListener('keydown', ({ code }) => {
+      if (code === 'KeyM') gameMap.nextLevel();
+      if (code === 'KeyN') gameMap.prevLevel();
+    });
 
     window.addEventListener('blur', () => {
       gameloop.stop();

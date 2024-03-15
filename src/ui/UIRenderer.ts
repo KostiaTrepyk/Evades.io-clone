@@ -1,5 +1,5 @@
 import { characterSpeedPerPoint } from '../consts/consts';
-import { gameMap } from '../core/GameMap/GameMapConfiguration';
+import { gameMap } from '../core/GameMap/Configuration/GameMapConfiguration';
 import { gameObjectManager } from '../core/global';
 import {
   ExtendedDrawTextOptions,
