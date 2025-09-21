@@ -62,14 +62,14 @@ export class GameMap {
     );
   }
 
-  public getCurrentTunelDetails(): {
+  public getCurrentTunnelDetails(): {
     currentLevel: number;
-    tunel: Tunel;
+    tunnel: Tunel;
   } {
     const currentTunnel = this._tunels[this._playerPositionOnMap.tunel];
     return {
       currentLevel: this._playerPositionOnMap.level,
-      tunel: currentTunnel,
+      tunnel: currentTunnel,
     };
   }
 }

@@ -1,5 +1,5 @@
 import { Character } from './objects/character/character';
-import { gameloop, renderer, userInput } from './core/global';
+import { gameLoop, renderer, userInput } from './core/global';
 import { Magmax } from './objects/characters/magmax/magmax';
 import { Rime } from './objects/characters/rime/rime';
 import { gameMap } from './core/GameMap/Configuration/GameMapConfiguration';
@@ -28,15 +28,15 @@ export class Game {
       if (code === 'KeyN') gameMap.prevLevel();
     });
 
-    // !!!FIX ME Пауза и старт когда ALT+Tab. В тоерии может запускать игру когда нам это не нужно
+    // !!!FIX ME Пауза и старт когда ALT+Tab. В теории может запускать игру когда нам это не нужно
     window.addEventListener('blur', () => {
-      gameloop.stop();
+      gameLoop.stop();
     });
 
     window.addEventListener('focus', () => {
-      gameloop.start();
+      gameLoop.start();
     });
 
-    gameloop.start();
+    gameLoop.start();
   }
 }

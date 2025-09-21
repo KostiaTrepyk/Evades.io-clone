@@ -13,12 +13,12 @@ const gameObjectManager = new GameObjectManager();
 const camera = new CameraController();
 const uiRenderer = new UIRenderer();
 const renderer = new Renderer(camera);
-const gameloop = new GameLoop();
+const gameLoop = new GameLoop();
 
 const game = new Game();
 
 export {
-  gameloop,
+  gameLoop,
   userInput,
   renderer,
   gameObjectManager,

@@ -9,11 +9,11 @@ export class CameraController {
   public onRender(ctx: CanvasRenderingContext2D) {
     const player = gameObjectManager.player;
 
-    if (player) this.setTrasform(ctx, player.position, zoom);
-    else this.setTrasform(ctx, { x: 0, y: 0 }, zoom);
+    if (player) this.setTransform(ctx, player.position, zoom);
+    else this.setTransform(ctx, { x: 0, y: 0 }, zoom);
   }
 
-  private setTrasform(
+  private setTransform(
     ctx: CanvasRenderingContext2D,
     position: Position,
     zoom: number

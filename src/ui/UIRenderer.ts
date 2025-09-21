@@ -31,6 +31,7 @@ export class UIRenderer {
     this.renderCharacterDescription();
     this.renderLevelDescription();
   }
+
   private renderCharacterDescription() {
     const player = gameObjectManager.player;
     if (!player) return;
@@ -396,11 +397,11 @@ export class UIRenderer {
   }
 
   private renderLevelDescription() {
-    const currentTunelDetails = gameMap.getCurrentTunelDetails();
+    const currentTunnelDetails = gameMap.getCurrentTunnelDetails();
     drawText(
       this.ctx,
-      `${currentTunelDetails.tunel.name}: ${currentTunelDetails.tunel.type} ${
-        currentTunelDetails.currentLevel + 1
+      `${currentTunnelDetails.tunnel.name}: ${currentTunnelDetails.tunnel.type} ${
+        currentTunnelDetails.currentLevel + 1
       }`,
       {
         fillColor: '#fff',

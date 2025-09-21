@@ -39,6 +39,7 @@ export class Renderer {
     this.ctx.canvas.height = window.innerHeight;
   }
 
+  /** FIX ME Походу можно ускорить. Нужно позже подумать */
   private drawCells(ctx: CanvasRenderingContext2D) {
     const horizontalCells = this.canvasSize.x / cellSize;
     const verticalCells = this.canvasSize.y / cellSize;
