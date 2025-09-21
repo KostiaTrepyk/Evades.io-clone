@@ -4,7 +4,7 @@ import { gameObjectManager } from '../core/global';
 import {
   ExtendedDrawTextOptions,
   drawText,
-} from '../core/helpers/canvas/drawText';
+} from '../core/utils/canvas/drawText';
 import { Position } from '../core/types/Position';
 import { RenderCharacterModel } from '../objects/character/character.model';
 

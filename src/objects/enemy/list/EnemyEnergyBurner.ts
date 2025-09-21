@@ -1,7 +1,7 @@
 import { GameObject } from '../../../core/common/GameObject';
-import { doItemsIntersect } from '../../../core/doItemsIntersect';
+import { doItemsIntersect } from '../../../core/utils/doItemsIntersect';
 import { gameObjectManager } from '../../../core/global';
-import { HSLA } from '../../../core/helpers/hsla';
+import { HSLA } from '../../../core/utils/hsla';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';
 import { Character } from '../../character/character';

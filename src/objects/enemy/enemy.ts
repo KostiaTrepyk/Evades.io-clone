@@ -1,6 +1,6 @@
 import { GameObject } from '../../core/common/GameObject';
 import { gameObjectManager, time } from '../../core/global';
-import { HSLA } from '../../core/helpers/hsla';
+import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
 import { EnemyCollision } from './enemy.collision';
 import { RenderEnemyModel } from './enemy.model';

@@ -1,4 +1,4 @@
-import { doItemsIntersect } from '../../core/doItemsIntersect';
+import { doItemsIntersect } from '../../core/utils/doItemsIntersect';
 import { gameObjectManager, renderer } from '../../core/global';
 import { Character } from './character';
 

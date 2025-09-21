@@ -1,4 +1,4 @@
-import { HSLA } from '../../../core/helpers/hsla';
+import { HSLA } from '../../../core/utils/hsla';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';
 import { Enemy } from '../enemy';

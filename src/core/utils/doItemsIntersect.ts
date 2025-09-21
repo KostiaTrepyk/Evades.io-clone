@@ -1,4 +1,4 @@
-import { GameObject } from "./common/GameObject";
+import { GameObject } from "../common/GameObject";
 
 export function doItemsIntersect(
   item1: GameObject<"circle" | "rectangle">,

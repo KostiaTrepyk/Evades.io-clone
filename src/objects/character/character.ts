@@ -1,8 +1,8 @@
-import { doItemsIntersect } from '../../core/doItemsIntersect';
+import { doItemsIntersect } from '../../core/utils/doItemsIntersect';
 import { GameObject } from '../../core/common/GameObject';
 import { gameObjectManager } from '../../core/global';
 import { Position } from '../../core/types/Position';
-import { HSLA } from '../../core/helpers/hsla';
+import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
 import { CharacterLevels } from './character.levels';

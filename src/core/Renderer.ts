@@ -1,5 +1,5 @@
 import { cellSize } from '../consts/consts';
-import { CameraController } from './camera.controller';
+import { CameraController } from './CameraController';
 
 export class Renderer {
   private camera: CameraController;

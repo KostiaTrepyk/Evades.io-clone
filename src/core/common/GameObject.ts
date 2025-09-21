@@ -1,13 +1,20 @@
 import { gameObjectManager } from '../global';
 import { Position } from '../types/Position';
-import { Shape } from '../types/Shape';
+import { CircleShape, RectangleShape, Shape } from '../types/Shape';
 
-export type ObjectModel<S extends Shape> = S extends 'circle'
-  ? { shape: 'circle'; size: number }
-  : S extends 'rectangle'
-  ? { shape: 'rectangle'; size: { x: number; y: number } }
+export type CircleProperties = { shape: CircleShape; size: number };
+export type RectangleProperties = {
+  shape: RectangleShape;
+  size: { x: number; y: number };
+};
+
+export type ObjectModel<S extends Shape> = S extends CircleShape
+  ? CircleProperties
+  : S extends RectangleShape
+  ? RectangleProperties
   : never;
 
+/** Каждый объект может быть только шаром либо прямоугольником. */
 export class GameObject<S extends Shape> {
   public position: Position;
   public objectModel: ObjectModel<S>;

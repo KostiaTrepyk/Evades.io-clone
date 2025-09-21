@@ -1,4 +1,4 @@
-/** Createed only for hints. */
+/** Created only for hints. */
 export type KeyCode =
   | 'KeyW'
   | 'KeyA'
@@ -8,10 +8,11 @@ export type KeyCode =
   | 'KeyK'
   | 'ShiftLeft';
 
+/** FIXME Система которая позволяет легко биндить нужные клавиши.  */
 export class UserInput {
-  private keydown: Set<string>;
-  private keyup: Set<string>;
-  private keypress: Set<string>;
+  private keydown: Set<KeyCode>;
+  private keyup: Set<KeyCode>;
+  private keypress: Set<KeyCode>;
 
   constructor() {
     this.keydown = new Set();
@@ -48,6 +49,7 @@ export class UserInput {
     return this.keyup.has(key);
   }
 
+  /** FIXME Нужно вручную добавлять. А что если забуду? Нужно подумать над другой реализацией. */
   public afterUpdate(): void {
     this.keydown.clear();
     this.keyup.clear();
@@ -57,15 +59,15 @@ export class UserInput {
     const { code, repeat } = event;
 
     if (!repeat) {
-      this.keydown.add(code);
-      this.keypress.add(code);
+      this.keydown.add(code as KeyCode);
+      this.keypress.add(code as KeyCode);
     }
   }
 
   private keyupEventHandler(event: KeyboardEvent): void {
     const { code } = event;
 
-    this.keyup.add(code);
-    this.keypress.delete(code);
+    this.keyup.add(code as KeyCode);
+    this.keypress.delete(code as KeyCode);
   }
 }

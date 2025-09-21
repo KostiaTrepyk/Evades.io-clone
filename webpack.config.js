@@ -17,6 +17,7 @@ module.exports = config = {
       },
     ],
   },
+  
   devServer: {
     static: {
       directory: path.join(__dirname, "/src/public"),
@@ -24,14 +25,17 @@ module.exports = config = {
     compress: true,
     port: 3000,
   },
+
   resolve: {
     extensions: [".ts", ".js"],
   },
+
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/public/index.html",

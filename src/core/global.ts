@@ -4,7 +4,7 @@ import { GameLoop } from './GameLoop';
 import { GameObjectManager } from './GameObjectManager';
 import { UserInput } from './UserInput';
 import { Renderer } from './Renderer';
-import { CameraController } from './camera.controller';
+import { CameraController } from './CameraController';
 import { Time } from './Time';
 
 const time = new Time();

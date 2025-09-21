@@ -6,6 +6,9 @@ import { SaveZone } from '../objects/saveZone/SaveZone';
 import { GameObject } from './common/GameObject';
 import { Shape } from './types/Shape';
 
+/** Отвечает за Все объекты в игре. Разделяет объекты через instanceof на разные
+ * категории: player, enemies, pointOrbs и тд. За их добавление, удаление и вызывает
+ * у них update и render. */
 export class GameObjectManager {
   public player: Character | undefined;
   public enemies: Enemy[];
@@ -29,7 +32,7 @@ export class GameObjectManager {
   }
 
   public renderAll(ctx: CanvasRenderingContext2D): void {
-    /* Order important */
+    /* Order important. Это типа как слои которые накладываются. */
     this.saveZones.forEach((saveZone) => saveZone.onRender(ctx));
     this.portals.forEach((portal) => portal.onRender(ctx));
     this.pointOrbs.forEach((pointOrb) => pointOrb.onRender(ctx));
