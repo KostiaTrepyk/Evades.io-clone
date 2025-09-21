@@ -1,7 +1,8 @@
-import { doItemsIntersect } from '../../core/utils/doItemsIntersect';
-import { GameObject } from '../../core/common/GameObject';
-import { gameObjectManager } from '../../core/global';
+import { CircleShape, Shapes } from '../../core/types/Shape';
 import { Position } from '../../core/types/Position';
+import { gameObjectManager } from '../../core/global';
+import { GameObject } from '../../core/common/GameObject';
+import { doItemsIntersect } from '../../core/utils/doItemsIntersect';
 import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
@@ -10,7 +11,7 @@ import { CharacterCharacteristics } from './character.characteristics';
 import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 
-export class Character extends GameObject<'circle'> {
+export class Character extends GameObject<CircleShape> {
   public firstSkill: ISkill | undefined;
   public secondSkill: ISkill | undefined;
 
@@ -22,10 +23,10 @@ export class Character extends GameObject<'circle'> {
   public timeToDeath: number | undefined;
   public color: HSLA;
 
-  constructor(startPsition: Position, size: number, color: HSLA) {
-    super(startPsition, { shape: 'circle', size });
+  constructor(startPosition: Position, size: number, color: HSLA) {
+    super(startPosition, { shape: Shapes.circle, size });
 
-    this.characterMovement = new CharacterMovement(this, startPsition, size);
+    this.characterMovement = new CharacterMovement(this, startPosition, size);
     this.level = new CharacterLevels(this);
     this.characteristics = new CharacterCharacteristics(this);
     this.collision = new CharacterCollision(this);

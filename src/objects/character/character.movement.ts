@@ -1,8 +1,7 @@
-import { userInput } from '../../core/global';
 import { Position } from '../../core/types/Position';
+import { userInput } from '../../core/global';
+import { gameConfig } from '../../configs/game.config';
 import { Character } from './character';
-
-const characterSlow = 0.5;
 
 export class CharacterMovement {
   public player: Character;
@@ -28,27 +27,40 @@ export class CharacterMovement {
   public onUpdate(progress: number) {
     if (this.isBlocked) return;
 
-    let isMovingY = userInput.isKeypress('KeyW') || userInput.isKeypress('KeyS');
-    let isMovingX = userInput.isKeypress('KeyA') || userInput.isKeypress('KeyD');
+    const isBothWSPressed =
+      userInput.isKeypress('KeyW') && userInput.isKeypress('KeyS');
+    const isBothADPressed =
+      userInput.isKeypress('KeyA') && userInput.isKeypress('KeyD');
+
+    let isMovingY =
+      (userInput.isKeypress('KeyW') || userInput.isKeypress('KeyS')) &&
+      !isBothWSPressed;
+    let isMovingX =
+      (userInput.isKeypress('KeyA') || userInput.isKeypress('KeyD')) &&
+      !isBothADPressed;
+
+    if (!isMovingY && !isMovingX) return;
 
     // normalizing the speed of the character
     let normalizedSpeed = this.player.characteristics.speed;
     if (isMovingY && isMovingX) normalizedSpeed /= 1.333;
 
-    if (userInput.isKeypress('ShiftLeft')) normalizedSpeed *= characterSlow;
+    if (userInput.isKeypress('ShiftLeft'))
+      normalizedSpeed *= gameConfig.characterSlowRatio;
 
-    // Fix При нажатии двух клавиш A и D, W и S. Performance optimization!!!
-    if (userInput.isKeypress('KeyW')) {
+    if (userInput.isKeypress('KeyW') && isMovingY) {
       this.position.y -= normalizedSpeed * progress;
     }
-    if (userInput.isKeypress('KeyS')) {
+
+    if (userInput.isKeypress('KeyS') && isMovingY) {
       this.position.y += normalizedSpeed * progress;
     }
 
-    if (userInput.isKeypress('KeyA')) {
+    if (userInput.isKeypress('KeyA') && isMovingX) {
       this.position.x -= normalizedSpeed * progress;
     }
-    if (userInput.isKeypress('KeyD')) {
+
+    if (userInput.isKeypress('KeyD') && isMovingX) {
       this.position.x += normalizedSpeed * progress;
     }
   }
