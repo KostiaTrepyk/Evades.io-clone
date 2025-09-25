@@ -54,7 +54,7 @@ export class ToggleSkill {
 
   public onUpdate(deltaTime: number): void {
     if (userInput.isKeydown(this.keyCode)) {
-      this.toggle(time.getTimeStamp);
+      this.toggle(time.getTimestamp);
     }
 
     if (this.isActive) {
@@ -92,7 +92,7 @@ export class ToggleSkill {
     const needsEnergy = this.energyUsage() * deltaTime;
 
     if (playerEnergy - needsEnergy <= 0) {
-      this.deactivate(time.getTimeStamp);
+      this.deactivate(time.getTimestamp);
       return;
     }
 
@@ -105,7 +105,7 @@ export class ToggleSkill {
   }
 
   public get cooldownPercentage(): number {
-    const elapsedTime = time.getTimeStamp - this.lastUsedTimestamp;
+    const elapsedTime = time.getTimestamp - this.lastUsedTimestamp;
     return Math.min(elapsedTime / this.cooldown(), 1);
   }
 }

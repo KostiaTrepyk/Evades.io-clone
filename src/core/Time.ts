@@ -1,17 +1,16 @@
-/** Просто время прохождения. Ничего такого. В Теории можно получить время между кадрами. */
+/** Просто время. Ничего такого. */
 export class Time {
-  private timeStamp: number;
+  private timestamp: number;
 
   constructor() {
-    this.timeStamp = 0;
+    this.timestamp = 0;
   }
 
-  public onUpdate(deltaTime: number): void {
-    // TODO Вопрос насколько это точное время???
-    this.timeStamp += deltaTime;
+  public onUpdate(timestamp: number): void {
+    this.timestamp = timestamp;
   }
 
-  public get getTimeStamp(): number {
-    return this.timeStamp;
+  public get getTimestamp(): number {
+    return this.timestamp;
   }
 }

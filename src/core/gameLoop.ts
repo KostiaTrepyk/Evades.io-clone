@@ -1,3 +1,4 @@
+import { gameConfig } from '../configs/game.config';
 import {
   gameObjectManager,
   renderer,
@@ -8,7 +9,8 @@ import {
 
 /** Главный цикл игры */
 export class GameLoop {
-  private lastRender: number | null = null;
+  private lastGameRenderTimestamp: number | null = null;
+  private lastUIRenderTimestamp: number | null = null;
   private animationId: number | null = null;
   private readonly loopBound: (timestamp: number) => void;
 
@@ -35,8 +37,9 @@ export class GameLoop {
     if (this.animationId !== null) {
       cancelAnimationFrame(this.animationId);
       this.animationId = null;
+      this.lastGameRenderTimestamp = null;
+      this.lastUIRenderTimestamp = null;
     }
-    this.lastRender = null;
   }
 
   /**
@@ -44,32 +47,55 @@ export class GameLoop {
    * @param timestamp - DOMHighResTimeStamp, предоставляемый rAF (в ms).
    */
   private loop(timestamp: number): void {
-    // Инициализируем lastRender при первом кадре
-    if (this.lastRender === null) {
-      this.lastRender = timestamp;
-    }
-
-    // deltaTime в секундах
-    const frameTime = (timestamp - this.lastRender) / 1000;
-
     // render
-    this.render(frameTime);
+    this.renderGame(timestamp);
+    this.renderUI(timestamp);
 
     // Подготовка к следующему кадру
-    this.lastRender = timestamp;
     this.animationId = requestAnimationFrame(this.loopBound);
   }
 
-  private render(frameTime: number): void {
+  private renderGame(timestamp: number): void {
+    const frameTime = 1 / gameConfig.fpsGame;
+
+    // ====== Инициализируем lastRender при первом кадре ======
+    if (this.lastGameRenderTimestamp === null) {
+      this.lastGameRenderTimestamp = timestamp - frameTime;
+    }
+
+    // ====== deltaTime в секундах ======
+    const deltaTime = (timestamp - this.lastGameRenderTimestamp) / 1000;
+
+    // ====== FPS Limitation ======
+    if (deltaTime < frameTime) return;
+
     // ====== обновления состояния ======
-    time.onUpdate(frameTime);
-    gameObjectManager.updateAll(frameTime);
+    time.onUpdate(timestamp);
+    gameObjectManager.updateAll(deltaTime);
     userInput.afterUpdate();
 
     // ====== рендер игровых объектов ======
     renderer.renderFrame((ctx) => gameObjectManager.renderAll(ctx));
 
-    // ====== UI ======
+    this.lastGameRenderTimestamp = timestamp;
+  }
+
+  private renderUI(timestamp: number): void {
+    const frameTime = 1 / gameConfig.fpsUI;
+
+    // ====== Инициализируем lastRender при первом кадре ======
+    if (this.lastUIRenderTimestamp === null) {
+      this.lastUIRenderTimestamp = timestamp - frameTime;
+    }
+
+    // ====== deltaTime в секундах ======
+    const deltaTime = (timestamp - this.lastUIRenderTimestamp) / 1000;
+
+    // ====== FPS Limitation ======
+    if (deltaTime < frameTime) return;
+
     uiRenderer.render();
+
+    this.lastUIRenderTimestamp = timestamp;
   }
 }

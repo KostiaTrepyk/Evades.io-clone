@@ -27,12 +27,12 @@ export class Magmax extends Character {
       cooldown: () => MAGMAXCONFIG.fistSpell.cooldown,
       energyUsage: () => MAGMAXCONFIG.fistSpell.energyUsagePerSecond,
       whenActive: () => {
-        if (this.isDead) this.firstSkill.deactivate(time.getTimeStamp);
+        if (this.isDead) this.firstSkill.deactivate(time.getTimestamp);
         this.applySpeedBoost();
       },
       beforeActivation: () => {
         if (this.secondSkill.getIsActive) {
-          this.secondSkill.deactivate(time.getTimeStamp);
+          this.secondSkill.deactivate(time.getTimestamp);
         }
         this.color = MAGMAXCONFIG.color.firstSpellActive;
       },
@@ -52,13 +52,13 @@ export class Magmax extends Character {
       },
       energyUsage: () => MAGMAXCONFIG.secondSpell.energyUsagePerSecond,
       whenActive: () => {
-        if (this.isDead) this.secondSkill.deactivate(time.getTimeStamp);
+        if (this.isDead) this.secondSkill.deactivate(time.getTimestamp);
         this.applyImmortality();
       },
       beforeActivation: () => {
         // отключает 1 спелл
         if (this.firstSkill.getIsActive) {
-          this.firstSkill.deactivate(time.getTimeStamp);
+          this.firstSkill.deactivate(time.getTimestamp);
         }
 
         this.color = MAGMAXCONFIG.color.secondSpellActive;

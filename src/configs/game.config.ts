@@ -2,6 +2,9 @@ export const gameConfig = {
   /** When pressed SHIFT */
   characterSlowRatio: 0.5,
 
+  fpsGame: 180,
+  fpsUI: 20,
+
   /** UI */
   colors: {
     ui: {
