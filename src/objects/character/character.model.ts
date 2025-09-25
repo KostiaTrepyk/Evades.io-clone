@@ -1,5 +1,6 @@
 import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
+import { gameConfig } from '../../configs/game.config';
 import { Character } from './character';
 
 export const RenderCharacterModel = {
@@ -8,28 +9,39 @@ export const RenderCharacterModel = {
       x: character.position.x - character.objectModel.size / 2,
       y: character.position.y - character.objectModel.size / 2 - 10,
     };
-    const ad = 2;
-    const size = character.objectModel.size + ad * 2;
+
+    const manaBarSizeAdjustment = character.objectModel.size / 20;
+
+    const manaBarSize = character.objectModel.size + manaBarSizeAdjustment * 2;
+
+    const manaBarHeight = 8;
+    const manaBarBorderWidth = 1;
 
     ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = '#888';
-    ctx.fillStyle = '#22f';
-    ctx.strokeRect(position.x - ad, position.y, size, 8);
-    ctx.fillRect(
-      position.x - ad,
+    ctx.lineWidth = manaBarBorderWidth;
+    ctx.strokeStyle = gameConfig.colors.ui.mana.border;
+    ctx.fillStyle = gameConfig.colors.ui.mana.fill;
+    ctx.strokeRect(
+      position.x - manaBarSizeAdjustment,
       position.y,
-      size *
+      manaBarSize,
+      manaBarHeight
+    );
+    ctx.fillRect(
+      position.x - manaBarSizeAdjustment,
+      position.y,
+      manaBarSize *
         (character.characteristics.energy.current /
           character.characteristics.energy.max),
-      8
+      manaBarHeight
     );
   },
 
   default: (ctx: CanvasRenderingContext2D, character: Character) => {
-    const color = character.color.clone();
+    /*  const color = character.color.clone(); */
 
-    switch (true) {
+    /** Переделать */
+    /* switch (true) {
       case character.characteristics.statuses.includes('immortal'):
         color.setLightness = 35;
         break;
@@ -37,7 +49,7 @@ export const RenderCharacterModel = {
         color.setLightness = 60;
         color.setHue = 5;
         break;
-    }
+    } */
 
     ctx.beginPath();
     ctx.arc(
@@ -47,7 +59,8 @@ export const RenderCharacterModel = {
       0,
       2 * Math.PI
     );
-    ctx.fillStyle = color.toString();
+    // ctx.fillStyle = color.toString();
+    ctx.fillStyle = character.color.toString();
     ctx.fill();
   },
 
@@ -77,6 +90,7 @@ export const RenderCharacterModel = {
     );
   },
 
+  /** ГОВНО */
   static: (
     ctx: CanvasRenderingContext2D,
     options: {
@@ -94,6 +108,19 @@ export const RenderCharacterModel = {
       2 * Math.PI
     );
     ctx.fillStyle = options.color.toString();
+    ctx.fill();
+  },
+
+  drawBody: (ctx: CanvasRenderingContext2D, character: Character): void => {
+    ctx.beginPath();
+    ctx.arc(
+      character.position.x,
+      character.position.y,
+      character.objectModel.size / 2,
+      0,
+      2 * Math.PI
+    );
+    ctx.fillStyle = character.color.toString();
     ctx.fill();
   },
 } as const;

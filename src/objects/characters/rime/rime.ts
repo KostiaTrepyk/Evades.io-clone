@@ -4,7 +4,7 @@ import { gameObjectManager, renderer, userInput } from '../../../core/global';
 import { HSLA } from '../../../core/utils/hsla';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
-import { CommonSkill } from '../../character/skills/commonskill';
+import { CommonSkill } from '../../character/skills/commonSkill';
 
 export class Rime extends Character {
   public override firstSkill: CommonSkill;
@@ -21,12 +21,12 @@ export class Rime extends Character {
   constructor(startPosition: Position, size: number) {
     super(startPosition, size, new HSLA(230, 85, 50, 100));
     this.firstSkill = new CommonSkill(this, {
-      key: 'KeyJ',
+      keyCode: 'KeyJ',
       energyUsage: 10,
       onUse: this.firstSkillHandler.bind(this),
     });
     this.secondSkill = new CommonSkill(this, {
-      key: 'KeyK',
+      keyCode: 'KeyK',
       energyUsage: 30,
       onUse: this.secondSkillHandler.bind(this),
     });

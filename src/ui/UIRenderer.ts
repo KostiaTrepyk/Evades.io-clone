@@ -87,8 +87,8 @@ export class UIRenderer {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
           // Draw points
-          if (player.level.points > 0) {
-            drawText(ctx, `Points: ${player.level.points}`, {
+          if (player.level.upgradePoints > 0) {
+            drawText(ctx, `Points: ${player.level.upgradePoints}`, {
               position: {
                 x: centeredPosition.x - barHeight / 2 + 4,
                 y: centeredPosition.y - barHeight / 2 + 20,
@@ -114,7 +114,7 @@ export class UIRenderer {
           });
 
           if (
-            player.level.points > 0 &&
+            player.level.upgradePoints > 0 &&
             player.level.upgrades.speed.current <
               player.level.upgrades.speed.max
           ) {
@@ -143,7 +143,7 @@ export class UIRenderer {
           });
 
           if (
-            player.level.points > 0 &&
+            player.level.upgradePoints > 0 &&
             player.level.upgrades.maxEnergy.current <
               player.level.upgrades.maxEnergy.max
           ) {
@@ -166,7 +166,7 @@ export class UIRenderer {
           });
 
           if (
-            player.level.points > 0 &&
+            player.level.upgradePoints > 0 &&
             player.level.upgrades.regen.current <
               player.level.upgrades.regen.max
           ) {
@@ -203,7 +203,7 @@ export class UIRenderer {
           );
 
           if (
-            player.level.points > 0 &&
+            player.level.upgradePoints > 0 &&
             player.level.upgrades.firstSpell.current <
               player.level.upgrades.firstSpell.max
           ) {
@@ -242,7 +242,7 @@ export class UIRenderer {
           );
 
           if (
-            player.level.points > 0 &&
+            player.level.upgradePoints > 0 &&
             player.level.upgrades.secondSpell.current <
               player.level.upgrades.secondSpell.max
           ) {

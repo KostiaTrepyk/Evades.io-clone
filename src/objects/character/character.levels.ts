@@ -9,7 +9,7 @@ export class CharacterLevels {
   public player: Character;
   public currentLevel: number;
   public atePointOrbs: number;
-  public points: number;
+  public upgradePoints: number;
   public upgrades: {
     speed: Upgrade;
     maxEnergy: Upgrade;
@@ -22,7 +22,7 @@ export class CharacterLevels {
     this.player = player;
     this.currentLevel = 1;
     this.atePointOrbs = 0;
-    this.points = 1000;
+    this.upgradePoints = 1000;
     this.upgrades = {
       speed: { current: 0, max: 15 },
       maxEnergy: { current: 0, max: 42 },
@@ -48,7 +48,7 @@ export class CharacterLevels {
   public levelUp() {
     this.atePointOrbs -= this.levelUpReq();
     this.currentLevel++;
-    this.points += 1;
+    this.upgradePoints += 1;
   }
 
   public levelUpReq(): number {
@@ -61,38 +61,38 @@ export class CharacterLevels {
   }
 
   private handlerKeydown({ code }: KeyboardEvent): void {
-    if (this.points <= 0) return;
+    if (this.upgradePoints <= 0) return;
 
     if (
       code === 'Digit1' &&
       this.upgrades.speed.current < this.upgrades.speed.max
     ) {
       this.upgrades.speed.current += 1;
-      this.points -= 1;
+      this.upgradePoints -= 1;
     } else if (
       code === 'Digit2' &&
       this.upgrades.maxEnergy.current < this.upgrades.maxEnergy.max
     ) {
       this.upgrades.maxEnergy.current += 1;
-      this.points -= 1;
+      this.upgradePoints -= 1;
     } else if (
       code === 'Digit3' &&
       this.upgrades.regen.current < this.upgrades.regen.max
     ) {
       this.upgrades.regen.current += 1;
-      this.points -= 1;
+      this.upgradePoints -= 1;
     } else if (
       code === 'Digit4' &&
       this.upgrades.firstSpell.current < this.upgrades.firstSpell.max
     ) {
       this.upgrades.firstSpell.current += 1;
-      this.points -= 1;
+      this.upgradePoints -= 1;
     } else if (
       code === 'Digit5' &&
       this.upgrades.secondSpell.current < this.upgrades.secondSpell.max
     ) {
       this.upgrades.secondSpell.current += 1;
-      this.points -= 1;
+      this.upgradePoints -= 1;
     }
   }
 }

@@ -1,44 +1,57 @@
-import { HSLA } from '../../../core/utils/hsla';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
-import { CommonSkill } from '../../character/skills/commonskill';
+import { CommonSkill } from '../../character/skills/commonSkill';
+import { MAGMAXCONFIG } from '../../../configs/characters/magmax.config';
+import { userInput } from '../../../core/global';
 
 export class Magmax extends Character {
+  /* Без этого не работает UI. Нужно переделать что-бы это убрать. */
   public override firstSkill: CommonSkill;
   public override secondSkill: CommonSkill;
 
-  private isFirstSkillActive: boolean;
-  private isSecondSkillActive: boolean;
+  private isFirstSkillActive: boolean = false;
+  private isSecondSkillActive: boolean = false;
 
   private spellsUpgrades = {
-    first: { energyUsage: 2, speed: [2, 4, 6, 8, 10] },
-    second: { energyUsage: 12, cooldown: [2, 1.5, 1.2, 0.7, 0.3] },
+    first: {
+      energyUsage: MAGMAXCONFIG.fistSpell.energyUsagePerSecond,
+      speed: MAGMAXCONFIG.fistSpell.speed,
+    },
+    second: {
+      energyUsage: MAGMAXCONFIG.secondSpell.energyUsagePerSecond,
+      cooldown: MAGMAXCONFIG.secondSpell.cooldown,
+    },
   };
 
   constructor(startPosition: Position, size: number) {
-    super(startPosition, size, new HSLA(0, 85, 50, 100));
+    super(startPosition, size, MAGMAXCONFIG.color.default);
+
+    /* Без этого не работает UI. Нужно переделать что-бы это убрать. */
     this.firstSkill = new CommonSkill(this, {
-      key: 'KeyJ',
-      energyUsage: 2,
-      onUse: this.firstSkillHandler.bind(this),
+      keyCode: 'KeyJ',
+      energyUsage: 0,
+      onUse: () => {},
     });
     this.secondSkill = new CommonSkill(this, {
-      key: 'KeyK',
-      energyUsage: 12,
-      onUse: this.secondSkillHandler.bind(this),
+      keyCode: 'KeyK',
+      energyUsage: 0,
+      onUse: () => {},
     });
-    this.isFirstSkillActive = false;
-    this.isSecondSkillActive = false;
   }
 
   public override onUpdate(deltaTime: number): void {
     super.onUpdate(deltaTime);
 
-    this.firstSkill.onUpdate();
-    this.secondSkill.onUpdate();
+    if (userInput.isKeydown('KeyJ')) this.firstSkillHandler();
 
     if (this.isFirstSkillActive) this.applyFirstSkill(deltaTime);
+
+    if (userInput.isKeydown('KeyK')) this.secondSkillHandler();
+
     if (this.isSecondSkillActive) this.applySecondSkill(deltaTime);
+
+    if (!this.isFirstSkillActive && !this.isSecondSkillActive)
+      this.cancelSecondSkill();
   }
 
   private applyContinuousEnergyUsage(
@@ -92,8 +105,6 @@ export class Magmax extends Character {
 
     if (this.isSecondSkillActive) {
       this.isSecondSkillActive = false;
-      this.secondSkill.setCooldown =
-        this.spellsUpgrades.second.cooldown[skillLevel - 1];
     } else {
       this.isSecondSkillActive = true;
       this.isFirstSkillActive = false;
@@ -113,9 +124,14 @@ export class Magmax extends Character {
         deltaTime,
         this.spellsUpgrades.first.energyUsage
       );
+      this.color = MAGMAXCONFIG.color.firstSpellActive;
     } else {
       this.isFirstSkillActive = false;
     }
+  }
+
+  private cancelFirstSkill(): void {
+    this.color = MAGMAXCONFIG.color.default;
   }
 
   private applySecondSkill(deltaTime: number): void {
@@ -131,9 +147,14 @@ export class Magmax extends Character {
         deltaTime,
         this.spellsUpgrades.second.energyUsage
       );
+      this.color = MAGMAXCONFIG.color.secondSpellActive;
     } else {
       this.isSecondSkillActive = false;
     }
+  }
+
+  private cancelSecondSkill(): void {
+    this.color = MAGMAXCONFIG.color.default;
   }
 
   private applySpeedBoost() {

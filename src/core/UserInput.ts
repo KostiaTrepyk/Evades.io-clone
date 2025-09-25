@@ -6,7 +6,12 @@ export type KeyCode =
   | 'KeyD'
   | 'KeyJ'
   | 'KeyK'
-  | 'ShiftLeft';
+  | 'ShiftLeft'
+  | 'Digit1'
+  | 'Digit2'
+  | 'Digit3'
+  | 'Digit4'
+  | 'Digit5'
 
 /** FIXME Система которая позволяет легко биндить нужные клавиши.  */
 export class UserInput {

@@ -4,7 +4,8 @@ import { Character } from '../character';
 import { ISkill } from './ISkill';
 
 export interface CommonSkillOptions {
-  key: KeyCode;
+  /** Клавиша на которую забинджено */
+  keyCode: KeyCode;
   energyUsage: number;
   onUse: () => void;
 }
@@ -12,17 +13,17 @@ export interface CommonSkillOptions {
 export class CommonSkill implements ISkill {
   private player: Character;
 
-  private readonly key: KeyCode;
+  private readonly keyCode: KeyCode;
   private cooldown: { from: number; duration: number };
   private energyUsage: CommonSkillOptions['energyUsage'];
   private onUse: CommonSkillOptions['onUse'];
   private lastUsedTimestamp: number;
 
   constructor(player: Character, options: CommonSkillOptions) {
-    const { key, energyUsage, onUse } = options;
+    const { keyCode, energyUsage, onUse } = options;
 
     this.player = player;
-    this.key = key;
+    this.keyCode = keyCode;
     this.cooldown = { from: 0, duration: 0 };
     this.energyUsage = Math.max(0, energyUsage);
     this.onUse = onUse;
@@ -30,7 +31,7 @@ export class CommonSkill implements ISkill {
   }
 
   public onUpdate(): void {
-    if (userInput.isKeydown(this.key)) {
+    if (userInput.isKeydown(this.keyCode)) {
       this.use();
     }
   }
