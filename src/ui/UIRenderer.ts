@@ -60,7 +60,7 @@ export class UIRenderer {
         draw: (ctx, centeredPosition) => {
           RenderCharacterModel.static(ctx, {
             position: centeredPosition,
-            color: player.color,
+            color: player.UIColor,
             size: 65,
           });
           drawText(ctx, player.level.currentLevel.toString(), {
@@ -186,7 +186,7 @@ export class UIRenderer {
           });
           drawText(
             ctx,
-            (player.firstSkill.cooldownPersentage * 100).toFixed(0),
+            (player.firstSkill.cooldownPercentage * 100).toFixed(0),
             {
               position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
               fontSize: 12,
@@ -225,7 +225,7 @@ export class UIRenderer {
           });
           drawText(
             ctx,
-            (player.secondSkill.cooldownPersentage * 100).toFixed(0),
+            (player.secondSkill.cooldownPercentage * 100).toFixed(0),
             {
               position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
               fontSize: 12,
@@ -389,7 +389,7 @@ export class UIRenderer {
       { x: barPosition.x, y: barPosition.y - 20 },
       player.level.atePointOrbs,
       player.level.levelUpReq(),
-      player.color.toString()
+      player.UIColor.toString()
     );
 
     // Draw Sections
@@ -400,9 +400,9 @@ export class UIRenderer {
     const currentTunnelDetails = gameMap.getCurrentTunnelDetails();
     drawText(
       this.ctx,
-      `${currentTunnelDetails.tunnel.name}: ${currentTunnelDetails.tunnel.type} ${
-        currentTunnelDetails.currentLevel + 1
-      }`,
+      `${currentTunnelDetails.tunnel.name}: ${
+        currentTunnelDetails.tunnel.type
+      } ${currentTunnelDetails.currentLevel + 1}`,
       {
         fillColor: '#fff',
         fontSize: 42,

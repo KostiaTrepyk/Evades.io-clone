@@ -12,6 +12,7 @@ import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 
 export class Character extends GameObject<CircleShape> {
+  public UIColor: HSLA;
   public firstSkill: ISkill | undefined;
   public secondSkill: ISkill | undefined;
 
@@ -26,11 +27,12 @@ export class Character extends GameObject<CircleShape> {
   constructor(startPosition: Position, size: number, color: HSLA) {
     super(startPosition, { shape: Shapes.circle, size });
 
+    this.UIColor = color.clone();
     this.characterMovement = new CharacterMovement(this, startPosition, size);
     this.level = new CharacterLevels(this);
     this.characteristics = new CharacterCharacteristics(this);
     this.collision = new CharacterCollision(this);
-    this.color = color;
+    this.color = color.clone();
     this.isDead = false;
   }
 

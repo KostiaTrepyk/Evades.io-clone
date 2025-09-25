@@ -81,7 +81,7 @@ export class CommonSkill implements ISkill {
     return this.lastUsedTimestamp;
   }
 
-  public get cooldownPersentage(): number {
+  public get cooldownPercentage(): number {
     const elapsedTime = time.getInGameTime - this.cooldown.from;
     const percentage = elapsedTime / this.cooldown.duration;
     return Math.min(Math.max(percentage, 0), 1);

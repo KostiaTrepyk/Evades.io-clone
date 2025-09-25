@@ -10,6 +10,7 @@ export const MAGMAXCONFIG = {
   fistSpell: {
     speed: [2, 4, 6, 8, 10],
     energyUsagePerSecond: 4,
+    cooldown: 0,
   },
   secondSpell: {
     energyUsagePerSecond: 15,
