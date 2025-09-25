@@ -1,16 +1,17 @@
 /** Просто время прохождения. Ничего такого. В Теории можно получить время между кадрами. */
 export class Time {
-  private inGameTime: number;
+  private timeStamp: number;
 
   constructor() {
-    this.inGameTime = 0;
+    this.timeStamp = 0;
   }
 
   public onUpdate(deltaTime: number): void {
-    this.inGameTime += deltaTime;
+    // TODO Вопрос насколько это точное время???
+    this.timeStamp += deltaTime;
   }
 
-  public get getInGameTime(): number {
-    return this.inGameTime;
+  public get getTimeStamp(): number {
+    return this.timeStamp;
   }
 }

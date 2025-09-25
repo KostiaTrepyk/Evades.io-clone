@@ -4,8 +4,9 @@ import { Character } from '../character';
 
 export interface ToggleSkillOptions {
   keyCode: KeyCode;
-  cooldown: number;
-  energyUsage: number;
+  cooldown: () => number;
+  energyUsage: () => number;
+  /** Применяется каждый кадр если спелл активирован */
   whenActive: (deltaTime: number) => void;
   beforeActivation?: () => void;
   cancelSkill?: () => void;
@@ -40,9 +41,9 @@ export class ToggleSkill {
 
     this.player = player;
     this.keyCode = keyCode;
-    this.cooldown = Math.max(0, cooldown);
-    this.energyUsage = Math.max(0, energyUsage);
-    this.lastUsedTimestamp = -cooldown;
+    this.cooldown = cooldown;
+    this.energyUsage = energyUsage;
+    this.lastUsedTimestamp = -cooldown();
     this.isActive = false;
 
     this.whenActive = whenActive;
@@ -53,7 +54,7 @@ export class ToggleSkill {
 
   public onUpdate(deltaTime: number): void {
     if (userInput.isKeydown(this.keyCode)) {
-      this.toggle(time.getInGameTime);
+      this.toggle(time.getTimeStamp);
     }
 
     if (this.isActive) {
@@ -83,35 +84,28 @@ export class ToggleSkill {
     if (!this.condition()) return false;
 
     const elapsedTime = currentTimestamp - this.lastUsedTimestamp;
-    return elapsedTime >= this.cooldown;
+    return elapsedTime >= this.cooldown();
   }
 
   public applyEnergyUsage(deltaTime: number): void {
     const playerEnergy = this.player.characteristics.energy.current;
-    const needsEnergy = this.energyUsage * deltaTime;
+    const needsEnergy = this.energyUsage() * deltaTime;
 
     if (playerEnergy - needsEnergy <= 0) {
-      this.deactivate(time.getInGameTime);
+      this.deactivate(time.getTimeStamp);
       return;
     }
 
-    this.player.characteristics.energy.current -= this.energyUsage * deltaTime;
+    this.player.characteristics.energy.current -=
+      this.energyUsage() * deltaTime;
   }
 
   public get getIsActive(): boolean {
     return this.isActive;
   }
 
-  public set setCoolDown(newCoolDown: number) {
-    this.cooldown = newCoolDown;
-  }
-
-  public set setEnergyUsage(newEnergyUsage: number) {
-    this.energyUsage = newEnergyUsage;
-  }
-
   public get cooldownPercentage(): number {
-    const elapsedTime = time.getInGameTime - this.lastUsedTimestamp;
-    return Math.min(elapsedTime / this.cooldown, 1);
+    const elapsedTime = time.getTimeStamp - this.lastUsedTimestamp;
+    return Math.min(elapsedTime / this.cooldown(), 1);
   }
 }

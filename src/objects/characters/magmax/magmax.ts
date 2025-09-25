@@ -24,55 +24,50 @@ export class Magmax extends Character {
 
     this.firstSkill = new ToggleSkill(this, {
       keyCode: 'KeyJ',
-      cooldown: MAGMAXCONFIG.fistSpell.cooldown,
-      energyUsage: MAGMAXCONFIG.fistSpell.energyUsagePerSecond,
+      cooldown: () => MAGMAXCONFIG.fistSpell.cooldown,
+      energyUsage: () => MAGMAXCONFIG.fistSpell.energyUsagePerSecond,
       whenActive: () => {
+        if (this.isDead) this.firstSkill.deactivate(time.getTimeStamp);
         this.applySpeedBoost();
       },
       beforeActivation: () => {
         if (this.secondSkill.getIsActive) {
-          this.secondSkill.deactivate(time.getInGameTime);
+          this.secondSkill.deactivate(time.getTimeStamp);
         }
         this.color = MAGMAXCONFIG.color.firstSpellActive;
       },
       cancelSkill: () => {
         this.color = MAGMAXCONFIG.color.default;
       },
-      condition: () => this.level.upgrades.firstSpell.current > 0,
+      condition: () =>
+        this.level.upgrades.firstSpell.current > 0 && !this.isDead,
     });
 
     this.secondSkill = new ToggleSkill(this, {
       keyCode: 'KeyK',
-      /** Не изменяется кд спела. Нужно пофиксить */
-      cooldown:
-        this.spellsUpgrades.second.cooldown[
-          this.level.upgrades.secondSpell.current
-        ],
-      energyUsage: MAGMAXCONFIG.secondSpell.energyUsagePerSecond,
+      cooldown: () => {
+        return this.spellsUpgrades.second.cooldown[
+          Math.max(0, this.level.upgrades.secondSpell.current - 1)
+        ];
+      },
+      energyUsage: () => MAGMAXCONFIG.secondSpell.energyUsagePerSecond,
       whenActive: () => {
+        if (this.isDead) this.secondSkill.deactivate(time.getTimeStamp);
         this.applyImmortality();
       },
       beforeActivation: () => {
         // отключает 1 спелл
         if (this.firstSkill.getIsActive) {
-          this.firstSkill.deactivate(time.getInGameTime);
+          this.firstSkill.deactivate(time.getTimeStamp);
         }
-
-        // Каждый раз обновляет кд способки так как при апгрейде кд изменяется
-        const currentSpellLevel = this.level.upgrades.secondSpell.current - 1;
-
-        // Math.max что-бы лвл не мог быть -1
-        this.secondSkill.setCoolDown = Math.max(
-          0,
-          this.spellsUpgrades.second.cooldown[currentSpellLevel]
-        );
 
         this.color = MAGMAXCONFIG.color.secondSpellActive;
       },
       cancelSkill: () => {
         this.color = MAGMAXCONFIG.color.default;
       },
-      condition: () => this.level.upgrades.secondSpell.current > 0,
+      condition: () =>
+        this.level.upgrades.secondSpell.current > 0 && !this.isDead,
     });
   }
 

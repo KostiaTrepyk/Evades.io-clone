@@ -54,7 +54,7 @@ export class CommonSkill implements ISkill {
       if (!isEnoughEnergy) return false;
     }
 
-    this.lastUsedTimestamp = time.getInGameTime;
+    this.lastUsedTimestamp = time.getTimeStamp;
     this.onUse();
     return true;
   }
@@ -62,7 +62,7 @@ export class CommonSkill implements ISkill {
   public isAvailable(): boolean {
     const cooldownDurationInSeconds = this.cooldown.duration;
 
-    return time.getInGameTime >= this.cooldown.from + cooldownDurationInSeconds;
+    return time.getTimeStamp >= this.cooldown.from + cooldownDurationInSeconds;
   }
 
   public applyEnergyUsage(): boolean {
@@ -82,13 +82,13 @@ export class CommonSkill implements ISkill {
   }
 
   public get cooldownPercentage(): number {
-    const elapsedTime = time.getInGameTime - this.cooldown.from;
+    const elapsedTime = time.getTimeStamp - this.cooldown.from;
     const percentage = elapsedTime / this.cooldown.duration;
     return Math.min(Math.max(percentage, 0), 1);
   }
 
   public set setCooldown(seconds: number) {
-    this.cooldown.from = time.getInGameTime;
+    this.cooldown.from = time.getTimeStamp;
     this.cooldown.duration = seconds;
   }
 
