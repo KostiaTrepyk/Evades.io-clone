@@ -44,7 +44,7 @@ export class Enemy extends GameObject<'circle'> {
 
   public isFreezed(): boolean {
     if (
-      time.getTimestamp <
+      time.getTimestamp / 1000 <
       this.freezeStatus.from + this.freezeStatus.duration
     )
       return true;
@@ -55,11 +55,11 @@ export class Enemy extends GameObject<'circle'> {
     // Check prev freeze status
     if (
       this.freezeStatus.from + this.freezeStatus.duration >=
-      time.getTimestamp + seconds
+      time.getTimestamp / 1000 + seconds
     )
       return;
 
-    this.freezeStatus.from = time.getTimestamp;
+    this.freezeStatus.from = time.getTimestamp / 1000;
     this.freezeStatus.duration = seconds;
   }
 }
