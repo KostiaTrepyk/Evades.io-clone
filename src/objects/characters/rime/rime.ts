@@ -1,37 +1,52 @@
 import { GameObject } from '../../../core/common/GameObject';
 import { doItemsIntersect } from '../../../core/utils/doItemsIntersect';
-import { gameObjectManager, renderer, userInput } from '../../../core/global';
-import { HSLA } from '../../../core/utils/hsla';
+import { gameObjectManager, userInput } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
 import { CommonSkill } from '../../character/skills/commonSkill';
+import { RIMECONFIG } from '../../../configs/characters/rime.config';
 
 export class Rime extends Character {
   public override firstSkill: CommonSkill;
   public override secondSkill: CommonSkill;
   private secondSkillRangeVisibility: boolean;
 
-  private spellsUpgrades = {
-    first: { distance: [100, 150, 200, 250, 300] },
-    second: { radius: [150, 180, 220, 260, 300] },
-  };
-
   private moveDirection: { x: -1 | 0 | 1; y: -1 | 0 | 1 };
 
-  constructor(startPosition: Position, size: number) {
-    super(startPosition, size, new HSLA(230, 85, 50, 100));
-    this.firstSkill = new CommonSkill(this, {
-      keyCode: 'KeyJ',
-      energyUsage: 10,
-      onUse: this.firstSkillHandler.bind(this),
-    });
-    this.secondSkill = new CommonSkill(this, {
-      keyCode: 'KeyK',
-      energyUsage: 30,
-      onUse: this.secondSkillHandler.bind(this),
-    });
+  constructor(startPosition: Position) {
+    super(startPosition, RIMECONFIG.size, RIMECONFIG.color.default.clone());
+
     this.moveDirection = { x: 0, y: 0 };
     this.secondSkillRangeVisibility = false;
+
+    this.firstSkill = new CommonSkill(this, {
+      keyCode: 'KeyJ',
+      energyUsage: () => RIMECONFIG.fistSpell.energyUsage,
+      cooldown: () => RIMECONFIG.fistSpell.cooldown,
+      onUse: this.firstSkillHandler.bind(this),
+      condition: () => {
+        if (this.isDead) return false;
+        if (this.level.upgrades.firstSpell.current <= 0) return false;
+        return true;
+      },
+    });
+
+    this.secondSkill = new CommonSkill(this, {
+      keyCode: 'KeyK',
+      // Побор энергии будет в onUse так как у нас 2 стадии спела.
+      energyUsage: () => 0,
+      cooldown: () => {
+        if (this.secondSkillRangeVisibility === false)
+          return RIMECONFIG.secondSpell.cooldown;
+        return 0;
+      },
+      onUse: this.secondSkillHandler.bind(this),
+      condition: () => {
+        if (this.isDead) return false;
+        if (this.level.upgrades.secondSpell.current <= 0) return false;
+        return true;
+      },
+    });
   }
 
   public override onUpdate(deltaTime: number): void {
@@ -48,7 +63,7 @@ export class Rime extends Character {
 
     if (this.secondSkillRangeVisibility) {
       const currentSkillLevel = this.level.upgrades.secondSpell.current;
-      const radius = this.spellsUpgrades.second.radius[currentSkillLevel - 1];
+      const radius = RIMECONFIG.secondSpell.radius[currentSkillLevel - 1];
       ctx.beginPath();
       const color = this.color.clone();
       color.setAlpha = 0.2;
@@ -61,31 +76,27 @@ export class Rime extends Character {
   }
 
   private firstSkillHandler(): void {
-    if (this.isDead) return;
-    if (this.level.upgrades.firstSpell.current <= 0) return;
-    if (!this.firstSkill.isEnoughEnergy()) return;
-
     const currentSkillLevel = this.level.upgrades.firstSpell.current;
-    const distance = this.spellsUpgrades.first.distance[currentSkillLevel - 1];
-
-    this.firstSkill.applyEnergyUsage();
-    this.firstSkill.setCooldown = 0.5;
+    const distance = RIMECONFIG.fistSpell.distance[currentSkillLevel - 1];
     this.teleportForward(distance);
   }
 
-  private secondSkillHandler() {
-    if (this.isDead) return;
-    if (this.level.upgrades.secondSpell.current <= 0) return;
-    if (!this.secondSkill.isEnoughEnergy()) return;
+  private secondSkillHandler(): void {
+    // Проверка на ману
+    if (
+      this.characteristics.energy.current < RIMECONFIG.secondSpell.energyUsage
+    ) {
+      return;
+    }
 
     if (this.secondSkillRangeVisibility) {
       const currentSkillLevel = this.level.upgrades.secondSpell.current;
-      const radius = this.spellsUpgrades.second.radius[currentSkillLevel - 1];
-      const freezeDuration = 1.5;
+      const radius = RIMECONFIG.secondSpell.radius[currentSkillLevel - 1];
+      const freezeDuration =
+        RIMECONFIG.secondSpell.freezeTime[currentSkillLevel - 1];
 
-      this.secondSkill.applyEnergyUsage();
+      this.characteristics.energy.current -= RIMECONFIG.secondSpell.energyUsage;
       this.freezeEnemy(radius, freezeDuration);
-      this.secondSkill.setCooldown = 0.5;
       this.secondSkillRangeVisibility = false;
     } else {
       this.secondSkillRangeVisibility = true;

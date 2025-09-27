@@ -6,27 +6,31 @@ import { ISkill } from './ISkill';
 export interface CommonSkillOptions {
   /** Клавиша на которую забинджено */
   keyCode: KeyCode;
-  energyUsage: number;
+  energyUsage: () => number;
+  cooldown: () => number;
   onUse: () => void;
+  condition: () => boolean;
 }
 
 export class CommonSkill implements ISkill {
   private player: Character;
 
   private readonly keyCode: KeyCode;
-  private cooldown: { from: number; duration: number };
+  private cooldown: CommonSkillOptions['cooldown'];
   private energyUsage: CommonSkillOptions['energyUsage'];
   private onUse: CommonSkillOptions['onUse'];
+  private condition: CommonSkillOptions['condition'];
   private lastUsedTimestamp: number;
 
   constructor(player: Character, options: CommonSkillOptions) {
-    const { keyCode, energyUsage, onUse } = options;
+    const { keyCode, energyUsage, onUse, cooldown, condition } = options;
 
     this.player = player;
     this.keyCode = keyCode;
-    this.cooldown = { from: 0, duration: 0 };
-    this.energyUsage = Math.max(0, energyUsage);
+    this.cooldown = cooldown;
+    this.energyUsage = energyUsage;
     this.onUse = onUse;
+    this.condition = condition;
     this.lastUsedTimestamp = 0;
   }
 
@@ -38,62 +42,45 @@ export class CommonSkill implements ISkill {
 
   /** @returns `true` if used and `false` if was not. */
   public use(
-    options: { ignoreCooldown?: boolean; applyEnergyUsage?: boolean } = {
+    options: { ignoreCooldown: boolean; applyEnergyUsage: boolean } = {
       ignoreCooldown: false,
-      applyEnergyUsage: false,
+      applyEnergyUsage: true,
     }
   ): boolean {
     const { ignoreCooldown, applyEnergyUsage } = options;
 
     // Check isAvailable
-    if (!this.isAvailable() && !ignoreCooldown) return false;
-
-    // Check isEnoughEnergy
-    if (applyEnergyUsage) {
-      const isEnoughEnergy = this.applyEnergyUsage();
-      if (!isEnoughEnergy) return false;
+    if (ignoreCooldown === false && this.isNotCooldown() === false) {
+      return false;
     }
 
-    this.lastUsedTimestamp = time.getTimeStamp;
+    // Check isEnoughEnergy
+    if (applyEnergyUsage === true && this.isEnoughEnergy() === false) {
+      return false;
+    }
+
+    this.lastUsedTimestamp = time.getTimestamp;
+    if (applyEnergyUsage === true) this.applyEnergyUsage();
     this.onUse();
     return true;
   }
 
-  public isAvailable(): boolean {
-    const cooldownDurationInSeconds = this.cooldown.duration;
-
-    return time.getTimeStamp >= this.cooldown.from + cooldownDurationInSeconds;
+  public isNotCooldown(): boolean {
+    const isCooldown =
+      time.getTimestamp < this.cooldown() * 1000 + this.lastUsedTimestamp;
+    return isCooldown === false && this.condition();
   }
 
-  public applyEnergyUsage(): boolean {
-    if (this.isEnoughEnergy()) {
-      this.player.characteristics.energy.current -= this.energyUsage;
-      return true;
-    }
-    return false;
+  public applyEnergyUsage(): void {
+    this.player.characteristics.energy.current -= this.energyUsage();
   }
 
   public isEnoughEnergy(): boolean {
-    return this.player.characteristics.energy.current - this.energyUsage >= 0;
-  }
-
-  public get getLastUsedTimestamp(): number {
-    return this.lastUsedTimestamp;
+    return this.player.characteristics.energy.current - this.energyUsage() >= 0;
   }
 
   public get cooldownPercentage(): number {
-    const elapsedTime = time.getTimeStamp - this.cooldown.from;
-    const percentage = elapsedTime / this.cooldown.duration;
-    return Math.min(Math.max(percentage, 0), 1);
-  }
-
-  public set setCooldown(seconds: number) {
-    this.cooldown.from = time.getTimeStamp;
-    this.cooldown.duration = seconds;
-  }
-
-  public resetCooldown(): void {
-    this.cooldown.from = 0;
-    this.cooldown.duration = 0;
+    const elapsedTime = (time.getTimestamp - this.lastUsedTimestamp) / 1000;
+    return Math.min(elapsedTime / this.cooldown(), 1);
   }
 }

@@ -19,8 +19,8 @@ export class Magmax extends Character {
     },
   };
 
-  constructor(startPosition: Position, size: number) {
-    super(startPosition, size, MAGMAXCONFIG.color.default);
+  constructor(startPosition: Position) {
+    super(startPosition, MAGMAXCONFIG.size, MAGMAXCONFIG.color.default);
 
     this.firstSkill = new ToggleSkill(this, {
       keyCode: 'KeyJ',
