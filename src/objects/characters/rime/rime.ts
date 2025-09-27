@@ -1,5 +1,5 @@
 import { GameObject } from '../../../core/common/GameObject';
-import { doItemsIntersect } from '../../../core/utils/doItemsIntersect';
+import { doItemsIntersect } from '../../../core/utils/collision/doItemsIntersect';
 import { gameObjectManager, userInput } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';

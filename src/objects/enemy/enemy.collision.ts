@@ -1,7 +1,8 @@
-import { doItemsIntersect } from '../../core/utils/doItemsIntersect';
-import { gameObjectManager, renderer } from '../../core/global';
+import { doItemsIntersect } from '../../core/utils/collision/doItemsIntersect';
+import { gameObjectManager } from '../../core/global';
 import { SaveZone } from '../saveZone/SaveZone';
 import { Enemy } from './enemy';
+import { applyCollisionWithWalls } from '../../core/utils/collision/applyCollisionWithWalls';
 
 export class EnemyCollision {
   private _enemy: Enemy;
@@ -12,9 +13,10 @@ export class EnemyCollision {
 
   public onUpdate(): void {
     // Check for collisions with walls
-    const { newPosition, newVelocity } = this.boundaryCollision();
-    this._enemy.position = newPosition;
-    this._enemy.velocity = newVelocity;
+    applyCollisionWithWalls(this._enemy, (collision) => {
+      if (collision.x) this._enemy.velocity.x *= -1;
+      if (collision.y) this._enemy.velocity.y *= -1;
+    });
 
     // Check for collisions with save zones
     gameObjectManager.saveZones.forEach(this.collisionWithSaveZone.bind(this));
@@ -61,39 +63,5 @@ export class EnemyCollision {
         velocity.y = -velocity.y;
       }
     }
-  }
-
-  private boundaryCollision() {
-    const handleAxisCollision = (axis: 'x' | 'y') => {
-      let newPosition: number;
-      let newVelocity: number;
-
-      const { position, velocity, objectModel } = this._enemy;
-
-      const axisPosition = position[axis];
-      const halfSize = objectModel.size / 2;
-      const minAxisPosition = halfSize;
-      const maxAxisPosition = renderer.canvasSize[axis] - halfSize;
-
-      if (axisPosition - halfSize < 0) {
-        newPosition = minAxisPosition;
-        newVelocity = -velocity[axis];
-      } else if (axisPosition > maxAxisPosition) {
-        newPosition = maxAxisPosition;
-        newVelocity = -velocity[axis];
-      } else {
-        newPosition = position[axis];
-        newVelocity = velocity[axis];
-      }
-
-      return { newPosition, newVelocity };
-    };
-    const x = handleAxisCollision('x');
-    const y = handleAxisCollision('y');
-
-    return {
-      newPosition: { x: x.newPosition, y: y.newPosition },
-      newVelocity: { x: x.newVelocity, y: y.newVelocity },
-    };
   }
 }
