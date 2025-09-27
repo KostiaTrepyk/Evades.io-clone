@@ -1,16 +1,14 @@
 import { Character } from './objects/character/character';
 import { gameLoop, renderer, userInput } from './core/global';
-import { Magmax } from './objects/characters/magmax/magmax';
-import { Rime } from './objects/characters/rime/rime';
 import { gameMap } from './core/GameMap/Configuration/GameMapConfiguration';
+import { Rime } from './objects/characters/rime/rime';
 
 export class Game {
   private character: Character;
 
   constructor() {
     this.character = new Rime(
-      { x: renderer.canvasSize.x / 2, y: renderer.canvasSize.y / 2 },
-      46
+      { x: renderer.canvasSize.x / 2, y: renderer.canvasSize.y / 2 }
     );
   }
 

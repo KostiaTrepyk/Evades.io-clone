@@ -2,9 +2,9 @@ import { HSLA } from '../../core/utils/hsla';
 
 export const MAGMAXCONFIG = {
   color: {
-    default: new HSLA(0, 85, 50, 100),
-    firstSpellActive: new HSLA(5, 85, 60, 100),
-    secondSpellActive: new HSLA(0, 85, 40, 100),
+    default: new HSLA(0, 85, 50, 1),
+    firstSpellActive: new HSLA(5, 85, 60, 1),
+    secondSpellActive: new HSLA(0, 85, 40, 1),
   },
   size: 46,
 

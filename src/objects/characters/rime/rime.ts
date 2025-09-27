@@ -5,13 +5,14 @@ import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
 import { CommonSkill } from '../../character/skills/commonSkill';
 import { RIMECONFIG } from '../../../configs/characters/rime.config';
+import { MoveDirection } from '../../../core/types/moveDirection';
 
 export class Rime extends Character {
   public override firstSkill: CommonSkill;
   public override secondSkill: CommonSkill;
   private secondSkillRangeVisibility: boolean;
 
-  private moveDirection: { x: -1 | 0 | 1; y: -1 | 0 | 1 };
+  private moveDirection: MoveDirection;
 
   constructor(startPosition: Position) {
     super(startPosition, RIMECONFIG.size, RIMECONFIG.color.default.clone());
@@ -59,20 +60,18 @@ export class Rime extends Character {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    super.onRender(ctx);
-
     if (this.secondSkillRangeVisibility) {
       const currentSkillLevel = this.level.upgrades.secondSpell.current;
       const radius = RIMECONFIG.secondSpell.radius[currentSkillLevel - 1];
+      const color = RIMECONFIG.secondSpell.rangeColor.clone();
+
       ctx.beginPath();
-      const color = this.color.clone();
-      color.setAlpha = 0.2;
-      color.setLightness = 50;
-      color.setHue = this.color.getHue - 30;
       ctx.fillStyle = color.toString();
       ctx.arc(this.position.x, this.position.y, radius, 0, 360);
       ctx.fill();
     }
+
+    super.onRender(ctx);
   }
 
   private firstSkillHandler(): void {
