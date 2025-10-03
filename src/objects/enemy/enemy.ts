@@ -1,21 +1,19 @@
 import { GameObject } from '../../core/common/GameObject';
-import { gameObjectManager, time } from '../../core/global';
+import { time } from '../../core/global';
 import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
 import { EnemyCollision } from './enemy.collision';
 import { RenderEnemyModel } from './enemy.model';
+import { Velocity } from '../../core/types/Velocity';
+import { CircleShape } from '../../core/types/Shape';
 
-export class Enemy extends GameObject<'circle'> {
+export class Enemy extends GameObject<CircleShape> {
   private collision: EnemyCollision;
-  public velocity: { x: number; y: number };
+  public velocity: Velocity;
   private freezeStatus: { from: number; duration: number };
   public color: HSLA;
 
-  constructor(
-    position: Position,
-    size: number,
-    velocity: { x: number; y: number }
-  ) {
+  constructor(position: Position, size: number, velocity: Velocity) {
     super(position, { shape: 'circle', size });
 
     this.collision = new EnemyCollision(this);
