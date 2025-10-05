@@ -15,7 +15,9 @@ export class EnemyEnergyBurner extends Enemy {
     super(startPosition, 50, velocity);
     this.radius = 200;
     this.energySteals = 12;
-    this.color = new HSLA(235, 100, 60, 1);
+    //FIX ME из за readonly в defaultColor не могу поставить цвет
+    // this.defaultColor = new HSLA(235, 100, 60, 1);
+    this.currentColor = new HSLA(235, 100, 60, 1);
   }
 
   public override onUpdate(deltaTime: number): void {

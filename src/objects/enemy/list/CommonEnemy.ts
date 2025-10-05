@@ -6,6 +6,8 @@ import { Enemy } from '../enemy';
 export class CommonEnemy extends Enemy {
   constructor(startPosition: Position, size: number, velocity: Velocity) {
     super(startPosition, size, velocity);
-    this.color = new HSLA(0, 0, 60, 1);
+    //FIX ME из за readonly в defaultColor не могу поставить цвет
+    // this.defaultColor = new HSLA(0, 0, 60, 1);
+    this.currentColor = new HSLA(0, 0, 60, 1);
   }
 }

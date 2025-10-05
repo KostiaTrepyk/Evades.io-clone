@@ -91,18 +91,22 @@ export class HSLA {
     return this.alpha;
   }
 
+  /** От 0 до 360 */
   set setHue(hue: number) {
     this.hue = this.clampValue(hue, 0, 360);
   }
 
+  /** От 0 до 100 */
   set setSaturation(saturation: number) {
     this.saturation = this.clampValue(saturation, 0, 100);
   }
 
+  /** От 0 до 100 */
   set setLightness(lightness: number) {
     this.lightness = this.clampValue(lightness, 0, 100);
   }
 
+  /** От 0 до 1 */
   set setAlpha(alpha: number) {
     this.alpha = this.clampValue(alpha, 0, 1);
   }

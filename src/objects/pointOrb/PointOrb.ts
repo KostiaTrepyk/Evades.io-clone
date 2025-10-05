@@ -1,7 +1,6 @@
 import { GameObject } from '../../core/common/GameObject';
-import { gameObjectManager } from '../../core/global';
 import { Position } from '../../core/types/Position';
-import { RenderPointOrb } from './PoinOrb.model';
+import { RenderPointOrb } from './PointOrb.model';
 
 const pointOrbSize: number = 30;
 const pointOrbColors = ['pink', 'lightgreen', '#fa7', 'lightblue'] as const;

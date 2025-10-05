@@ -6,24 +6,32 @@ import { Enemy } from '../enemy/enemy';
 import { gameObjectManager } from '../../core/global';
 import { doItemsIntersect } from '../../core/utils/collision/doItemsIntersect';
 import { Velocity } from '../../core/types/Velocity';
+import { doWallIntersect } from '../../core/utils/collision/doWallIntersect';
+import { Collision } from '../../core/types/Collision';
 
+interface Intersection {
+  enemy?: (enemy: Enemy) => void;
+  wall?: (collision: Collision) => void;
+}
 export class Projectile extends GameObject<CircleShape> {
   public velocity: Velocity;
   private color: HSLA;
   private readonly onEnemyIntersect?: (enemy: Enemy) => void;
+  private readonly onWallIntersect?: (collision: Collision) => void;
 
   constructor(
     startPosition: Projectile['position'],
     size: Projectile['objectModel']['size'],
     velocity: Projectile['velocity'],
     color: Projectile['color'],
-    onEnemyIntersect?: Projectile['onEnemyIntersect']
+    intersection: Intersection
   ) {
     super(startPosition, { shape: 'circle', size: size });
 
     this.velocity = velocity;
     this.color = color;
-    this.onEnemyIntersect = onEnemyIntersect;
+    this.onEnemyIntersect = intersection.enemy;
+    this.onWallIntersect = intersection.wall;
   }
 
   public override onUpdate(deltaTime: number): void {
@@ -41,6 +49,12 @@ export class Projectile extends GameObject<CircleShape> {
           }
         }
       });
+    }
+
+    // Коллизия с границами
+    if (this.onWallIntersect) {
+      const collision = doWallIntersect(this);
+      this.onWallIntersect(collision);
     }
   }
 

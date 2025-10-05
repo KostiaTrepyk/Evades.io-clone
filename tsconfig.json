@@ -10,7 +10,10 @@
     "strict": true,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "allowUnreachableCode": false
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
   },
   "include": ["**/*.ts", "**/*.tsx", "webpack.config.js"]
 }

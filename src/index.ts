@@ -1,7 +1,7 @@
-import { game } from "./core/global";
+import { game } from './core/global';
 
 window.onload = init;
 
-function init(e: Event) {
+function init() {
   game.start();
 }

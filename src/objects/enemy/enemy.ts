@@ -11,7 +11,8 @@ export class Enemy extends GameObject<CircleShape> {
   private collision: EnemyCollision;
   public velocity: Velocity;
   private freezeStatus: { from: number; duration: number };
-  public color: HSLA;
+  public readonly defaultColor: HSLA;
+  public currentColor: HSLA;
 
   constructor(position: Position, size: number, velocity: Velocity) {
     super(position, { shape: 'circle', size });
@@ -19,7 +20,8 @@ export class Enemy extends GameObject<CircleShape> {
     this.collision = new EnemyCollision(this);
     this.velocity = velocity;
     this.freezeStatus = { from: 0, duration: 0 };
-    this.color = new HSLA(0, 0, 60, 1);
+    this.defaultColor = new HSLA(0, 0, 60, 1);
+    this.currentColor = new HSLA(0, 0, 60, 1);
   }
 
   public override onUpdate(deltaTime: number): void {
@@ -37,7 +39,7 @@ export class Enemy extends GameObject<CircleShape> {
   public override onRender(ctx: CanvasRenderingContext2D): void {
     if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
 
-    RenderEnemyModel(ctx, this.position, this.objectModel.size, this.color);
+    RenderEnemyModel(ctx, this.position, this.objectModel.size, this.currentColor);
   }
 
   public isFreezed(): boolean {

@@ -1,11 +1,7 @@
 import { GameObject } from '../../common/GameObject';
 import { renderer } from '../../global';
+import { Collision } from '../../types/Collision';
 import { Shape } from '../../types/Shape';
-
-interface Collision {
-  x: boolean;
-  y: boolean;
-}
 
 export function applyCollisionWithWalls(
   gameObject: GameObject<Shape>,
