@@ -1,31 +1,47 @@
-import { doItemsIntersect } from '../../core/utils/collision/doItemsIntersect';
-import { gameObjectManager } from '../../core/global';
-import { applyCollisionWithWalls } from '../../core/utils/collision/applyCollisionWithWalls';
+import { MCollisionWalls } from '../../core/modules/collision/MCollisionWalls';
+import { MCollisionEnemy } from '../../core/modules/collision/MCollisionEnemy';
+import { MCollisionPointOrb } from '../../core/modules/collision/MCollisionPointOrb';
+import { Enemy } from '../enemy/enemy';
+import { PointOrb } from '../pointOrb/PointOrb';
 import { Character } from './character';
 
 export class CharacterCollision {
   private player: Character;
+  private mCollisionWalls: MCollisionWalls;
+  private mCollisionEnemy: MCollisionEnemy;
+  private mCollisionPointOrb: MCollisionPointOrb;
 
   constructor(player: Character) {
     this.player = player;
+
+    this.mCollisionWalls = new MCollisionWalls({
+      object: player,
+      collisionType: 'applyCollision',
+    });
+    this.mCollisionEnemy = new MCollisionEnemy({
+      object: player,
+      onCollision: this.onCollisionEnemy.bind(this),
+    });
+    this.mCollisionPointOrb = new MCollisionPointOrb({
+      object: player,
+      onCollision: this.onCollisionPointOrb.bind(this),
+    });
   }
 
   public afterUpdate(deltaTime: number): void {
-    applyCollisionWithWalls(this.player);
+    this.mCollisionWalls.afterUpdate(deltaTime);
+    this.mCollisionEnemy.afterUpdate(deltaTime);
+    this.mCollisionPointOrb.afterUpdate(deltaTime);
+  }
 
-    // Check collision
-    gameObjectManager.enemies.forEach((enemy) => {
-      if (doItemsIntersect(this.player, enemy)) {
-        if (!this.player.isDead) {
-          this.player.die();
-        }
-      }
-    });
-    gameObjectManager.pointOrbs.forEach((pointOrb) => {
-      if (doItemsIntersect(this.player, pointOrb)) {
-        pointOrb.delete();
-        this.player.level.addPointOrb();
-      }
-    });
+  private onCollisionEnemy(enemy: Enemy): void {
+    if (!this.player.isDead) {
+      this.player.die();
+    }
+  }
+
+  private onCollisionPointOrb(pointOrb: PointOrb): void {
+    pointOrb.delete();
+    this.player.level.addPointOrb();
   }
 }
