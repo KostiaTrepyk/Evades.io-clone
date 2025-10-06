@@ -1,5 +1,5 @@
 import { userInput } from '../../core/global';
-import { gameConfig } from '../../configs/game.config';
+import { GAMECONFIG } from '../../configs/game.config';
 import { Character } from './character';
 
 export class CharacterMovement {
@@ -41,7 +41,7 @@ export class CharacterMovement {
     if (isMovingY && isMovingX) normalizedSpeed /= 1.333;
 
     if (userInput.isKeypress('ShiftLeft'))
-      normalizedSpeed *= gameConfig.characterSlowRatio;
+      normalizedSpeed *= GAMECONFIG.characterSlowRatio;
 
     if (userInput.isKeypress('KeyW') && isMovingY) {
       this.player.prevPosition.y = this.player.position.y;

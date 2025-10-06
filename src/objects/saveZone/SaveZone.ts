@@ -1,3 +1,4 @@
+import { SAVEZONECONFIG } from "../../configs/saveZone.config";
 import { GameObject } from "../../core/common/GameObject";
 import { gameObjectManager } from "../../core/global";
 import { Position } from "../../core/types/Position";
@@ -16,7 +17,7 @@ export class SaveZone extends GameObject<"rectangle"> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = "hsla(100, 100%, 50%, 0.3)";
+    ctx.fillStyle = SAVEZONECONFIG.color.toString();
     ctx.fillRect(
       this.position.x - this.objectModel.size.x / 2,
       this.position.y - this.objectModel.size.y / 2,

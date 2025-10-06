@@ -14,13 +14,13 @@ export class EnemyCollision {
     this.mCollisionWalls = new MCollisionWalls({
       object: enemy,
       collisionType: 'applyCollision',
-      afterCollision: this.collisionWithWallsHandler.bind(this),
+      onCollision: this.collisionWithWallsHandler.bind(this),
     });
 
     this.mCollisionSaveZone = new MCollisionSaveZone({
       object: enemy,
       collisionType: 'applyCollision',
-      afterCollision: this.collisionWithSaveZonesHandler.bind(this),
+      onCollision: this.collisionWithSaveZonesHandler.bind(this),
     });
   }
 

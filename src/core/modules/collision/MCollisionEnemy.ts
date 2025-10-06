@@ -3,7 +3,7 @@ import { GameObject } from '../../common/GameObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Shape } from '../../types/Shape';
-import { doItemsIntersect } from '../../utils/collision/doItemsIntersect';
+import { doItemsCollide } from '../../utils/collision/doItemsCollide';
 
 interface MCollisionEnemyParams {
   object: GameObject<Shape>;
@@ -13,7 +13,7 @@ interface MCollisionEnemyParams {
 /**
  * Module responsible for handling collision detection between a game object and enemies.
  *
- * When the associated game object intersects with any enemy, the provided `onCollision` callback is triggered.
+ * When the associated game object collides with any enemy, the provided `onCollision` callback is triggered.
  *
  * @remarks
  * This module should be attached to a game object that needs to respond to collisions with enemies.
@@ -42,7 +42,7 @@ export class MCollisionEnemy implements Module {
   public afterUpdate(deltaTime: number): void {
     const enemies = gameObjectManager.enemies;
     enemies.forEach((enemy) => {
-      if (doItemsIntersect(this.object, enemy).doesIntersect === true) {
+      if (doItemsCollide(this.object, enemy).doesCollide === true) {
         this.onCollision(enemy);
       }
     });

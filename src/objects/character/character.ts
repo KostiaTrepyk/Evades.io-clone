@@ -2,7 +2,7 @@ import { CircleShape, Shapes } from '../../core/types/Shape';
 import { Position } from '../../core/types/Position';
 import { gameObjectManager } from '../../core/global';
 import { GameObject } from '../../core/common/GameObject';
-import { doItemsIntersect } from '../../core/utils/collision/doItemsIntersect';
+import { doItemsCollide } from '../../core/utils/collision/doItemsCollide';
 import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
@@ -12,7 +12,7 @@ import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 
 export class Character extends GameObject<CircleShape> {
-  public UIColor: HSLA;
+  public readonly UIColor: HSLA;
   public firstSkill: ISkill | undefined;
   public secondSkill: ISkill | undefined;
 
@@ -47,7 +47,7 @@ export class Character extends GameObject<CircleShape> {
     this.timeToDeath = undefined;
 
     gameObjectManager.enemies.forEach((enemy) => {
-      if (doItemsIntersect(this, enemy).doesIntersect === true) {
+      if (doItemsCollide(this, enemy).doesCollide === true) {
         this.die();
       }
     });

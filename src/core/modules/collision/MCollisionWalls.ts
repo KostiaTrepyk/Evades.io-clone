@@ -1,9 +1,8 @@
 import { GameObject } from '../../common/GameObject';
 import { Module } from '../../common/Module';
-import { renderer } from '../../global';
 import { Collision } from '../../types/Collision';
 import { Shape } from '../../types/Shape';
-import { doWallIntersect } from '../../utils/collision/doWallIntersect';
+import { doesCollideWithWalls } from '../../utils/collision/doesCollideWithWalls';
 import { repositionObjectOnCollisionWithWalls } from '../../utils/collision/repositionObjectOnCollisionWithWalls';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
@@ -11,7 +10,7 @@ type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 interface MCollisionWallsParams {
   object: GameObject<Shape>;
   collisionType?: CollisionType;
-  afterCollision?: (collision: Collision) => void;
+  onCollision?: (collision: Collision) => void;
 }
 
 /** @important Обязательно нужно добавить в onUpdate, afterUpdate в родителе! */
@@ -41,33 +40,33 @@ interface MCollisionWallsParams {
  */
 export class MCollisionWalls implements Module {
   private object: GameObject<Shape>;
-  private afterCollision?: (collision: Collision) => void;
+  private onCollision?: (collision: Collision) => void;
   private collisionType: CollisionType;
 
   constructor(params: MCollisionWallsParams) {
     this.object = params.object;
-    this.afterCollision = params.afterCollision;
+    this.onCollision = params.onCollision;
     this.collisionType = params.collisionType ?? 'onlyAfterCollision';
   }
 
   public afterUpdate(deltaTime: number): void {
     if (this.collisionType === 'applyCollision') {
-      const { intersections, doesIntersect } = doWallIntersect(this.object);
+      const { collisions, doesCollide } = doesCollideWithWalls(this.object);
 
-      repositionObjectOnCollisionWithWalls(this.object, intersections);
+      repositionObjectOnCollisionWithWalls(this.object, collisions);
 
-      if (this.afterCollision && doesIntersect) {
-        this.afterCollision(intersections);
+      if (this.onCollision && doesCollide) {
+        this.onCollision(collisions);
       }
 
       return;
     }
 
     if (this.collisionType === 'onlyAfterCollision') {
-      const { intersections, doesIntersect } = doWallIntersect(this.object);
+      const { collisions, doesCollide } = doesCollideWithWalls(this.object);
 
-      if (this.afterCollision && doesIntersect) {
-        this.afterCollision(intersections);
+      if (this.onCollision && doesCollide) {
+        this.onCollision(collisions);
       }
     }
   }

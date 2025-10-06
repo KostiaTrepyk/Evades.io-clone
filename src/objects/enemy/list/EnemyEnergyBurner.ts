@@ -1,23 +1,25 @@
 import { GameObject } from '../../../core/common/GameObject';
-import { doItemsIntersect } from '../../../core/utils/collision/doItemsIntersect';
+import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
 import { gameObjectManager } from '../../../core/global';
-import { HSLA } from '../../../core/utils/hsla';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';
 import { Character } from '../../character/character';
 import { Enemy } from '../enemy';
+import { ENERGYBURNERENEMYCONFIG } from '../../../configs/enemies/energyBurnerEnemy.config';
 
 export class EnemyEnergyBurner extends Enemy {
   private radius: number;
   private energySteals: number;
 
   constructor(startPosition: Position, velocity: Velocity) {
-    super(startPosition, 50, velocity);
-    this.radius = 200;
-    this.energySteals = 12;
-    //FIX ME из за readonly в defaultColor не могу поставить цвет
-    // this.defaultColor = new HSLA(235, 100, 60, 1);
-    this.currentColor = new HSLA(235, 100, 60, 1);
+    super(
+      startPosition,
+      ENERGYBURNERENEMYCONFIG.size,
+      velocity,
+      ENERGYBURNERENEMYCONFIG.color
+    );
+    this.radius = ENERGYBURNERENEMYCONFIG.auraRadius;
+    this.energySteals = ENERGYBURNERENEMYCONFIG.energySteals;
   }
 
   public override onUpdate(deltaTime: number): void {
@@ -27,12 +29,12 @@ export class EnemyEnergyBurner extends Enemy {
 
     if (!player) return;
 
-    const a = new GameObject(this.position, {
+    const aura = new GameObject(this.position, {
       shape: 'circle',
       size: this.radius * 2,
     });
 
-    if (doItemsIntersect(player, a).doesIntersect === true) {
+    if (doItemsCollide(player, aura).doesCollide === true) {
       this.stealEnergy(player, deltaTime);
     }
   }
@@ -41,7 +43,7 @@ export class EnemyEnergyBurner extends Enemy {
     super.onRender(ctx);
 
     ctx.beginPath();
-    ctx.fillStyle = '#05f3';
+    ctx.fillStyle = ENERGYBURNERENEMYCONFIG.auraColor.toString();
     ctx.arc(this.position.x, this.position.y, this.radius, 0, 360);
     ctx.fill();
   }

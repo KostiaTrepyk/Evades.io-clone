@@ -3,7 +3,7 @@ import { GameObject } from '../../common/GameObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Shape } from '../../types/Shape';
-import { doItemsIntersect } from '../../utils/collision/doItemsIntersect';
+import { doItemsCollide } from '../../utils/collision/doItemsCollide';
 
 interface MCollisionPointOrbParams {
   object: GameObject<Shape>;
@@ -13,7 +13,7 @@ interface MCollisionPointOrbParams {
 /**
  * Module responsible for handling collision detection between a game object and point orbs.
  *
- * When the associated game object intersects with any point orb, the provided `onCollision` callback is triggered.
+ * When the associated game object collides with any point orb, the provided `onCollision` callback is triggered.
  *
  * @remarks
  * This module should be attached to a game object that needs to respond to collisions with point orbs.
@@ -42,7 +42,7 @@ export class MCollisionPointOrb implements Module {
   public afterUpdate(deltaTime: number): void {
     const pointOrbs = gameObjectManager.pointOrbs;
     pointOrbs.forEach((pointOrb) => {
-      if (doItemsIntersect(this.object, pointOrb).doesIntersect === true) {
+      if (doItemsCollide(this.object, pointOrb).doesCollide === true) {
         this.onCollision(pointOrb);
       }
     });

@@ -4,7 +4,7 @@ import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Collision } from '../../types/Collision';
 import { Shape } from '../../types/Shape';
-import { doItemsIntersect } from '../../utils/collision/doItemsIntersect';
+import { doItemsCollide } from '../../utils/collision/doItemsCollide';
 import { repositionObjectOnCollisionWithObject } from '../../utils/collision/repositionObjectOnCollisionWithObject';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
@@ -12,13 +12,13 @@ type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 interface MCollisionSaveZoneParams {
   object: GameObject<Shape>;
   collisionType?: CollisionType;
-  afterCollision?: (collision: Collision) => void;
+  onCollision?: (collision: Collision) => void;
 }
 
 /**
  * Represents a collision module for handling interactions with save zones.
  *
- * This module checks for intersections between its associated game object and save zones,
+ * This module checks for collisions between its associated game object and save zones,
  * optionally applies collision effects, and triggers a callback after a collision occurs.
  *
  * @remarks
@@ -37,42 +37,35 @@ interface MCollisionSaveZoneParams {
 export class MCollisionSaveZone implements Module {
   private object: GameObject<Shape>;
   private collisionType?: CollisionType;
-  private afterCollision?: (collision: Collision) => void;
+  private onCollision?: (collision: Collision) => void;
 
   constructor(params: MCollisionSaveZoneParams) {
     this.object = params.object;
     this.collisionType = params.collisionType;
-    this.afterCollision = params.afterCollision;
+    this.onCollision = params.onCollision;
   }
 
   public afterUpdate(deltaTime: number): void {
     gameObjectManager.saveZones.forEach((saveZone) => {
-      const { doesIntersect, intersections } =
+      const { doesCollide, collisions } =
         this.collisionWithSaveZone.bind(this)(saveZone);
 
-      if (this.afterCollision !== undefined && doesIntersect === true) {
-        this.afterCollision(intersections);
+      if (this.onCollision !== undefined && doesCollide === true) {
+        this.onCollision(collisions);
       }
     });
   }
 
   private collisionWithSaveZone(saveZone: SaveZone): {
-    doesIntersect: boolean;
-    intersections: Collision;
+    doesCollide: boolean;
+    collisions: Collision;
   } {
-    const { doesIntersect, intersections } = doItemsIntersect(
-      this.object,
-      saveZone
-    );
+    const { doesCollide, collisions } = doItemsCollide(this.object, saveZone);
 
-    if (this.collisionType === 'applyCollision' && doesIntersect === true) {
-      repositionObjectOnCollisionWithObject(
-        this.object,
-        saveZone,
-        intersections
-      );
+    if (this.collisionType === 'applyCollision' && doesCollide === true) {
+      repositionObjectOnCollisionWithObject(this.object, saveZone, collisions);
     }
 
-    return { doesIntersect, intersections };
+    return { doesCollide: doesCollide, collisions: collisions };
   }
 }

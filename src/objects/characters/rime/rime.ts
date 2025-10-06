@@ -1,5 +1,5 @@
 import { GameObject } from '../../../core/common/GameObject';
-import { doItemsIntersect } from '../../../core/utils/collision/doItemsIntersect';
+import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
 import { gameObjectManager, userInput } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
@@ -115,8 +115,8 @@ export class Rime extends Character {
       size: radius * 2,
     });
 
-    const enemiesToFreeze = gameObjectManager.enemies.filter((enemy) =>
-      doItemsIntersect(freezer, enemy).doesIntersect === true
+    const enemiesToFreeze = gameObjectManager.enemies.filter(
+      (enemy) => doItemsCollide(freezer, enemy).doesCollide === true
     );
 
     enemiesToFreeze.forEach((enemy) => enemy.freeze(duration));

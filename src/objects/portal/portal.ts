@@ -1,5 +1,5 @@
 import { GameObject } from '../../core/common/GameObject';
-import { doItemsIntersect } from '../../core/utils/collision/doItemsIntersect';
+import { doItemsCollide } from '../../core/utils/collision/doItemsCollide';
 import { gameObjectManager } from '../../core/global';
 import { Position } from '../../core/types/Position';
 
@@ -16,11 +16,10 @@ export class Portal extends GameObject<'rectangle'> {
   }
 
   public override onUpdate(deltaTime: number): void {
-    if (
-      gameObjectManager.player &&
-      doItemsIntersect(this, gameObjectManager.player).doesIntersect === true
-    ) {
-      this.onEnter();
+    // Если существует игрок, проверяем на коллизию.
+    if (gameObjectManager.player !== undefined) {
+      const { doesCollide } = doItemsCollide(this, gameObjectManager.player);
+      if (doesCollide === true) this.onEnter();
     }
   }
 

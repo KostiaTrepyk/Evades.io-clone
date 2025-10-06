@@ -14,14 +14,19 @@ export class Enemy extends GameObject<CircleShape> {
   public readonly defaultColor: HSLA;
   public currentColor: HSLA;
 
-  constructor(position: Position, size: number, velocity: Velocity) {
+  constructor(
+    position: Position,
+    size: number,
+    velocity: Velocity,
+    color: HSLA
+  ) {
     super(position, { shape: 'circle', size });
 
     this.collision = new EnemyCollision(this);
     this.velocity = velocity;
     this.freezeStatus = { from: 0, duration: 0 };
-    this.defaultColor = new HSLA(0, 0, 60, 1);
-    this.currentColor = new HSLA(0, 0, 60, 1);
+    this.defaultColor = color;
+    this.currentColor = color;
   }
 
   public override onUpdate(deltaTime: number): void {

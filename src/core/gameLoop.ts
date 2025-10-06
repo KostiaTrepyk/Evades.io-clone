@@ -1,4 +1,4 @@
-import { gameConfig } from '../configs/game.config';
+import { GAMECONFIG } from '../configs/game.config';
 import {
   gameObjectManager,
   renderer,
@@ -56,7 +56,7 @@ export class GameLoop {
   }
 
   private renderGame(timestamp: number): void {
-    const frameTime = 1 / gameConfig.fpsGame;
+    const frameTime = 1 / GAMECONFIG.fpsGame;
 
     // ====== Инициализируем lastRender при первом кадре ======
     if (this.lastGameRenderTimestamp === null) {
@@ -81,7 +81,7 @@ export class GameLoop {
   }
 
   private renderUI(timestamp: number): void {
-    const frameTime = 1 / gameConfig.fpsUI;
+    const frameTime = 1 / GAMECONFIG.fpsUI;
 
     // ====== Инициализируем lastRender при первом кадре ======
     if (this.lastUIRenderTimestamp === null) {

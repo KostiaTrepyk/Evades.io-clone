@@ -1,9 +1,16 @@
 {
     "cSpell.words": [
+        "COMMONENEMYCONFIG",
         "cooldown",
+        "ENEMYCONFIG",
+        "ENERGYBURNERENEMYCONFIG",
+        "GAMECONFIG",
+        "lightgreen",
         "Magmax",
         "MAGMAXCONFIG",
         "MORPHCONFIG",
-        "RIMECONFIG"
+        "POINTORBCONFIG",
+        "RIMECONFIG",
+        "SAVEZONECONFIG"
     ]
 }
