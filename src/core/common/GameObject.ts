@@ -14,19 +14,32 @@ export type ObjectModel<S extends Shape> = S extends CircleShape
   ? RectangleProperties
   : never;
 
-/** Каждый объект может быть только шаром либо прямоугольником. */
+/* Каждый объект может быть только шаром либо прямоугольником. */
 export class GameObject<S extends Shape> {
+  // public readonly updateOrder: number;
+  // public readonly renderOrder: number;
+
+  public prevPosition: Position;
   public position: Position;
   public objectModel: ObjectModel<S>;
 
-  constructor(startPosition: Position, objectModel: ObjectModel<S>) {
+  constructor(
+    startPosition: Position,
+    objectModel: ObjectModel<S>
+    // updateOrder: number,
+    // renderOrder: number
+  ) {
+    this.prevPosition = startPosition;
     this.position = startPosition;
     this.objectModel = objectModel;
+    // this.updateOrder = updateOrder;
+    // this.renderOrder = renderOrder;
   }
 
   public create(): void {
     gameObjectManager.addGameObject(this);
   }
+
   public delete(): void {
     gameObjectManager.removeGameObject(this);
   }

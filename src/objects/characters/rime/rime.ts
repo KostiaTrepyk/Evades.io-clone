@@ -116,7 +116,7 @@ export class Rime extends Character {
     });
 
     const enemiesToFreeze = gameObjectManager.enemies.filter((enemy) =>
-      doItemsIntersect(freezer, enemy)
+      doItemsIntersect(freezer, enemy).doesIntersect === true
     );
 
     enemiesToFreeze.forEach((enemy) => enemy.freeze(duration));

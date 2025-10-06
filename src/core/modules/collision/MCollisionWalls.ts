@@ -1,9 +1,10 @@
 import { GameObject } from '../../common/GameObject';
 import { Module } from '../../common/Module';
+import { renderer } from '../../global';
 import { Collision } from '../../types/Collision';
 import { Shape } from '../../types/Shape';
-import { applyCollisionWithWalls } from '../../utils/collision/applyCollisionWithWalls';
 import { doWallIntersect } from '../../utils/collision/doWallIntersect';
+import { repositionObjectOnCollisionWithWalls } from '../../utils/collision/repositionObjectOnCollisionWithWalls';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 
@@ -51,21 +52,22 @@ export class MCollisionWalls implements Module {
 
   public afterUpdate(deltaTime: number): void {
     if (this.collisionType === 'applyCollision') {
-      return applyCollisionWithWalls(this.object, (collision) => {
-        const hasCollided = collision.x || collision.y;
+      const { intersections, doesIntersect } = doWallIntersect(this.object);
 
-        if (this.afterCollision && hasCollided) {
-          this.afterCollision(collision);
-        }
-      });
+      repositionObjectOnCollisionWithWalls(this.object, intersections);
+
+      if (this.afterCollision && doesIntersect) {
+        this.afterCollision(intersections);
+      }
+
+      return;
     }
 
     if (this.collisionType === 'onlyAfterCollision') {
-      const collision = doWallIntersect(this.object);
-      const hasCollided = collision.x || collision.y;
+      const { intersections, doesIntersect } = doWallIntersect(this.object);
 
-      if (this.afterCollision && hasCollided) {
-        this.afterCollision(collision);
+      if (this.afterCollision && doesIntersect) {
+        this.afterCollision(intersections);
       }
     }
   }

@@ -42,7 +42,7 @@ export class Projectile extends GameObject<CircleShape> {
     // Коллизия с врагами
     if (this.onEnemyIntersect) {
       gameObjectManager.enemies.forEach((enemy) => {
-        if (doItemsIntersect(enemy, this)) {
+        if (doItemsIntersect(enemy, this).doesIntersect === true) {
           // FIX ME Почему-то не хочет убрать undefined хотя на него есть проверка
           if (this.onEnemyIntersect) {
             this.onEnemyIntersect(enemy);
@@ -53,8 +53,8 @@ export class Projectile extends GameObject<CircleShape> {
 
     // Коллизия с границами
     if (this.onWallIntersect) {
-      const collision = doWallIntersect(this);
-      this.onWallIntersect(collision);
+      const { intersections, doesIntersect } = doWallIntersect(this);
+      if (doesIntersect) this.onWallIntersect(intersections);
     }
   }
 

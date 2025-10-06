@@ -28,7 +28,7 @@ export class Character extends GameObject<CircleShape> {
     super(startPosition, { shape: Shapes.circle, size });
 
     this.UIColor = color.clone();
-    this.characterMovement = new CharacterMovement(this, startPosition, size);
+    this.characterMovement = new CharacterMovement(this);
     this.level = new CharacterLevels(this);
     this.characteristics = new CharacterCharacteristics(this);
     this.collision = new CharacterCollision(this);
@@ -47,7 +47,7 @@ export class Character extends GameObject<CircleShape> {
     this.timeToDeath = undefined;
 
     gameObjectManager.enemies.forEach((enemy) => {
-      if (doItemsIntersect(this, enemy)) {
+      if (doItemsIntersect(this, enemy).doesIntersect === true) {
         this.die();
       }
     });

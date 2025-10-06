@@ -36,6 +36,7 @@ export class GameObjectManager {
     this.enemies.forEach((enemy) => enemy.onUpdate(deltaTime));
     this.portals.forEach((portal) => portal.onUpdate(deltaTime));
 
+    this.enemies.forEach((enemy) => enemy.afterUpdate(deltaTime));
     this.player?.afterUpdate(deltaTime);
   }
 

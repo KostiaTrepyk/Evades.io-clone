@@ -1,4 +1,4 @@
 export interface Collision {
-  x: boolean;
-  y: boolean;
+  x: 'left' | 'right' | 'no';
+  y: 'top' | 'bottom' | 'no';
 }

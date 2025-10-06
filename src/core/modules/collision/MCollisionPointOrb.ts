@@ -42,7 +42,7 @@ export class MCollisionPointOrb implements Module {
   public afterUpdate(deltaTime: number): void {
     const pointOrbs = gameObjectManager.pointOrbs;
     pointOrbs.forEach((pointOrb) => {
-      if (doItemsIntersect(this.object, pointOrb)) {
+      if (doItemsIntersect(this.object, pointOrb).doesIntersect === true) {
         this.onCollision(pointOrb);
       }
     });

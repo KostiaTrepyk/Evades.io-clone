@@ -32,7 +32,7 @@ export class EnemyEnergyBurner extends Enemy {
       size: this.radius * 2,
     });
 
-    if (doItemsIntersect(player, a)) {
+    if (doItemsIntersect(player, a).doesIntersect === true) {
       this.stealEnergy(player, deltaTime);
     }
   }

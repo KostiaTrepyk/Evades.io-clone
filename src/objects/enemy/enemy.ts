@@ -28,18 +28,27 @@ export class Enemy extends GameObject<CircleShape> {
     if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
 
     // If freezed, don't update position
-    if (this.isFreezed()) return;
+    if (this.isFreezed() === true) return;
+
+    this.prevPosition = { x: this.position.x, y: this.position.y };
 
     this.position.x += this.velocity.x * deltaTime;
     this.position.y += this.velocity.y * deltaTime;
+  }
 
-    this.collision.onUpdate();
+  public override afterUpdate(deltaTime: number): void {
+    this.collision.afterUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
     if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
 
-    RenderEnemyModel(ctx, this.position, this.objectModel.size, this.currentColor);
+    RenderEnemyModel(
+      ctx,
+      this.position,
+      this.objectModel.size,
+      this.currentColor
+    );
   }
 
   public isFreezed(): boolean {

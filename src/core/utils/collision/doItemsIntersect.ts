@@ -1,26 +1,72 @@
-import { GameObject } from "../../common/GameObject";
+import { GameObject } from '../../common/GameObject';
 
+interface DoItemsIntersectReturn {
+  doesIntersect: boolean;
+  intersections: {
+    x: 'left' | 'right' | 'no';
+    y: 'top' | 'bottom' | 'no';
+  };
+}
+
+// Сделал AI - не проверял всё ли правильно написано!
 export function doItemsIntersect(
-  item1: GameObject<"circle" | "rectangle">,
-  item2: GameObject<"circle" | "rectangle">
-): boolean {
+  item1: GameObject<'circle' | 'rectangle'>,
+  item2: GameObject<'circle' | 'rectangle'>
+): DoItemsIntersectReturn {
   const shape1 = item1.objectModel.shape;
   const shape2 = item2.objectModel.shape;
 
-  // If both items are circles
-  if (shape1 === "circle" && shape2 === "circle") {
+  const sideXFor = (fromX: number, toX: number) => (toX > fromX ? 'right' : 'left');
+  const sideYFor = (fromY: number, toY: number) => (toY > fromY ? 'bottom' : 'top');
+
+  // relative movement of item2 seen from item1 between prev and current frames
+  const relMove = {
+    x: (item2.position.x - item2.prevPosition.x) - (item1.position.x - item1.prevPosition.x),
+    y: (item2.position.y - item2.prevPosition.y) - (item1.position.y - item1.prevPosition.y),
+  };
+
+  // --- circle-circle ---
+  if (shape1 === 'circle' && shape2 === 'circle') {
     const radius1 = item1.objectModel.size / 2;
     const radius2 = item2.objectModel.size / 2;
 
-    const distanceBetweenCenters = Math.hypot(
-      item2.position.x - item1.position.x,
-      item2.position.y - item1.position.y
-    );
+    const dx = item2.position.x - item1.position.x;
+    const dy = item2.position.y - item1.position.y;
+    const distance = Math.hypot(dx, dy);
 
-    return distanceBetweenCenters < radius1 + radius2;
+    const doesIntersect = distance < radius1 + radius2;
+    let intersections: DoItemsIntersectReturn['intersections'] = { x: 'no', y: 'no' };
+
+    if (!doesIntersect) return { doesIntersect, intersections };
+
+    // prev vector between centers
+    const prevDx = item2.prevPosition.x - item1.prevPosition.x;
+    const prevDy = item2.prevPosition.y - item1.prevPosition.y;
+    const prevDist = Math.hypot(prevDx, prevDy);
+    const rsum = radius1 + radius2;
+
+    // Если раньше не было пересечения, а сейчас есть — определяем направление по нормали контакта
+    if (prevDist >= rsum && distance !== 0) {
+      const nx = dx / distance;
+      const ny = dy / distance;
+      // проекция относительного движения на нормаль
+      const proj = relMove.x * nx + relMove.y * ny;
+      if (proj !== 0) {
+        if (Math.abs(nx) > Math.abs(ny)) intersections.x = nx > 0 ? 'right' : 'left';
+        else intersections.y = ny > 0 ? 'bottom' : 'top';
+        return { doesIntersect, intersections };
+      }
+    }
+
+    // Fallback — доминирующая компонента между центрами
+    if (Math.abs(dx) > Math.abs(dy)) intersections.x = dx > 0 ? 'right' : 'left';
+    else intersections.y = dy > 0 ? 'bottom' : 'top';
+
+    return { doesIntersect, intersections };
   }
-  // If both items are rectangles
-  if (shape1 === "rectangle" && shape2 === "rectangle") {
+
+  // --- rectangle-rectangle ---
+  if (shape1 === 'rectangle' && shape2 === 'rectangle') {
     const halfWidth1 = item1.objectModel.size.x / 2;
     const halfHeight1 = item1.objectModel.size.y / 2;
     const halfWidth2 = item2.objectModel.size.x / 2;
@@ -36,31 +82,70 @@ export function doItemsIntersect(
     const top2 = item2.position.y - halfHeight2;
     const bottom2 = item2.position.y + halfHeight2;
 
-    return !(
-      left2 > right1 ||
-      right2 < left1 ||
-      top2 > bottom1 ||
-      bottom2 < top1
-    );
+    const overlapX = Math.min(right1, right2) - Math.max(left1, left2);
+    const overlapY = Math.min(bottom1, bottom2) - Math.max(top1, top2);
+
+    const doesIntersect = overlapX > 0 && overlapY > 0;
+    let intersections: DoItemsIntersectReturn['intersections'] = { x: 'no', y: 'no' };
+
+    if (!doesIntersect) return { doesIntersect, intersections };
+
+    // prev bounds
+    const left1Prev = item1.prevPosition.x - halfWidth1;
+    const right1Prev = item1.prevPosition.x + halfWidth1;
+    const top1Prev = item1.prevPosition.y - halfHeight1;
+    const bottom1Prev = item1.prevPosition.y + halfHeight1;
+
+    const left2Prev = item2.prevPosition.x - halfWidth2;
+    const right2Prev = item2.prevPosition.x + halfWidth2;
+    const top2Prev = item2.prevPosition.y - halfHeight2;
+    const bottom2Prev = item2.prevPosition.y + halfHeight2;
+
+    const prevOverlapX = Math.min(right1Prev, right2Prev) - Math.max(left1Prev, left2Prev);
+    const prevOverlapY = Math.min(bottom1Prev, bottom2Prev) - Math.max(top1Prev, top2Prev);
+
+    // Если раньше не было перекрытия — определяем, через какую границу прошёл item2
+    if (prevOverlapX <= 0 || prevOverlapY <= 0) {
+      if (right2Prev <= left1 && right2 > left1) {
+        intersections.x = 'left';
+        return { doesIntersect, intersections };
+      }
+      if (left2Prev >= right1 && left2 < right1) {
+        intersections.x = 'right';
+        return { doesIntersect, intersections };
+      }
+      if (bottom2Prev <= top1 && bottom2 > top1) {
+        intersections.y = 'top';
+        return { doesIntersect, intersections };
+      }
+      if (top2Prev >= bottom1 && top2 < bottom1) {
+        intersections.y = 'bottom';
+        return { doesIntersect, intersections };
+      }
+    }
+
+    // Fallback: ось с меньшей глубиной проникновения
+    if (overlapX < overlapY) intersections.x = sideXFor(item1.position.x, item2.position.x);
+    else intersections.y = sideYFor(item1.position.y, item2.position.y);
+
+    return { doesIntersect, intersections };
   }
-  
-  // If one item is a circle and the other is a rectangle
-  const circle = (shape1 === "circle" ? item1 : item2) as GameObject<"circle">;
-  const rectangle = (
-    shape1 === "rectangle" ? item1 : item2
-  ) as GameObject<"rectangle">;
+
+  // --- circle-rectangle (one is circle, other rectangle) ---
+  const circle = (shape1 === 'circle' ? item1 : item2) as GameObject<'circle'>;
+  const rectangle = (shape1 === 'rectangle' ? item1 : item2) as GameObject<'rectangle'>;
+  const circleIsItem1 = circle === item1;
 
   const halfWidth = rectangle.objectModel.size.x / 2;
   const halfHeight = rectangle.objectModel.size.y / 2;
 
-  const nearestX = Math.max(
-    rectangle.position.x - halfWidth,
-    Math.min(circle.position.x, rectangle.position.x + halfWidth)
-  );
-  const nearestY = Math.max(
-    rectangle.position.y - halfHeight,
-    Math.min(circle.position.y, rectangle.position.y + halfHeight)
-  );
+  const rectLeft = rectangle.position.x - halfWidth;
+  const rectRight = rectangle.position.x + halfWidth;
+  const rectTop = rectangle.position.y - halfHeight;
+  const rectBottom = rectangle.position.y + halfHeight;
+
+  const nearestX = Math.max(rectLeft, Math.min(circle.position.x, rectRight));
+  const nearestY = Math.max(rectTop, Math.min(circle.position.y, rectBottom));
 
   const distanceX = circle.position.x - nearestX;
   const distanceY = circle.position.y - nearestY;
@@ -68,5 +153,80 @@ export function doItemsIntersect(
 
   const radius = circle.objectModel.size / 2;
 
-  return distanceSquared < radius * radius;
+  const doesIntersect = distanceSquared < radius * radius;
+  let rawIntersections: DoItemsIntersectReturn['intersections'] = { x: 'no', y: 'no' };
+
+  if (!doesIntersect) return { doesIntersect, intersections: { x: 'no', y: 'no' } };
+
+  // prev rect bounds and prev nearest point
+  const rectLeftPrev = rectangle.prevPosition.x - halfWidth;
+  const rectRightPrev = rectangle.prevPosition.x + halfWidth;
+  const rectTopPrev = rectangle.prevPosition.y - halfHeight;
+  const rectBottomPrev = rectangle.prevPosition.y + halfHeight;
+
+  const nearestXPrev = Math.max(rectLeftPrev, Math.min(circle.prevPosition.x, rectRightPrev));
+  const nearestYPrev = Math.max(rectTopPrev, Math.min(circle.prevPosition.y, rectBottomPrev));
+
+  const dXPrev = circle.prevPosition.x - nearestXPrev;
+  const dYPrev = circle.prevPosition.y - nearestYPrev;
+  const distPrevSq = dXPrev * dXPrev + dYPrev * dYPrev;
+
+  const wasIntersectingBefore = distPrevSq < radius * radius;
+
+  if (!wasIntersectingBefore) {
+    // Определяем откуда подошёл круг используя prev center относительно prev rect
+    const centerInsideXPrev = circle.prevPosition.x >= rectLeftPrev && circle.prevPosition.x <= rectRightPrev;
+    const centerInsideYPrev = circle.prevPosition.y >= rectTopPrev && circle.prevPosition.y <= rectBottomPrev;
+
+    if (centerInsideXPrev && !centerInsideYPrev) {
+      rawIntersections.y = circle.prevPosition.y > rectangle.prevPosition.y ? 'bottom' : 'top';
+    } else if (centerInsideYPrev && !centerInsideXPrev) {
+      rawIntersections.x = circle.prevPosition.x > rectangle.prevPosition.x ? 'right' : 'left';
+    } else if (!centerInsideXPrev && !centerInsideYPrev) {
+      // угол — решаем по доминирующей компоненте текущих центров
+      const dx = circle.position.x - rectangle.position.x;
+      const dy = circle.position.y - rectangle.position.y;
+      if (Math.abs(dx) > Math.abs(dy)) rawIntersections.x = dx > 0 ? 'right' : 'left';
+      else rawIntersections.y = dy > 0 ? 'bottom' : 'top';
+    } else {
+      // prev center был внутри rect — минимальная глубина проникновения
+      const penX = halfWidth - Math.abs(circle.position.x - rectangle.position.x);
+      const penY = halfHeight - Math.abs(circle.position.y - rectangle.position.y);
+      if (penX < penY) rawIntersections.x = circle.position.x > rectangle.position.x ? 'right' : 'left';
+      else rawIntersections.y = circle.position.y > rectangle.position.y ? 'bottom' : 'top';
+    }
+  }
+
+  // Если все ещё нет результата — fallback по проекциям/доминирующей компоненте
+  if (rawIntersections.x === 'no' && rawIntersections.y === 'no') {
+    const centerInsideX = circle.position.x >= rectLeft && circle.position.x <= rectRight;
+    const centerInsideY = circle.position.y >= rectTop && circle.position.y <= rectBottom;
+
+    if (centerInsideX && !centerInsideY) rawIntersections.y = circle.position.y > rectangle.position.y ? 'bottom' : 'top';
+    else if (centerInsideY && !centerInsideX) rawIntersections.x = circle.position.x > rectangle.position.x ? 'right' : 'left';
+    else if (centerInsideX && centerInsideY) {
+      const penX = halfWidth - Math.abs(circle.position.x - rectangle.position.x);
+      const penY = halfHeight - Math.abs(circle.position.y - rectangle.position.y);
+      if (penX < penY) rawIntersections.x = circle.position.x > rectangle.position.x ? 'right' : 'left';
+      else rawIntersections.y = circle.position.y > rectangle.position.y ? 'bottom' : 'top';
+    } else {
+      const dx = circle.position.x - rectangle.position.x;
+      const dy = circle.position.y - rectangle.position.y;
+      if (Math.abs(dx) > Math.abs(dy)) rawIntersections.x = dx > 0 ? 'right' : 'left';
+      else rawIntersections.y = dy > 0 ? 'bottom' : 'top';
+    }
+  }
+
+  // rawIntersections описывает сторону прямоугольника; нужно вернуть сторону относительно item1
+  let intersections: DoItemsIntersectReturn['intersections'] = { x: 'no', y: 'no' };
+  if (circleIsItem1) {
+    if (rawIntersections.x === 'left') intersections.x = 'right';
+    else if (rawIntersections.x === 'right') intersections.x = 'left';
+    if (rawIntersections.y === 'top') intersections.y = 'bottom';
+    else if (rawIntersections.y === 'bottom') intersections.y = 'top';
+  } else {
+    intersections = rawIntersections;
+  }
+
+  return { doesIntersect, intersections };
 }

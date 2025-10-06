@@ -42,7 +42,7 @@ export class MCollisionEnemy implements Module {
   public afterUpdate(deltaTime: number): void {
     const enemies = gameObjectManager.enemies;
     enemies.forEach((enemy) => {
-      if (doItemsIntersect(this.object, enemy)) {
+      if (doItemsIntersect(this.object, enemy).doesIntersect === true) {
         this.onCollision(enemy);
       }
     });

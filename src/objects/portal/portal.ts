@@ -18,7 +18,7 @@ export class Portal extends GameObject<'rectangle'> {
   public override onUpdate(deltaTime: number): void {
     if (
       gameObjectManager.player &&
-      doItemsIntersect(this, gameObjectManager.player)
+      doItemsIntersect(this, gameObjectManager.player).doesIntersect === true
     ) {
       this.onEnter();
     }
