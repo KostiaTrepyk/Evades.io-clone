@@ -1,3 +1,5 @@
+import { HSLA } from '../core/utils/hsla';
+
 export const GAMECONFIG = {
   /** When pressed SHIFT */
   characterSlowRatio: 0.5,
@@ -5,7 +7,7 @@ export const GAMECONFIG = {
   fpsGame: 180,
   fpsUI: 20,
 
-/*   orders: {
+  /*   orders: {
     update: {
       player: 1,
       enemies: 3,
@@ -31,8 +33,8 @@ export const GAMECONFIG = {
   colors: {
     ui: {
       mana: {
-        fill: '#22f',
-        border: '#888',
+        fill: new HSLA(240, 100, 55, 1),
+        stroke: { color: new HSLA(0, 0, 50, 1), width: 1 },
       },
     },
   },

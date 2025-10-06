@@ -2,6 +2,8 @@ import { GameObject } from '../../core/common/GameObject';
 import { doItemsCollide } from '../../core/utils/collision/doItemsCollide';
 import { gameObjectManager } from '../../core/global';
 import { Position } from '../../core/types/Position';
+import { drawRectangle } from '../../core/utils/canvas/drawRectangle';
+import { HSLA } from '../../core/utils/hsla';
 
 export class Portal extends GameObject<'rectangle'> {
   private onEnter: () => void;
@@ -24,12 +26,10 @@ export class Portal extends GameObject<'rectangle'> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = 'hsla(180, 100%, 50%, 0.3)';
-    ctx.fillRect(
-      this.position.x - this.objectModel.size.x / 2,
-      this.position.y - this.objectModel.size.y / 2,
-      this.objectModel.size.x,
-      this.objectModel.size.y
-    );
+    drawRectangle(ctx, {
+      position: this.position,
+      size: { height: this.objectModel.size.y, width: this.objectModel.size.x },
+      fill: { color: new HSLA(180, 100, 50, 0.3) },
+    });
   }
 }

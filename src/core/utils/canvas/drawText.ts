@@ -1,7 +1,9 @@
-import { Position } from "../../types/Position";
+import { Position } from '../../types/Position';
+import { HSLA } from '../hsla';
 
-export interface CommonDrawTextOptions {
-  fillColor?: string;
+export interface DrawTextOptions {
+  fill?: { color: HSLA };
+  stroke?: { color: HSLA; width: number };
   position: Position;
   fontSize?: number;
   textAlign?: CanvasTextAlign;
@@ -9,41 +11,28 @@ export interface CommonDrawTextOptions {
   isBold?: boolean;
 }
 
-export interface ExtendedDrawTextOptions extends CommonDrawTextOptions {
-  strokeColor: string;
-  lineWidth: number;
-}
-const defaultOptions = {
-  position: { x: 0, y: 0 },
-  fillColor: "#000",
-  fontSize: 16,
-  textAlign: "start",
-  textBaseline: "middle",
-  isBold: false,
-} as const;
-
 export function drawText(
   ctx: CanvasRenderingContext2D,
   text: string,
-  options: CommonDrawTextOptions | ExtendedDrawTextOptions
+  options: DrawTextOptions
 ): void {
-  const { isBold, fillColor, position, fontSize, textAlign, textBaseline } = {
-    ...defaultOptions,
-    ...options,
-  };
+  const { fill, stroke, position, fontSize, textAlign, textBaseline, isBold } =
+    options;
 
   ctx.beginPath();
-  ctx.fillStyle = fillColor;
-  ctx.textBaseline = textBaseline;
-  ctx.textAlign = textAlign;
-  ctx.font = `${isBold ? "bold" : ""} ${fontSize}px sans-serif`;
+  ctx.font = `${isBold ? 'bold' : ''} ${fontSize}px cursive`;
 
-  if ("strokeColor" in options) {
-    const extendedOptions = options as ExtendedDrawTextOptions;
-    ctx.strokeStyle = extendedOptions.strokeColor;
-    ctx.lineWidth = extendedOptions.lineWidth * 2;
-    ctx.strokeText(text, position.x, position.y);
+  if (textBaseline !== undefined) ctx.textBaseline = textBaseline;
+  if (textAlign !== undefined) ctx.textAlign = textAlign;
+
+  if (fill !== undefined) {
+    ctx.fillStyle = fill.color.toString();
+    ctx.fillText(text, position.x, position.y);
   }
 
-  ctx.fillText(text, position.x, position.y);
+  if (stroke !== undefined) {
+    ctx.lineWidth = stroke.width;
+    ctx.strokeStyle = stroke.color.toString();
+    ctx.strokeText(text, position.x, position.y);
+  }
 }

@@ -58,10 +58,10 @@ export class Projectile extends GameObject<CircleShape> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    drawCircle(ctx, this.position, {
+    drawCircle(ctx, {
+      position: this.position,
       size: this.objectModel.size,
-      fillColor: this.color,
-      fill: true,
+      fill: { color: this.color },
     });
   }
 }

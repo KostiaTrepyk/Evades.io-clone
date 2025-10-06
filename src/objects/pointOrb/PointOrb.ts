@@ -1,10 +1,11 @@
 import { POINTORBCONFIG } from '../../configs/pointOrb.config';
 import { GameObject } from '../../core/common/GameObject';
 import { Position } from '../../core/types/Position';
-import { RenderPointOrb } from './PointOrb.model';
+import { drawCircle } from '../../core/utils/canvas/drawCircle';
+import { HSLA } from '../../core/utils/hsla';
 
 export class PointOrb extends GameObject<'circle'> {
-  private color: string;
+  private color: HSLA;
 
   constructor(startPosition: Position) {
     super(startPosition, { shape: 'circle', size: POINTORBCONFIG.size });
@@ -13,10 +14,14 @@ export class PointOrb extends GameObject<'circle'> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    RenderPointOrb(ctx, this.position, this.objectModel.size, this.color);
+    drawCircle(ctx, {
+      position: this.position,
+      size: this.objectModel.size,
+      fill: { color: this.color },
+    });
   }
 
-  private getRandomColor(): string {
+  private getRandomColor(): HSLA {
     const colors = POINTORBCONFIG.colors;
     const onErrorColor = POINTORBCONFIG.onErrorColor;
 

@@ -3,9 +3,10 @@ import { time } from '../../core/global';
 import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
 import { EnemyCollision } from './enemy.collision';
-import { RenderEnemyModel } from './enemy.model';
 import { Velocity } from '../../core/types/Velocity';
 import { CircleShape } from '../../core/types/Shape';
+import { drawCircle } from '../../core/utils/canvas/drawCircle';
+import { ENEMYCONFIG } from '../../configs/enemies/enemy.config';
 
 export class Enemy extends GameObject<CircleShape> {
   private collision: EnemyCollision;
@@ -48,12 +49,15 @@ export class Enemy extends GameObject<CircleShape> {
   public override onRender(ctx: CanvasRenderingContext2D): void {
     if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
 
-    RenderEnemyModel(
-      ctx,
-      this.position,
-      this.objectModel.size,
-      this.currentColor
-    );
+    drawCircle(ctx, {
+      position: this.position,
+      size: this.objectModel.size,
+      fill: { color: this.currentColor },
+      stroke: {
+        color: ENEMYCONFIG.strokeColor,
+        width: ENEMYCONFIG.strokeWidth,
+      },
+    });
   }
 
   public isFreezed(): boolean {

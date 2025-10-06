@@ -1,12 +1,10 @@
 import { characterSpeedPerPoint } from '../consts/consts';
 import { gameMap } from '../core/GameMap/Configuration/GameMapConfiguration';
 import { gameObjectManager } from '../core/global';
-import {
-  ExtendedDrawTextOptions,
-  drawText,
-} from '../core/utils/canvas/drawText';
+import { drawText, DrawTextOptions } from '../core/utils/canvas/drawText';
 import { Position } from '../core/types/Position';
-import { RenderCharacterModel } from '../objects/character/character.model';
+import { drawCircle } from '../core/utils/canvas/drawCircle';
+import { HSLA } from '../core/utils/hsla';
 
 type Section = {
   width: number;
@@ -38,17 +36,12 @@ export class UIRenderer {
 
     const barHeight = 120;
     const text = {
-      outlineColor: '#333',
       fontSize: { main: 26, secondary: 14, t: 14 },
     };
 
-    const drawTextOptions: Omit<
-      ExtendedDrawTextOptions,
-      'position' | 'fontSize'
-    > = {
-      fillColor: '#fff',
-      lineWidth: 1,
-      strokeColor: '#444',
+    const drawTextOptions: Omit<DrawTextOptions, 'position' | 'fontSize'> = {
+      fill: { color: new HSLA(0, 0, 100, 1) },
+      stroke: { width: 0.5, color: new HSLA(0, 0, 27, 1) },
       isBold: false,
       textAlign: 'center',
       textBaseline: 'middle',
@@ -58,10 +51,10 @@ export class UIRenderer {
       {
         width: barHeight + 40,
         draw: (ctx, centeredPosition) => {
-          RenderCharacterModel.static(ctx, {
+          drawCircle(ctx, {
             position: centeredPosition,
-            color: player.UIColor,
             size: 65,
+            fill: { color: player.UIColor },
           });
           drawText(ctx, player.level.currentLevel.toString(), {
             position: { x: centeredPosition.x, y: centeredPosition.y + 3 },
@@ -94,7 +87,8 @@ export class UIRenderer {
                 y: centeredPosition.y - barHeight / 2 + 20,
               },
               fontSize: 16,
-              fillColor: 'white',
+              fill: { color: new HSLA(0, 0, 100, 1) },
+              textAlign: 'start',
             });
           }
 
@@ -253,6 +247,7 @@ export class UIRenderer {
         },
       },
     ];
+
     const barWidth = sections.reduce(
       (acc, section) => (acc += section.width),
       0
@@ -355,8 +350,7 @@ export class UIRenderer {
       drawText(ctx, hint, {
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
         fontSize: text.fontSize.t,
-        fillColor: 'black',
-        strokeColor: 'transparent',
+        fill: { color: new HSLA(0, 0, 0, 1) },
         isBold: true,
         textAlign: 'center',
         textBaseline: 'middle',
@@ -371,8 +365,7 @@ export class UIRenderer {
       drawText(ctx, hint, {
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
         fontSize: text.fontSize.t + 1,
-        fillColor: '#eee',
-        strokeColor: 'transparent',
+        fill: { color: new HSLA(0, 0, 93, 1.0) },
         isBold: true,
         textAlign: 'center',
         textBaseline: 'middle',
@@ -404,13 +397,12 @@ export class UIRenderer {
         currentTunnelDetails.tunnel.type
       } ${currentTunnelDetails.currentLevel + 1}`,
       {
-        fillColor: '#fff',
+        fill: { color: new HSLA(0, 0, 100, 1.0) },
+        stroke: { width: 3, color: new HSLA(0, 0, 40, 1) },
         fontSize: 42,
         position: { x: this.ctx.canvas.width / 2, y: 40 },
         textAlign: 'center',
         textBaseline: 'middle',
-        lineWidth: 2.5,
-        strokeColor: '#666',
       }
     );
   }
