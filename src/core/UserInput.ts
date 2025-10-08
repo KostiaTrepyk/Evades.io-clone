@@ -11,7 +11,7 @@ export type KeyCode =
   | 'Digit2'
   | 'Digit3'
   | 'Digit4'
-  | 'Digit5'
+  | 'Digit5';
 
 /** FIXME Система которая позволяет легко биндить нужные клавиши.  */
 export class UserInput {
@@ -54,7 +54,7 @@ export class UserInput {
     return this.keyup.has(key);
   }
 
-  /** FIXME Нужно вручную добавлять. А что если забуду? Нужно подумать над другой реализацией. */
+  /** Очищает состояния после update */
   public afterUpdate(): void {
     this.keydown.clear();
     this.keyup.clear();

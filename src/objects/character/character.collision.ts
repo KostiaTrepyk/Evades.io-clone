@@ -6,10 +6,10 @@ import { PointOrb } from '../pointOrb/PointOrb';
 import { Character } from './character';
 
 export class CharacterCollision {
-  private player: Character;
-  private mCollisionWalls: MCollisionWalls;
-  private mCollisionEnemy: MCollisionEnemy;
-  private mCollisionPointOrb: MCollisionPointOrb;
+  private readonly player: Character;
+  private readonly mCollisionWalls: MCollisionWalls;
+  private readonly mCollisionEnemy: MCollisionEnemy;
+  private readonly mCollisionPointOrb: MCollisionPointOrb;
 
   constructor(player: Character) {
     this.player = player;

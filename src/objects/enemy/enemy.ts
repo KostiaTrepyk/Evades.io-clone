@@ -31,8 +31,6 @@ export class Enemy extends GameObject<CircleShape> {
   }
 
   public override onUpdate(deltaTime: number): void {
-    if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
-
     // If freezed, don't update position
     if (this.isFreezed() === true) return;
 
@@ -47,8 +45,6 @@ export class Enemy extends GameObject<CircleShape> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    if (this.objectModel.shape !== 'circle') throw new Error('not implemented');
-
     drawCircle(ctx, {
       position: this.position,
       size: this.objectModel.size,

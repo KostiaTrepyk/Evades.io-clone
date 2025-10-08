@@ -72,11 +72,14 @@ export class CommonSkill implements ISkill {
   }
 
   public applyEnergyUsage(): void {
-    this.player.characteristics.energy.current -= this.energyUsage();
+    // FIX ME А если не хватит энергии
+    this.player.characteristics.removeEnergy(this.energyUsage());
   }
 
   public isEnoughEnergy(): boolean {
-    return this.player.characteristics.energy.current - this.energyUsage() >= 0;
+    return (
+      this.player.characteristics.getEnergy.current - this.energyUsage() >= 0
+    );
   }
 
   public get cooldownPercentage(): number {

@@ -49,9 +49,11 @@ export class EnemyEnergyBurner extends Enemy {
   }
 
   private stealEnergy(player: Character, deltaTime: number): void {
-    player.characteristics.energy.current = Math.max(
-      0,
-      player.characteristics.energy.current - this.energySteals * deltaTime
+    const playerCurrentEnergy = player.characteristics.getEnergy.current;
+
+    // FIX ME Не забирает энергию до 0
+    player.characteristics.removeEnergy(
+      playerCurrentEnergy - this.energySteals * deltaTime
     );
   }
 }

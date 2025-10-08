@@ -3,6 +3,7 @@ import { time } from '../../../core/global';
 import { Character } from '../../character/character';
 import { MAGMAXCONFIG } from '../../../configs/characters/magmax.config';
 import { ToggleSkill } from '../../character/skills/toggleSkill';
+import { statusIds } from '../../character/character.characteristics';
 
 export class Magmax extends Character {
   public override firstSkill: ToggleSkill;
@@ -27,17 +28,18 @@ export class Magmax extends Character {
       cooldown: () => MAGMAXCONFIG.fistSpell.cooldown,
       energyUsage: () => MAGMAXCONFIG.fistSpell.energyUsagePerSecond,
       whenActive: () => {
-        if (this.isDead) this.firstSkill.deactivate(time.getTimestamp);
+        if (this.isDead) this.firstSkill.deactivate();
         this.applySpeedBoost();
       },
       beforeActivation: () => {
         if (this.secondSkill.getIsActive) {
-          this.secondSkill.deactivate(time.getTimestamp);
+          this.secondSkill.deactivate();
         }
         this.color = MAGMAXCONFIG.color.firstSpellActive;
       },
       cancelSkill: () => {
         this.color = MAGMAXCONFIG.color.default;
+        this.characteristics.removeStatus(statusIds.speedBoost);
       },
       condition: () =>
         this.level.upgrades.firstSpell.current > 0 && !this.isDead,
@@ -52,44 +54,44 @@ export class Magmax extends Character {
       },
       energyUsage: () => MAGMAXCONFIG.secondSpell.energyUsagePerSecond,
       whenActive: () => {
-        if (this.isDead) this.secondSkill.deactivate(time.getTimestamp);
+        if (this.isDead) this.secondSkill.deactivate();
         this.applyImmortality();
       },
       beforeActivation: () => {
         // отключает 1 спелл
         if (this.firstSkill.getIsActive) {
-          this.firstSkill.deactivate(time.getTimestamp);
+          this.firstSkill.deactivate();
         }
 
         this.color = MAGMAXCONFIG.color.secondSpellActive;
       },
       cancelSkill: () => {
         this.color = MAGMAXCONFIG.color.default;
+        this.characteristics.removeStatus(statusIds.immortality);
       },
       condition: () =>
         this.level.upgrades.secondSpell.current > 0 && !this.isDead,
     });
   }
 
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate(deltaTime);
-    this.firstSkill.onUpdate(deltaTime);
-    this.secondSkill.onUpdate(deltaTime);
-  }
-
   private applySpeedBoost() {
-    this.characteristics.applyEffect(
-      {
-        speed:
-          this.spellsUpgrades.first.speed[
-            this.level.upgrades.firstSpell.current - 1
-          ],
-      },
-      'speedBoost'
-    );
+    const speedBoost =
+      this.spellsUpgrades.first.speed[
+        this.level.upgrades.firstSpell.current - 1
+      ];
+
+    this.characteristics.applyStatus({
+      id: statusIds.speedBoost,
+      name: 'speedBoost',
+      speed: speedBoost,
+    });
   }
 
   private applyImmortality() {
-    this.characteristics.applyEffect({ speed: -9999 }, 'immortal');
+    this.characteristics.applyStatus({
+      id: statusIds.immortality,
+      name: 'immortal',
+      speed: -9999,
+    });
   }
 }

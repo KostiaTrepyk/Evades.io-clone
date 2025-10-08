@@ -1,25 +1,25 @@
 import { KeyCode } from '../../../core/UserInput';
 import { time, userInput } from '../../../core/global';
 import { Character } from '../character';
+import { ISkill } from './ISkill';
 
+// FIX ME Теоретически beforeActivation и whenActive это тоже самое (выполняются по очереди но всё можно написать в одном из них.)
 export interface ToggleSkillOptions {
   keyCode: KeyCode;
   cooldown: () => number;
   energyUsage: () => number;
-  /** Применяется каждый кадр если спелл активирован */
-  whenActive: (deltaTime: number) => void;
   beforeActivation?: () => void;
+  whenActive: () => void;
   cancelSkill?: () => void;
   condition?: () => boolean;
 }
 
-export class ToggleSkill {
-  private player: Character;
+export class ToggleSkill implements ISkill {
+  private readonly player: Character;
 
   private readonly keyCode: KeyCode;
-  private cooldown: ToggleSkillOptions['cooldown'];
-  private energyUsage: ToggleSkillOptions['energyUsage'];
-  /** Применяется каждый кадр если спелл активирован */
+  private readonly cooldown: ToggleSkillOptions['cooldown'];
+  private readonly energyUsage: ToggleSkillOptions['energyUsage'];
   private readonly whenActive: ToggleSkillOptions['whenActive'];
   private readonly beforeActivation: () => void;
   private readonly cancelSkill: () => void;
@@ -54,50 +54,55 @@ export class ToggleSkill {
 
   public onUpdate(deltaTime: number): void {
     if (userInput.isKeydown(this.keyCode)) {
-      this.toggle(time.getTimestamp);
+      this.toggle(deltaTime);
     }
 
     if (this.isActive) {
-      this.whenActive(deltaTime);
-      this.applyEnergyUsage(deltaTime);
+      const isEnoughEnergy = this.applyContinuousEnergyUsage(deltaTime);
+      if (isEnoughEnergy === false) this.deactivate();
     }
   }
 
-  private toggle(timestamp: number): void {
-    if (this.isActive) this.deactivate(timestamp);
-    else this.activate(timestamp);
+  private toggle(deltaTime: number): void {
+    if (this.isActive) this.deactivate();
+    else this.activate(deltaTime);
   }
 
-  public activate(timestamp: number): void {
-    if (!this.isAvailable(timestamp)) return;
+  public activate(deltaTime: number): void {
+    if (this.isAvailable(deltaTime) === false) return;
     this.isActive = true;
     this.beforeActivation();
+    this.whenActive();
   }
 
-  public deactivate(timestamp: number): void {
+  public deactivate(): void {
     this.isActive = false;
-    this.lastUsedTimestamp = timestamp;
+    this.lastUsedTimestamp = time.getTimestamp;
     this.cancelSkill();
   }
 
-  private isAvailable(currentTimestamp: number): boolean {
+  private isAvailable(deltaTime: number): boolean {
     if (!this.condition()) return false;
 
-    const elapsedTime = currentTimestamp - this.lastUsedTimestamp;
-    return elapsedTime >= this.cooldown();
+    // In seconds
+    const elapsedTime = (time.getTimestamp - this.lastUsedTimestamp) / 1000;
+    const isNotCooldown: boolean = elapsedTime >= this.cooldown();
+
+    const playerEnergy = this.player.characteristics.getEnergy.current;
+    const needsEnergy = this.energyUsage() * deltaTime;
+    const isEnoughEnergy: boolean = playerEnergy - needsEnergy >= 0;
+
+    return isNotCooldown && isEnoughEnergy;
   }
 
-  public applyEnergyUsage(deltaTime: number): void {
-    const playerEnergy = this.player.characteristics.energy.current;
-    const needsEnergy = this.energyUsage() * deltaTime;
+  /** Returns false if not enough energy */
+  public applyContinuousEnergyUsage(deltaTime: number): boolean {
+    const isEnoughEnergy: boolean = this.player.characteristics.removeEnergy(
+      this.energyUsage() * deltaTime
+    );
 
-    if (playerEnergy - needsEnergy <= 0) {
-      this.deactivate(time.getTimestamp);
-      return;
-    }
-
-    this.player.characteristics.energy.current -=
-      this.energyUsage() * deltaTime;
+    if (isEnoughEnergy) return true;
+    return false;
   }
 
   public get getIsActive(): boolean {
@@ -105,7 +110,9 @@ export class ToggleSkill {
   }
 
   public get cooldownPercentage(): number {
-    const elapsedTime = time.getTimestamp - this.lastUsedTimestamp;
+    // In seconds
+    const elapsedTime = (time.getTimestamp - this.lastUsedTimestamp) / 1000;
+
     return Math.min(elapsedTime / this.cooldown(), 1);
   }
 }

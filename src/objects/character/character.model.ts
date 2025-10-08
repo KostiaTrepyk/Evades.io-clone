@@ -13,10 +13,10 @@ export const RenderCharacterModel = {
       y: character.position.y - character.objectModel.size / 2 - 8,
     };
 
+    const playerEnergy = character.characteristics.getEnergy;
+
     const manaBarSizeAdjustment = character.objectModel.size / 22;
-    const manaPercentage =
-      character.characteristics.energy.current /
-      character.characteristics.energy.max;
+    const manaPercentage = playerEnergy.current / playerEnergy.max;
 
     const manaBarWidth = character.objectModel.size + manaBarSizeAdjustment * 2;
     const manaBarHeight = 8;

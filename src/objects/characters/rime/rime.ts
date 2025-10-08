@@ -1,23 +1,24 @@
 import { GameObject } from '../../../core/common/GameObject';
 import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
-import { gameObjectManager, userInput } from '../../../core/global';
+import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
 import { CommonSkill } from '../../character/skills/commonSkill';
 import { RIMECONFIG } from '../../../configs/characters/rime.config';
-import { MoveDirection } from '../../../core/types/moveDirection';
+import { MMoveDirection } from '../../../core/modules/movement/MMoveDirection';
+import { drawCircle } from '../../../core/utils/canvas/drawCircle';
 
 export class Rime extends Character {
   public override firstSkill: CommonSkill;
   public override secondSkill: CommonSkill;
   private secondSkillRangeVisibility: boolean;
 
-  private moveDirection: MoveDirection;
+  private _mMoveDirection: MMoveDirection;
 
   constructor(startPosition: Position) {
     super(startPosition, RIMECONFIG.size, RIMECONFIG.color.default.clone());
 
-    this.moveDirection = { x: 0, y: 0 };
+    this._mMoveDirection = new MMoveDirection();
     this.secondSkillRangeVisibility = false;
 
     this.firstSkill = new CommonSkill(this, {
@@ -34,7 +35,7 @@ export class Rime extends Character {
 
     this.secondSkill = new CommonSkill(this, {
       keyCode: 'KeyK',
-      // Побор энергии будет в onUse так как у нас 2 стадии спела.
+      // Побор энергии будет в onUse так как у нас две стадии спела.
       energyUsage: () => 0,
       cooldown: () => {
         if (this.secondSkillRangeVisibility === false)
@@ -53,22 +54,21 @@ export class Rime extends Character {
   public override onUpdate(deltaTime: number): void {
     super.onUpdate(deltaTime);
 
-    this.calculateMovementDirection();
-
-    this.firstSkill.onUpdate();
-    this.secondSkill.onUpdate();
+    this._mMoveDirection.onUpdate();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    if (this.secondSkillRangeVisibility) {
+    if (this.secondSkillRangeVisibility === true) {
       const currentSkillLevel = this.level.upgrades.secondSpell.current;
       const radius = RIMECONFIG.secondSpell.radius[currentSkillLevel - 1];
-      const color = RIMECONFIG.secondSpell.rangeColor.clone();
 
-      ctx.beginPath();
-      ctx.fillStyle = color.toString();
-      ctx.arc(this.position.x, this.position.y, radius, 0, 360);
-      ctx.fill();
+      drawCircle(ctx, {
+        size: radius * 2,
+        position: this.position,
+        fill: {
+          color: RIMECONFIG.secondSpell.rangeColor,
+        },
+      });
     }
 
     super.onRender(ctx);
@@ -81,20 +81,16 @@ export class Rime extends Character {
   }
 
   private secondSkillHandler(): void {
-    // Проверка на ману
-    if (
-      this.characteristics.energy.current < RIMECONFIG.secondSpell.energyUsage
-    ) {
-      return;
-    }
-
-    if (this.secondSkillRangeVisibility) {
+    if (this.secondSkillRangeVisibility === true) {
       const currentSkillLevel = this.level.upgrades.secondSpell.current;
       const radius = RIMECONFIG.secondSpell.radius[currentSkillLevel - 1];
       const freezeDuration =
         RIMECONFIG.secondSpell.freezeTime[currentSkillLevel - 1];
+      const energyUsage = RIMECONFIG.secondSpell.energyUsage;
 
-      this.characteristics.energy.current -= RIMECONFIG.secondSpell.energyUsage;
+      const isEnoughEnergy = this.characteristics.removeEnergy(energyUsage);
+      if (isEnoughEnergy === false) return;
+
       this.freezeEnemy(radius, freezeDuration);
       this.secondSkillRangeVisibility = false;
     } else {
@@ -105,8 +101,8 @@ export class Rime extends Character {
   private teleportForward(distance: number) {
     let teleportDistance = distance;
 
-    this.position.x += teleportDistance * this.moveDirection.x;
-    this.position.y += teleportDistance * this.moveDirection.y;
+    this.position.x += teleportDistance * this._mMoveDirection.moveDirection.x;
+    this.position.y += teleportDistance * this._mMoveDirection.moveDirection.y;
   }
 
   private freezeEnemy(radius: number, duration: number) {
@@ -120,41 +116,5 @@ export class Rime extends Character {
     );
 
     enemiesToFreeze.forEach((enemy) => enemy.freeze(duration));
-  }
-
-  private calculateMovementDirection() {
-    if (
-      !userInput.isKeypress('KeyW') &&
-      !userInput.isKeypress('KeyS') &&
-      !userInput.isKeypress('KeyA') &&
-      !userInput.isKeypress('KeyD')
-    )
-      return;
-
-    // Only update moveDirection if a movement key is pressed
-    this.moveDirection.x = 0;
-    this.moveDirection.y = 0;
-
-    if (userInput.isKeypress('KeyW')) {
-      this.moveDirection.y = 1;
-    } else if (userInput.isKeypress('KeyS')) {
-      this.moveDirection.y = -1;
-    }
-
-    if (userInput.isKeypress('KeyA')) {
-      this.moveDirection.x = -1;
-    } else if (userInput.isKeypress('KeyD')) {
-      this.moveDirection.x = 1;
-    }
-
-    // Normalize diagonal movement
-    if (this.moveDirection.x !== 0 && this.moveDirection.y !== 0) {
-      const diagonalFactor = 1 / Math.sqrt(2);
-      this.moveDirection.x *= diagonalFactor;
-      this.moveDirection.y *= diagonalFactor;
-    }
-
-    // Reverse y-direction
-    this.moveDirection.y *= -1;
   }
 }

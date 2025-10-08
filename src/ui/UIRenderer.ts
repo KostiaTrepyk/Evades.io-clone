@@ -1,4 +1,4 @@
-import { characterSpeedPerPoint } from '../consts/consts';
+import { speedPerPoint } from '../consts/consts';
 import { gameMap } from '../core/GameMap/Configuration/GameMapConfiguration';
 import { gameObjectManager } from '../core/global';
 import { drawText, DrawTextOptions } from '../core/utils/canvas/drawText';
@@ -94,7 +94,9 @@ export class UIRenderer {
 
           drawText(
             ctx,
-            (player.characteristics.speed / characterSpeedPerPoint).toFixed(1),
+            (player.characteristics.getSpeed / speedPerPoint).toFixed(
+              1
+            ),
             {
               position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
               fontSize: text.fontSize.main,
@@ -121,8 +123,8 @@ export class UIRenderer {
         draw: (ctx, centeredPosition) => {
           drawText(
             ctx,
-            `${player.characteristics.energy.current.toFixed(0)}/${
-              player.characteristics.energy.max
+            `${player.characteristics.getEnergy.current.toFixed(0)}/${
+              player.characteristics.getEnergy.max
             }`,
             {
               position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
@@ -148,11 +150,15 @@ export class UIRenderer {
       {
         width: barHeight,
         draw: (ctx, centeredPosition) => {
-          drawText(ctx, player.characteristics.energy.regen.toFixed(1), {
-            position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
-            fontSize: text.fontSize.main,
-            ...drawTextOptions,
-          });
+          drawText(
+            ctx,
+            player.characteristics.getEnergy.regeneration.toFixed(1),
+            {
+              position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
+              fontSize: text.fontSize.main,
+              ...drawTextOptions,
+            }
+          );
           drawText(ctx, 'Regen', {
             position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
             fontSize: text.fontSize.secondary,
@@ -161,8 +167,8 @@ export class UIRenderer {
 
           if (
             player.level.upgradePoints > 0 &&
-            player.level.upgrades.regen.current <
-              player.level.upgrades.regen.max
+            player.level.upgrades.energyRegeneration.current <
+              player.level.upgrades.energyRegeneration.max
           ) {
             drawUpgradeHelper(ctx, '3', centeredPosition);
           }

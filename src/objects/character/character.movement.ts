@@ -3,12 +3,56 @@ import { GAMECONFIG } from '../../configs/game.config';
 import { Character } from './character';
 
 export class CharacterMovement {
-  public player: Character;
-  public isBlocked: boolean;
+  private readonly player: Character;
+  private isBlocked: boolean;
 
   constructor(player: Character) {
     this.player = player;
     this.isBlocked = false;
+  }
+
+  public onUpdate(deltaTime: number): void {
+    if (this.isBlocked) return;
+
+    const isPressedW: boolean = userInput.isKeypress('KeyW');
+    const isPressedS: boolean = userInput.isKeypress('KeyS');
+    const isPressedA: boolean = userInput.isKeypress('KeyA');
+    const isPressedD: boolean = userInput.isKeypress('KeyD');
+    const isPressedShift: boolean = userInput.isKeypress('ShiftLeft');
+
+    const isBothWSPressed: boolean = isPressedW && isPressedS;
+    const isBothADPressed: boolean = isPressedA && isPressedD;
+
+    const isMovingY: boolean = (isPressedW || isPressedS) && !isBothWSPressed;
+    const isMovingX: boolean = (isPressedA || isPressedD) && !isBothADPressed;
+
+    if (!isMovingX && !isMovingY) return;
+
+    // normalizing the speed of the character
+    let normalizedSpeed: number = this.player.characteristics.getSpeed;
+    if (isMovingX && isMovingY) normalizedSpeed /= 1.333;
+
+    if (isPressedShift) normalizedSpeed *= GAMECONFIG.characterSlowRatio;
+
+    if (isPressedW && isMovingY) {
+      this.player.prevPosition.y = this.player.position.y;
+      this.player.position.y -= normalizedSpeed * deltaTime;
+    }
+
+    if (isPressedS && isMovingY) {
+      this.player.prevPosition.y = this.player.position.y;
+      this.player.position.y += normalizedSpeed * deltaTime;
+    }
+
+    if (isPressedA && isMovingX) {
+      this.player.prevPosition.x = this.player.position.x;
+      this.player.position.x -= normalizedSpeed * deltaTime;
+    }
+
+    if (isPressedD && isMovingX) {
+      this.player.prevPosition.x = this.player.position.x;
+      this.player.position.x += normalizedSpeed * deltaTime;
+    }
   }
 
   public unblock(): void {
@@ -19,48 +63,7 @@ export class CharacterMovement {
     this.isBlocked = true;
   }
 
-  public onUpdate(deltaTime: number) {
-    if (this.isBlocked) return;
-
-    const isBothWSPressed =
-      userInput.isKeypress('KeyW') && userInput.isKeypress('KeyS');
-    const isBothADPressed =
-      userInput.isKeypress('KeyA') && userInput.isKeypress('KeyD');
-
-    let isMovingY =
-      (userInput.isKeypress('KeyW') || userInput.isKeypress('KeyS')) &&
-      !isBothWSPressed;
-    let isMovingX =
-      (userInput.isKeypress('KeyA') || userInput.isKeypress('KeyD')) &&
-      !isBothADPressed;
-
-    if (!isMovingY && !isMovingX) return;
-
-    // normalizing the speed of the character
-    let normalizedSpeed = this.player.characteristics.speed;
-    if (isMovingY && isMovingX) normalizedSpeed /= 1.333;
-
-    if (userInput.isKeypress('ShiftLeft'))
-      normalizedSpeed *= GAMECONFIG.characterSlowRatio;
-
-    if (userInput.isKeypress('KeyW') && isMovingY) {
-      this.player.prevPosition.y = this.player.position.y;
-      this.player.position.y -= normalizedSpeed * deltaTime;
-    }
-
-    if (userInput.isKeypress('KeyS') && isMovingY) {
-      this.player.prevPosition.y = this.player.position.y;
-      this.player.position.y += normalizedSpeed * deltaTime;
-    }
-
-    if (userInput.isKeypress('KeyA') && isMovingX) {
-      this.player.prevPosition.x = this.player.position.x;
-      this.player.position.x -= normalizedSpeed * deltaTime;
-    }
-
-    if (userInput.isKeypress('KeyD') && isMovingX) {
-      this.player.prevPosition.x = this.player.position.x;
-      this.player.position.x += normalizedSpeed * deltaTime;
-    }
+  public get getIsBlocked(): boolean {
+    return this.isBlocked;
   }
 }

@@ -1,79 +1,126 @@
-import { Character } from "./character";
-import { characterSpeedPerPoint } from "../../consts/consts";
+import { CHARACTERCONFIG } from '../../configs/characters/character.config';
+import { speedPerPoint } from '../../consts/consts';
+import { CharacterLevels } from './character.levels';
 
-type Status = "immortal" | "speedBoost";
+type StatusName = 'immortal' | 'speedBoost';
 
+export const statusIds = {
+  speedBoost: Symbol('Speed boost'),
+  immortality: Symbol('Immortality'),
+} as const;
+
+export interface Status {
+  id: Symbol;
+  name: StatusName;
+  speed?: number;
+  energy?: {
+    max?: number;
+    regeneration?: number;
+  };
+}
+
+// Статусы накладываются на 1 фрейм.
 export class CharacterCharacteristics {
-  private player: Character;
+  private readonly characterLevels: CharacterLevels;
 
-  public speed: number;
-  public energy: { current: number; max: number; regen: number };
-  /** Can be used to increase/decrease speed, increase/decrease mana regeneration, etc. Remember to apply the correct status. */
-  public effects: { speed: number; energy: { max: number; regen: number } };
-  public statuses: Status[];
+  private speed: number;
+  private energy: { current: number; max: number; regeneration: number };
+  /** Can be used to increase/decrease speed, increase/decrease mana regeneration, etc. */
+  private statuses: Status[];
 
-  constructor(player: Character) {
-    this.player = player;
-    this.speed = 5;
-    this.energy = { current: 30, max: 30, regen: 2 };
+  constructor(characterLevels: CharacterLevels) {
+    this.characterLevels = characterLevels;
+    this.speed = CHARACTERCONFIG.characteristics.default.speed;
+    this.energy = {
+      current: CHARACTERCONFIG.characteristics.default.energy.max,
+      max: CHARACTERCONFIG.characteristics.default.energy.max,
+      regeneration: CHARACTERCONFIG.characteristics.default.energy.regeneration,
+    };
     this.statuses = [];
-    this.effects = { speed: 0, energy: { max: 0, regen: 0 } };
   }
 
-  public onUpdate(deltaTime: number) {
-    const upgrades = this.player.level.upgrades;
+  // FIX ME Не уверен что нужно каждый фрейм обновлять
+  public onUpdate(deltaTime: number): void {
+    const upgrades = this.characterLevels.upgrades;
+    const characteristics = CHARACTERCONFIG.characteristics;
+
+    const defaultSpeed = characteristics.default.speed;
+    const speedFromUpgrades =
+      characteristics.upgradesPerLevel.speed * upgrades.speed.current;
+
+    const defaultEnergyMax = characteristics.default.energy.max;
+    const energyMaxFromUpgrades =
+      characteristics.upgradesPerLevel.energy.max * upgrades.maxEnergy.current;
+
+    const defaultEnergyRegeneration =
+      characteristics.default.energy.regeneration;
+    const energyRegenerationFromUpgrades =
+      characteristics.upgradesPerLevel.energy.regeneration *
+      upgrades.energyRegeneration.current;
 
     // Apply upgrades
-    this.speed = (5 + 1 * upgrades.speed.current) * characterSpeedPerPoint;
-    this.energy.max = 30 + 5 * upgrades.maxEnergy.current;
-    this.energy.regen = 1 + 0.2 * upgrades.regen.current;
+    this.speed = (defaultSpeed + speedFromUpgrades) * speedPerPoint;
+    this.energy.max = defaultEnergyMax + energyMaxFromUpgrades;
+    this.energy.regeneration =
+      defaultEnergyRegeneration + energyRegenerationFromUpgrades;
 
     // Apply effects
-    this.speed += this.effects.speed * characterSpeedPerPoint;
-    this.energy.max += this.effects.energy.max;
-    this.energy.regen += this.effects.energy.regen;
+    this.statuses.forEach((status) => {
+      if (status.speed !== undefined)
+        this.speed += status.speed * speedPerPoint;
+      if (status.energy !== undefined) {
+        if (status.energy.max !== undefined)
+          this.energy.max += status.energy.max;
+        if (status.energy.regeneration !== undefined)
+          this.energy.regeneration += status.energy.regeneration;
+      }
+    });
 
     // Ensure non-negative values
     this.speed = Math.max(0, this.speed);
     this.energy.max = Math.max(0, this.energy.max);
-    this.energy.regen = Math.max(0, this.energy.regen);
+    this.energy.regeneration = Math.max(0, this.energy.regeneration);
 
     // Energy regeneration
     if (this.energy.current < this.energy.max) {
       this.energy.current = Math.min(
         this.energy.max,
-        this.energy.current + this.energy.regen * deltaTime
+        this.energy.current + this.energy.regeneration * deltaTime
       );
     }
   }
 
-  /** Reset effects and statuses. */
-  public reset(): void {
-    this.effects = { speed: 0, energy: { max: 0, regen: 0 } };
+  public afterUpdate(): void {
+    // Reset statuses.
     this.statuses = [];
   }
 
-  public applyEffect(
-    effect: {
-      speed?: number;
-      energy?: { max?: number; regen?: number };
-    },
-    status: Status
-  ): void {
+  // FIX ME Передаём ссылку на объект. Опасно! Но если использовать structuredClone, тогда не будет работать this.removeStatus
+  public applyStatus(status: Status): void {
     this.statuses.push(status);
+  }
 
-    if (effect.speed !== undefined) {
-      this.effects.speed += effect.speed;
-    }
+  public removeStatus(id: Symbol): void {
+    this.statuses = this.statuses.filter((status) => status.id !== id);
+  }
 
-    if (effect.energy !== undefined) {
-      if (effect.energy.max !== undefined) {
-        this.effects.energy.max += effect.energy.max;
-      }
+  public isAppliedStatusById(id: Symbol): boolean {
+    return Boolean(this.statuses.find((status) => status.id === id));
+  }
 
-      if (effect.energy.regen !== undefined) {
-        this.effects.energy.regen += effect.energy.regen;
-      }
-    }
+  /** Возвращает true если энергии хватает и её уже списали. False если не хватает энергии и её на списали. */
+  public removeEnergy(energy: number): boolean {
+    if (this.energy.current < energy) return false;
+
+    this.energy.current -= energy;
+    return true;
+  }
+
+  public get getSpeed(): CharacterCharacteristics['speed'] {
+    return this.speed;
+  }
+
+  public get getEnergy(): CharacterCharacteristics['energy'] {
+    return structuredClone(this.energy);
   }
 }

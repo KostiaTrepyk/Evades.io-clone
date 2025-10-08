@@ -9,7 +9,7 @@ export const MAGMAXCONFIG = {
   size: 46,
 
   fistSpell: {
-    speed: [2, 4, 6, 8, 10],
+    speed: [3, 6, 8, 10, 12],
     energyUsagePerSecond: 4,
     cooldown: 0,
   },

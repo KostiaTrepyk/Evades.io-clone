@@ -9,7 +9,7 @@ export const RIMECONFIG = {
   fistSpell: {
     energyUsage: 10,
     cooldown: 0.2,
-    distance: [100, 150, 200, 250, 300],
+    distance: [160, 200, 240, 280, 320],
   },
   secondSpell: {
     energyUsage: 30,

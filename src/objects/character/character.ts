@@ -7,19 +7,22 @@ import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
 import { CharacterLevels } from './character.levels';
-import { CharacterCharacteristics } from './character.characteristics';
+import {
+  CharacterCharacteristics,
+  statusIds,
+} from './character.characteristics';
 import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 
-export class Character extends GameObject<CircleShape> {
+export abstract class Character extends GameObject<CircleShape> {
   public readonly UIColor: HSLA;
-  public firstSkill: ISkill | undefined;
-  public secondSkill: ISkill | undefined;
+  public abstract firstSkill: ISkill;
+  public abstract secondSkill: ISkill;
 
-  public characterMovement: CharacterMovement;
-  public characteristics: CharacterCharacteristics;
-  public collision: CharacterCollision;
-  public level: CharacterLevels;
+  public readonly characterMovement: CharacterMovement;
+  public readonly characteristics: CharacterCharacteristics;
+  public readonly collision: CharacterCollision;
+  public readonly level: CharacterLevels;
   public isDead: boolean;
   public timeToDeath: number | undefined;
   public color: HSLA;
@@ -29,14 +32,14 @@ export class Character extends GameObject<CircleShape> {
 
     this.UIColor = color.clone();
     this.characterMovement = new CharacterMovement(this);
-    this.level = new CharacterLevels(this);
-    this.characteristics = new CharacterCharacteristics(this);
+    this.level = new CharacterLevels();
+    this.characteristics = new CharacterCharacteristics(this.level);
     this.collision = new CharacterCollision(this);
     this.color = color.clone();
     this.isDead = false;
   }
 
-  public override create() {
+  public override create(): void {
     super.create();
     this.level.init();
   }
@@ -54,7 +57,7 @@ export class Character extends GameObject<CircleShape> {
   }
 
   public die(): void {
-    if (this.characteristics.statuses.includes('immortal')) return;
+    if (this.characteristics.isAppliedStatusById(statusIds.immortality)) return;
 
     this.isDead = true;
     this.characterMovement.block();
@@ -64,27 +67,30 @@ export class Character extends GameObject<CircleShape> {
   public override onUpdate(deltaTime: number): void {
     // Update death timer
     if (this.isDead) {
-      if (!this.timeToDeath) return;
+      if (this.timeToDeath === undefined) return;
 
       this.timeToDeath -= deltaTime;
       if (this.timeToDeath <= 0) {
-        // GAME OVER
+        // FIX ME GAME OVER не сделано еще!!!!!!!!!!
         // this.delete();
         this.revive();
       }
     }
 
+    // Должно быть первым что-бы правильно просчитать скорость игрока и эго эффекты
     this.characteristics.onUpdate(deltaTime);
-    this.characterMovement.onUpdate(deltaTime);
 
-    this.characteristics.reset();
+    this.firstSkill.onUpdate(deltaTime);
+    this.secondSkill.onUpdate(deltaTime);
+
+    this.characterMovement.onUpdate(deltaTime);
   }
 
   public override afterUpdate(deltaTime: number): void {
     this.collision.afterUpdate(deltaTime);
   }
 
-  public override onRender(ctx: CanvasRenderingContext2D) {
+  public override onRender(ctx: CanvasRenderingContext2D): void {
     RenderCharacterModel.showMana(ctx, this);
 
     if (this.isDead) {
