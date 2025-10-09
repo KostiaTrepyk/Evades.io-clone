@@ -1,16 +1,16 @@
 /** Просто время. Ничего такого. */
 export class Time {
-  private timestamp: number;
+  private _timestamp: number;
 
   constructor() {
-    this.timestamp = 0;
+    this._timestamp = 0;
   }
 
   public onUpdate(timestamp: number): void {
-    this.timestamp = timestamp;
+    this._timestamp = timestamp;
   }
 
-  public get getTimestamp(): number {
-    return this.timestamp;
+  public get timestamp(): number {
+    return this._timestamp;
   }
 }

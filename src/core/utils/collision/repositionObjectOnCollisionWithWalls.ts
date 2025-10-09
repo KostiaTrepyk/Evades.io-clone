@@ -14,10 +14,10 @@ export function repositionObjectOnCollisionWithWalls(
 
     if (collision.x === 'left') object.position.x = halfSize;
     else if (collision.x === 'right')
-      object.position.x = renderer.canvasSize.x - halfSize;
+      object.position.x = renderer._canvasSize.x - halfSize;
     if (collision.y === 'top') object.position.y = halfSize;
     else if (collision.y === 'bottom')
-      object.position.y = renderer.canvasSize.y - halfSize;
+      object.position.y = renderer._canvasSize.y - halfSize;
   }
 
   // applyCollision for rectangle
@@ -27,9 +27,9 @@ export function repositionObjectOnCollisionWithWalls(
 
     if (collision.x === 'left') object.position.x = halfSizeX;
     else if (collision.x === 'right')
-      object.position.x = renderer.canvasSize.x - halfSizeX;
+      object.position.x = renderer._canvasSize.x - halfSizeX;
     if (collision.y === 'top') object.position.y = halfSizeY;
     else if (collision.y === 'bottom')
-      object.position.y = renderer.canvasSize.y - halfSizeY;
+      object.position.y = renderer._canvasSize.y - halfSizeY;
   }
 }

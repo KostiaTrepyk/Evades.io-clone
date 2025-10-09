@@ -1,4 +1,4 @@
-import { Character } from './character';
+import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 
 type Upgrade = {
   current: number;
@@ -6,29 +6,29 @@ type Upgrade = {
 };
 
 export class CharacterLevels {
-  public player: Character;
   public currentLevel: number;
   public atePointOrbs: number;
   public upgradePoints: number;
   public upgrades: {
     speed: Upgrade;
     maxEnergy: Upgrade;
-    regen: Upgrade;
+    energyRegeneration: Upgrade;
     firstSpell: Upgrade;
     secondSpell: Upgrade;
   };
 
-  constructor(player: Character) {
-    this.player = player;
+  constructor() {
+    const maxUpgrades = CHARACTERCONFIG.characteristics.maxUpgradeLevels;
+
     this.currentLevel = 1;
     this.atePointOrbs = 0;
-    this.upgradePoints = 1000;
+    this.upgradePoints = 100;
     this.upgrades = {
-      speed: { current: 0, max: 15 },
-      maxEnergy: { current: 0, max: 42 },
-      regen: { current: 0, max: 30 },
-      firstSpell: { current: 0, max: 5 },
-      secondSpell: { current: 0, max: 5 },
+      speed: { current: 0, max: maxUpgrades.speed },
+      maxEnergy: { current: 0, max: maxUpgrades.energy.max },
+      energyRegeneration: { current: 0, max: maxUpgrades.energy.regeneration },
+      firstSpell: { current: 0, max: maxUpgrades.firstLevel },
+      secondSpell: { current: 0, max: maxUpgrades.secondLevel },
     };
   }
 
@@ -77,9 +77,10 @@ export class CharacterLevels {
       this.upgradePoints -= 1;
     } else if (
       code === 'Digit3' &&
-      this.upgrades.regen.current < this.upgrades.regen.max
+      this.upgrades.energyRegeneration.current <
+        this.upgrades.energyRegeneration.max
     ) {
-      this.upgrades.regen.current += 1;
+      this.upgrades.energyRegeneration.current += 1;
       this.upgradePoints -= 1;
     } else if (
       code === 'Digit4' &&

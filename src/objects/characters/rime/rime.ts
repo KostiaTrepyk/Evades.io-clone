@@ -13,12 +13,12 @@ export class Rime extends Character {
   public override secondSkill: CommonSkill;
   private secondSkillRangeVisibility: boolean;
 
-  private _mMoveDirection: MMoveDirection;
+  private MMoveDirection: MMoveDirection;
 
   constructor(startPosition: Position) {
     super(startPosition, RIMECONFIG.size, RIMECONFIG.color.default.clone());
 
-    this._mMoveDirection = new MMoveDirection();
+    this.MMoveDirection = new MMoveDirection();
     this.secondSkillRangeVisibility = false;
 
     this.firstSkill = new CommonSkill(this, {
@@ -54,7 +54,7 @@ export class Rime extends Character {
   public override onUpdate(deltaTime: number): void {
     super.onUpdate(deltaTime);
 
-    this._mMoveDirection.onUpdate();
+    this.MMoveDirection.onUpdate();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
@@ -101,8 +101,8 @@ export class Rime extends Character {
   private teleportForward(distance: number) {
     let teleportDistance = distance;
 
-    this.position.x += teleportDistance * this._mMoveDirection.moveDirection.x;
-    this.position.y += teleportDistance * this._mMoveDirection.moveDirection.y;
+    this.position.x += teleportDistance * this.MMoveDirection.moveDirection.x;
+    this.position.y += teleportDistance * this.MMoveDirection.moveDirection.y;
   }
 
   private freezeEnemy(radius: number, duration: number) {

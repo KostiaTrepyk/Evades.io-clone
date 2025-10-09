@@ -1,7 +1,7 @@
 import { gameObjectManager } from './global';
 import { Position } from './types/Position';
 
-const zoom = 0.85;
+const zoom = 1.1;
 
 export class CameraController {
   constructor() {}

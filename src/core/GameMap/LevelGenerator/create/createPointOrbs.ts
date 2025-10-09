@@ -8,9 +8,9 @@ export function createPointOrbs(count: number): void {
     const pointOrb = new PointOrb(
       getRandomPosition({
         minX: saveZoneWidth + 50,
-        maxX: renderer.canvasSize.x - saveZoneWidth - 50,
+        maxX: renderer._canvasSize.x - saveZoneWidth - 50,
         minY: 50,
-        maxY: renderer.canvasSize.y - 50,
+        maxY: renderer._canvasSize.y - 50,
       })
     );
     pointOrb.create();

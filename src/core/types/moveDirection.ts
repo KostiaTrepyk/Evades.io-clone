@@ -1,1 +1,2 @@
-export type MoveDirection = { x: -1 | 0 | 1; y: -1 | 0 | 1 };
+/** Значения могут быть от -1, -0.707, 0, 0.707, 1. Если игрок движется под углом 45% тогда 0.707 либо -0.707.  */
+export type MoveDirection = { x: number; y: number };

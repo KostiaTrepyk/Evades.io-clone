@@ -77,7 +77,7 @@ export class ToggleSkill implements ISkill {
 
   public deactivate(): void {
     this.isActive = false;
-    this.lastUsedTimestamp = time.getTimestamp;
+    this.lastUsedTimestamp = time.timestamp;
     this.cancelSkill();
   }
 
@@ -85,7 +85,7 @@ export class ToggleSkill implements ISkill {
     if (!this.condition()) return false;
 
     // In seconds
-    const elapsedTime = (time.getTimestamp - this.lastUsedTimestamp) / 1000;
+    const elapsedTime = (time.timestamp - this.lastUsedTimestamp) / 1000;
     const isNotCooldown: boolean = elapsedTime >= this.cooldown();
 
     const playerEnergy = this.player.characteristics.getEnergy.current;
@@ -111,7 +111,7 @@ export class ToggleSkill implements ISkill {
 
   public get cooldownPercentage(): number {
     // In seconds
-    const elapsedTime = (time.getTimestamp - this.lastUsedTimestamp) / 1000;
+    const elapsedTime = (time.timestamp - this.lastUsedTimestamp) / 1000;
 
     return Math.min(elapsedTime / this.cooldown(), 1);
   }

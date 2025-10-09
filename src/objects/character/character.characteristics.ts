@@ -2,11 +2,12 @@ import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { speedPerPoint } from '../../consts/consts';
 import { CharacterLevels } from './character.levels';
 
-type StatusName = 'immortal' | 'speedBoost';
+type StatusName = 'immortal' | 'speedBoost' | 'speedReduction';
 
 export const statusIds = {
-  speedBoost: Symbol('Speed boost'),
   immortality: Symbol('Immortality'),
+  speedBoost: Symbol('Speed boost'),
+  speedReduction: Symbol('Speed reduction'),
 } as const;
 
 export interface Status {
@@ -19,7 +20,6 @@ export interface Status {
   };
 }
 
-// Статусы накладываются на 1 фрейм.
 export class CharacterCharacteristics {
   private readonly characterLevels: CharacterLevels;
 

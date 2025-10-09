@@ -6,7 +6,7 @@ export class Renderer {
 
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
-  public canvasSize = { x: 4000, y: 800 };
+  public _canvasSize = { x: 4000, y: 800 };
 
   constructor(camera: CameraController) {
     this.canvas = document.getElementById('game')! as HTMLCanvasElement;
@@ -27,7 +27,7 @@ export class Renderer {
 
     // Set bgcolor
     this.ctx.fillStyle = '#ffe';
-    this.ctx.fillRect(0, 0, this.canvasSize.x, this.canvasSize.y);
+    this.ctx.fillRect(0, 0, this._canvasSize.x, this._canvasSize.y);
 
     this.drawCells(this.ctx);
 
@@ -41,9 +41,10 @@ export class Renderer {
 
   /** FIX ME Походу можно ускорить. Нужно позже подумать */
   private drawCells(ctx: CanvasRenderingContext2D) {
-    const horizontalCells = this.canvasSize.x / cellSize;
-    const verticalCells = this.canvasSize.y / cellSize;
-    ctx.strokeStyle = '#ddd';
+    const horizontalCells = this._canvasSize.x / cellSize;
+    const verticalCells = this._canvasSize.y / cellSize;
+
+    ctx.strokeStyle = '#ddddddff';
     ctx.lineWidth = 3;
     for (let i = 0; i < horizontalCells; i++) {
       for (let j = 0; j < verticalCells; j++) {
@@ -54,14 +55,14 @@ export class Renderer {
     }
   }
 
-  get getCanvasSize(): { x: number; y: number } {
-    return this.canvasSize;
+  get canvasSize(): { x: number; y: number } {
+    return this._canvasSize;
   }
 
   set setCanvasSize(newCanvasSize: { x: number; y: number }) {
     if (newCanvasSize.x < 500 || newCanvasSize.y < 300)
       console.warn('Canvas size si too small');
 
-    this.canvasSize = { ...newCanvasSize };
+    this._canvasSize = { ...newCanvasSize };
   }
 }

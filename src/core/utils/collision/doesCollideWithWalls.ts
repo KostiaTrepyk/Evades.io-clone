@@ -20,12 +20,12 @@ export function doesCollideWithWalls(
     let collisions: Collision = { x: 'no', y: 'no' };
 
     if (position.x - halfSize < 0) collisions.x = 'left';
-    else if (position.x + halfSize > renderer.canvasSize.x)
+    else if (position.x + halfSize > renderer._canvasSize.x)
       collisions.x = 'right';
     else collisions.x = 'no';
 
     if (position.y - halfSize < 0) collisions.y = 'top';
-    else if (position.y + halfSize > renderer.canvasSize.y)
+    else if (position.y + halfSize > renderer._canvasSize.y)
       collisions.y = 'bottom';
     else collisions.y = 'no';
 
@@ -41,14 +41,14 @@ export function doesCollideWithWalls(
     let collisions: Collision = { x: 'no', y: 'no' };
 
     if (position.x - halfSizeX < 0) collisions.x = 'left';
-    else if (position.x + halfSizeX > renderer.canvasSize.x)
+    else if (position.x + halfSizeX > renderer._canvasSize.x)
       collisions.x = 'right';
     else {
       collisions.x = 'no';
     }
 
     if (position.y - halfSizeY < 0) collisions.y = 'top';
-    else if (position.y + halfSizeY > renderer.canvasSize.y)
+    else if (position.y + halfSizeY > renderer._canvasSize.y)
       collisions.y = 'bottom';
     else collisions.y = 'no';
 

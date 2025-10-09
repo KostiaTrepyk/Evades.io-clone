@@ -42,22 +42,22 @@ export function generateLevel({
       player.position.x = player.objectModel.size / 2 + 50;
     } else if (playerPosition === 'end') {
       player.position.x =
-        renderer.canvasSize.x - player.objectModel.size / 2 - 50;
+        renderer._canvasSize.x - player.objectModel.size / 2 - 50;
     }
-    player.position.y = renderer.getCanvasSize.y / 2;
+    player.position.y = renderer.canvasSize.y / 2;
   }
 
   // Create SaveZone
   const saveZoneStart = new SaveZone(
-    { x: saveZoneWidth / 2, y: renderer.canvasSize.y / 2 },
-    { x: saveZoneWidth, y: renderer.canvasSize.y }
+    { x: saveZoneWidth / 2, y: renderer._canvasSize.y / 2 },
+    { x: saveZoneWidth, y: renderer._canvasSize.y }
   );
   const saveZoneEnd = new SaveZone(
     {
-      x: renderer.canvasSize.x - saveZoneWidth / 2,
-      y: renderer.canvasSize.y / 2,
+      x: renderer._canvasSize.x - saveZoneWidth / 2,
+      y: renderer._canvasSize.y / 2,
     },
-    { x: saveZoneWidth, y: renderer.canvasSize.y }
+    { x: saveZoneWidth, y: renderer._canvasSize.y }
   );
   saveZoneStart.create();
   saveZoneEnd.create();
@@ -65,8 +65,8 @@ export function generateLevel({
   // Create Portals
   if (portals.prevLevel) {
     const portalToPrevLevel = new Portal(
-      { x: 25, y: renderer.canvasSize.y / 2 },
-      { x: 50, y: renderer.canvasSize.y },
+      { x: 25, y: renderer._canvasSize.y / 2 },
+      { x: 50, y: renderer._canvasSize.y },
       () => gameMap.prevLevel()
     );
     portalToPrevLevel.create();
@@ -74,10 +74,10 @@ export function generateLevel({
   if (portals.nextLevel) {
     const portalToNextLevel = new Portal(
       {
-        x: renderer.canvasSize.x - 25,
-        y: renderer.canvasSize.y / 2,
+        x: renderer._canvasSize.x - 25,
+        y: renderer._canvasSize.y / 2,
       },
-      { x: 50, y: renderer.canvasSize.y },
+      { x: 50, y: renderer._canvasSize.y },
       () => gameMap.nextLevel()
     );
     portalToNextLevel.create();
@@ -97,7 +97,7 @@ export function generateLevel({
     const portalToNextTunel = new Portal(
       {
         x: 150,
-        y: renderer.getCanvasSize.y - 25,
+        y: renderer.canvasSize.y - 25,
       },
       { x: 300, y: 50 },
       () => gameMap.nextTunel()
@@ -120,11 +120,11 @@ export function generateLevel({
             getRandomPosition({
               minX: saveZoneWidth + (enemyEnergyBurnerSize + 2),
               maxX:
-                renderer.canvasSize.x -
+                renderer._canvasSize.x -
                 saveZoneWidth -
                 (enemyEnergyBurnerSize + 2),
               minY: enemyEnergyBurnerSize + 2,
-              maxY: renderer.canvasSize.y - (enemyEnergyBurnerSize + 2),
+              maxY: renderer._canvasSize.y - (enemyEnergyBurnerSize + 2),
             }),
             getRandomVelocity(enemyTypeOptions.speed * 25)
           );
@@ -142,9 +142,9 @@ export function generateLevel({
     const pointOrb = new PointOrb(
       getRandomPosition({
         minX: saveZoneWidth + 50,
-        maxX: renderer.canvasSize.x - saveZoneWidth - 50,
+        maxX: renderer._canvasSize.x - saveZoneWidth - 50,
         minY: 50,
-        maxY: renderer.canvasSize.y - 50,
+        maxY: renderer._canvasSize.y - 50,
       })
     );
     pointOrb.create();

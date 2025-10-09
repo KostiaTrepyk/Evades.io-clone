@@ -9,7 +9,7 @@ import { Velocity } from '../../core/types/Velocity';
 import { doesCollideWithWalls } from '../../core/utils/collision/doesCollideWithWalls';
 import { Collision } from '../../core/types/Collision';
 
-interface ProjectileCollision {
+export interface ProjectileCollision {
   enemy?: (enemy: Enemy) => void;
   wall?: (collision: Collision) => void;
 }

@@ -23,7 +23,8 @@ export class MMoveDirection {
   private _moveDirection: MoveDirection;
 
   constructor() {
-    this._moveDirection = { x: 0, y: 0 };
+    // Должно быть x:1 что-бы избежать багов таких как тп на то же самое место или снаряды которые стоят на месте так как направления нету (оно по нелям).
+    this._moveDirection = { x: 1, y: 0 };
   }
 
   public onUpdate(): void {
@@ -51,8 +52,8 @@ export class MMoveDirection {
     // Normalize diagonal movement
     if (this._moveDirection.x !== 0 && this._moveDirection.y !== 0) {
       const diagonalFactor = 1 / Math.sqrt(2);
-      this._moveDirection.x *= diagonalFactor;
-      this._moveDirection.y *= diagonalFactor;
+      this._moveDirection.x = this._moveDirection.x * diagonalFactor;
+      this._moveDirection.y = this._moveDirection.y * diagonalFactor;
     }
 
     // Reverse y-direction

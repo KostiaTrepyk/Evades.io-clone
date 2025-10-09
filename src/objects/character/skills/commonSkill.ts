@@ -59,7 +59,7 @@ export class CommonSkill implements ISkill {
       return false;
     }
 
-    this.lastUsedTimestamp = time.getTimestamp;
+    this.lastUsedTimestamp = time.timestamp;
     if (applyEnergyUsage === true) this.applyEnergyUsage();
     this.onUse();
     return true;
@@ -67,7 +67,7 @@ export class CommonSkill implements ISkill {
 
   public isNotCooldown(): boolean {
     const isCooldown =
-      time.getTimestamp < this.cooldown() * 1000 + this.lastUsedTimestamp;
+      time.timestamp < this.cooldown() * 1000 + this.lastUsedTimestamp;
     return isCooldown === false && this.condition();
   }
 
@@ -83,7 +83,7 @@ export class CommonSkill implements ISkill {
   }
 
   public get cooldownPercentage(): number {
-    const elapsedTime = (time.getTimestamp - this.lastUsedTimestamp) / 1000;
+    const elapsedTime = (time.timestamp - this.lastUsedTimestamp) / 1000;
     return Math.min(elapsedTime / this.cooldown(), 1);
   }
 }

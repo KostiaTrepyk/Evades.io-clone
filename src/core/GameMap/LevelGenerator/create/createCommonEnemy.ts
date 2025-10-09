@@ -12,9 +12,9 @@ export function createCommonEnemy(options: CommonEnemyOptions): void {
   const newCommonEnemy = new CommonEnemy(
     getRandomPosition({
       minX: saveZoneWidth + (options.size.max / 2 + 2),
-      maxX: renderer.canvasSize.x - saveZoneWidth - (options.size.max / 2 + 2),
+      maxX: renderer._canvasSize.x - saveZoneWidth - (options.size.max / 2 + 2),
       minY: options.size.max / 2 + 2,
-      maxY: renderer.canvasSize.y - (options.size.max / 2 + 2),
+      maxY: renderer._canvasSize.y - (options.size.max / 2 + 2),
     }),
     getRandomSize(options.size.min, options.size.max),
     getRandomVelocity(options.speed * 25)
