@@ -126,7 +126,7 @@ export function generateLevel({
               minY: enemyEnergyBurnerSize + 2,
               maxY: renderer._canvasSize.y - (enemyEnergyBurnerSize + 2),
             }),
-            getRandomVelocity(enemyTypeOptions.speed * 25)
+            getRandomVelocity(enemyTypeOptions.speed)
           );
           newEnemyEnergyBurner.create();
         });

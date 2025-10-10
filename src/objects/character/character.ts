@@ -9,7 +9,7 @@ import { CharacterMovement } from './character.movement';
 import { CharacterLevels } from './character.levels';
 import {
   CharacterCharacteristics,
-  statusIds,
+  characterStatusIds,
 } from './character.characteristics';
 import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
@@ -57,7 +57,7 @@ export abstract class Character extends GameObject<CircleShape> {
   }
 
   public die(): void {
-    if (this.characteristics.isAppliedStatusById(statusIds.immortality)) return;
+    if (this.characteristics.MStatus.isAppliedStatusById(characterStatusIds.immortal)) return;
 
     this.isDead = true;
     this.characterMovement.block();

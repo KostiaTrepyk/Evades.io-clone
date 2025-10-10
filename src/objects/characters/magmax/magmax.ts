@@ -1,9 +1,8 @@
 import { Position } from '../../../core/types/Position';
-import { time } from '../../../core/global';
 import { Character } from '../../character/character';
 import { MAGMAXCONFIG } from '../../../configs/characters/magmax.config';
 import { ToggleSkill } from '../../character/skills/toggleSkill';
-import { statusIds } from '../../character/character.characteristics';
+import { characterStatusIds } from '../../character/character.characteristics';
 
 export class Magmax extends Character {
   public override firstSkill: ToggleSkill;
@@ -39,7 +38,9 @@ export class Magmax extends Character {
       },
       cancelSkill: () => {
         this.color = MAGMAXCONFIG.color.default;
-        this.characteristics.removeStatus(statusIds.speedBoost);
+        this.characteristics.MStatus.removeStatus(
+          characterStatusIds.speedBoost
+        );
       },
       condition: () =>
         this.level.upgrades.firstSpell.current > 0 && !this.isDead,
@@ -67,7 +68,7 @@ export class Magmax extends Character {
       },
       cancelSkill: () => {
         this.color = MAGMAXCONFIG.color.default;
-        this.characteristics.removeStatus(statusIds.immortality);
+        this.characteristics.MStatus.removeStatus(characterStatusIds.immortal);
       },
       condition: () =>
         this.level.upgrades.secondSpell.current > 0 && !this.isDead,
@@ -80,18 +81,18 @@ export class Magmax extends Character {
         this.level.upgrades.firstSpell.current - 1
       ];
 
-    this.characteristics.applyStatus({
-      id: statusIds.speedBoost,
+    this.characteristics.MStatus.applyStatus({
+      id: characterStatusIds.speedBoost,
       name: 'speedBoost',
-      speed: speedBoost,
+      effects: { speed: speedBoost },
     });
   }
 
   private applyImmortality() {
-    this.characteristics.applyStatus({
-      id: statusIds.immortality,
+    this.characteristics.MStatus.applyStatus({
+      id: characterStatusIds.immortal,
       name: 'immortal',
-      speed: -9999,
+      effects: { speed: -9999 },
     });
   }
 }

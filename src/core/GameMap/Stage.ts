@@ -53,13 +53,13 @@ export class Stage {
 
       if (!enemy) continue;
 
-      enemy.count += Math.min(
-        Math.floor(enemyDifficulty.count.perLevel * level),
+      enemy.count = Math.min(
+        Math.floor(enemy.count + enemyDifficulty.count.perLevel * level),
         enemyDifficulty.count.max
       );
 
-      enemy.speed += Math.min(
-        enemyDifficulty.speed.perLevel * level,
+      enemy.speed = Math.min(
+        enemy.speed + enemyDifficulty.speed.perLevel * level,
         enemyDifficulty.speed.max
       );
     }

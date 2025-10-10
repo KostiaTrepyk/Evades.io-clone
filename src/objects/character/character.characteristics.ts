@@ -1,18 +1,18 @@
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { speedPerPoint } from '../../consts/consts';
+import { MStatus } from '../../core/modules/status/MStatus';
 import { CharacterLevels } from './character.levels';
 
-type StatusName = 'immortal' | 'speedBoost' | 'speedReduction';
+const statusNames = ['immortal', 'speedBoost', 'speedReduction'] as const;
+type StatusName = (typeof statusNames)[number];
 
-export const statusIds = {
-  immortality: Symbol('Immortality'),
+export const characterStatusIds: Record<StatusName, Symbol> = {
+  immortal: Symbol('Immortality'),
   speedBoost: Symbol('Speed boost'),
   speedReduction: Symbol('Speed reduction'),
 } as const;
 
-export interface Status {
-  id: Symbol;
-  name: StatusName;
+interface Effect {
   speed?: number;
   energy?: {
     max?: number;
@@ -26,7 +26,7 @@ export class CharacterCharacteristics {
   private speed: number;
   private energy: { current: number; max: number; regeneration: number };
   /** Can be used to increase/decrease speed, increase/decrease mana regeneration, etc. */
-  private statuses: Status[];
+  public MStatus: MStatus<StatusName, Effect>;
 
   constructor(characterLevels: CharacterLevels) {
     this.characterLevels = characterLevels;
@@ -36,7 +36,7 @@ export class CharacterCharacteristics {
       max: CHARACTERCONFIG.characteristics.default.energy.max,
       regeneration: CHARACTERCONFIG.characteristics.default.energy.regeneration,
     };
-    this.statuses = [];
+    this.MStatus = new MStatus({ availableStatusNames: statusNames });
   }
 
   // FIX ME Не уверен что нужно каждый фрейм обновлять
@@ -65,14 +65,16 @@ export class CharacterCharacteristics {
       defaultEnergyRegeneration + energyRegenerationFromUpgrades;
 
     // Apply effects
-    this.statuses.forEach((status) => {
-      if (status.speed !== undefined)
-        this.speed += status.speed * speedPerPoint;
-      if (status.energy !== undefined) {
-        if (status.energy.max !== undefined)
-          this.energy.max += status.energy.max;
-        if (status.energy.regeneration !== undefined)
-          this.energy.regeneration += status.energy.regeneration;
+    this.MStatus.statuses.forEach((status) => {
+      if (status.effects === undefined) return;
+
+      const { speed, energy } = status.effects;
+
+      if (speed !== undefined) this.speed += speed * speedPerPoint;
+      if (energy !== undefined) {
+        if (energy.max !== undefined) this.energy.max += energy.max;
+        if (energy.regeneration !== undefined)
+          this.energy.regeneration += energy.regeneration;
       }
     });
 
@@ -88,24 +90,6 @@ export class CharacterCharacteristics {
         this.energy.current + this.energy.regeneration * deltaTime
       );
     }
-  }
-
-  public afterUpdate(): void {
-    // Reset statuses.
-    this.statuses = [];
-  }
-
-  // FIX ME Передаём ссылку на объект. Опасно! Но если использовать structuredClone, тогда не будет работать this.removeStatus
-  public applyStatus(status: Status): void {
-    this.statuses.push(status);
-  }
-
-  public removeStatus(id: Symbol): void {
-    this.statuses = this.statuses.filter((status) => status.id !== id);
-  }
-
-  public isAppliedStatusById(id: Symbol): boolean {
-    return Boolean(this.statuses.find((status) => status.id === id));
   }
 
   /** Возвращает true если энергии хватает и её уже списали. False если не хватает энергии и её на списали. */

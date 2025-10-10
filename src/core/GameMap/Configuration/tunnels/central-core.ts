@@ -9,17 +9,17 @@ const firstStage: Stage = new Stage(
     enemies: [
       {
         type: EnemyTypes.CommonEnemy,
-        count: 15,
+        count: 6,
         size: { min: 60, max: 60 },
-        speed: 12,
+        speed: 2.5,
       },
     ],
   },
   [
     {
       type: EnemyTypes.CommonEnemy,
-      count: { max: 10, perLevel: 0.5 },
-      speed: { perLevel: 0.5, max: 15 },
+      count: { perLevel: 1.3, max: 56 },
+      speed: { perLevel: 0.145, max: 8 },
     },
   ]
 );
@@ -31,17 +31,17 @@ const secondStage: Stage = new Stage(
     enemies: [
       {
         type: EnemyTypes.CommonEnemy,
-        count: 10,
+        count: 5,
         size: { min: 45, max: 45 },
-        speed: 15,
+        speed: 8,
       },
     ],
   },
   [
     {
       type: EnemyTypes.CommonEnemy,
-      count: { max: 10, perLevel: 0.5 },
-      speed: { perLevel: 0.75, max: 22 },
+      count: { perLevel: 0.4, max: 8 },
+      speed: { perLevel: 0.5, max: 20 },
     },
   ]
 );
@@ -53,17 +53,17 @@ const thirdStage: Stage = new Stage(
     enemies: [
       {
         type: EnemyTypes.CommonEnemy,
-        count: 20,
-        size: { min: 30, max: 100 },
-        speed: 10,
+        count: 5,
+        size: { min: 30, max: 150 },
+        speed: 4,
       },
     ],
   },
   [
     {
       type: EnemyTypes.CommonEnemy,
-      count: { max: 10, perLevel: 0.25 },
-      speed: { perLevel: 0.4, max: 15 },
+      count: { perLevel: 1, max: 40 },
+      speed: { perLevel: 0.4, max: 7.5 },
     },
   ]
 );
@@ -77,15 +77,15 @@ const fourthStage: Stage = new Stage(
         type: EnemyTypes.CommonEnemy,
         count: 50,
         size: { min: 60, max: 60 },
-        speed: 4,
+        speed: 1.5,
       },
     ],
   },
   [
     {
       type: EnemyTypes.CommonEnemy,
-      count: { max: 10, perLevel: 0.5 },
-      speed: { perLevel: 0.5, max: 10 },
+      count: { perLevel: 2, max: 120 },
+      speed: { perLevel: 0.04, max: 3 },
     },
   ]
 );

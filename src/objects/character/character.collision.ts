@@ -35,9 +35,10 @@ export class CharacterCollision {
   }
 
   private onCollisionEnemy(enemy: Enemy): void {
-    if (!this.player.isDead) {
-      this.player.die();
-    }
+    if (this.player.isDead === true) return;
+    if (enemy.Characteristics.MStatus.isAppliedStatusByName('disabled')) return;
+
+    this.player.die();
   }
 
   private onCollisionPointOrb(pointOrb: PointOrb): void {

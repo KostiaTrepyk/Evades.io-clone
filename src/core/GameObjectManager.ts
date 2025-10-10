@@ -36,8 +36,11 @@ export class GameObjectManager {
     this.enemies.forEach((enemy) => enemy.onUpdate(deltaTime));
     this.portals.forEach((portal) => portal.onUpdate(deltaTime));
 
-    this.enemies.forEach((enemy) => enemy.afterUpdate(deltaTime));
     this.player?.afterUpdate(deltaTime);
+    this.projectiles.forEach((projectile) => projectile.afterUpdate?.(deltaTime))
+    this.enemies.forEach((enemy) => enemy.afterUpdate(deltaTime));
+    this.portals.forEach((portal) => portal.afterUpdate?.(deltaTime));
+    
   }
 
   public renderAll(ctx: CanvasRenderingContext2D): void {

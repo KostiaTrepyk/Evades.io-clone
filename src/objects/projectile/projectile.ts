@@ -2,59 +2,33 @@ import { GameObject } from '../../core/common/GameObject';
 import { CircleShape } from '../../core/types/Shape';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';
-import { Enemy } from '../enemy/enemy';
-import { gameObjectManager } from '../../core/global';
-import { doItemsCollide } from '../../core/utils/collision/doItemsCollide';
 import { Velocity } from '../../core/types/Velocity';
-import { doesCollideWithWalls } from '../../core/utils/collision/doesCollideWithWalls';
-import { Collision } from '../../core/types/Collision';
+import { Position } from '../../core/types/Position';
+import { speedPerPoint } from '../../consts/consts';
 
-export interface ProjectileCollision {
-  enemy?: (enemy: Enemy) => void;
-  wall?: (collision: Collision) => void;
+export interface ProjectileParams {
+  startPosition: Position;
+  size: number;
+  velocity: Velocity;
+  color: HSLA;
 }
+
 export class Projectile extends GameObject<CircleShape> {
   public velocity: Velocity;
   private color: HSLA;
-  private readonly onEnemyCollision?: (enemy: Enemy) => void;
-  private readonly onWallCollision?: (collision: Collision) => void;
 
-  constructor(
-    startPosition: Projectile['position'],
-    size: Projectile['objectModel']['size'],
-    velocity: Projectile['velocity'],
-    color: Projectile['color'],
-    collision: ProjectileCollision
-  ) {
+  constructor(params: ProjectileParams) {
+    const { startPosition, size, velocity, color } = params;
+
     super(startPosition, { shape: 'circle', size: size });
 
     this.velocity = velocity;
     this.color = color;
-    this.onEnemyCollision = collision.enemy;
-    this.onWallCollision = collision.wall;
   }
 
   public override onUpdate(deltaTime: number): void {
-    this.position.x += this.velocity.x * deltaTime;
-    this.position.y += this.velocity.y * deltaTime;
-
-    // Коллизия с врагами
-    if (this.onEnemyCollision !== undefined) {
-      gameObjectManager.enemies.forEach((enemy) => {
-        if (doItemsCollide(enemy, this).doesCollide === true) {
-          // FIX ME Почему-то не хочет убрать undefined хотя на него есть проверка
-          if (this.onEnemyCollision !== undefined) {
-            this.onEnemyCollision(enemy);
-          }
-        }
-      });
-    }
-
-    // Коллизия с границами
-    if (this.onWallCollision !== undefined) {
-      const { collisions, doesCollide } = doesCollideWithWalls(this);
-      if (doesCollide === true) this.onWallCollision(collisions);
-    }
+    this.position.x += this.velocity.x * speedPerPoint * deltaTime;
+    this.position.y += this.velocity.y * speedPerPoint * deltaTime;
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

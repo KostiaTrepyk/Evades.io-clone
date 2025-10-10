@@ -1,5 +1,4 @@
 import { GameObject } from '../../core/common/GameObject';
-import { time } from '../../core/global';
 import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
 import { EnemyCollision } from './enemy.collision';
@@ -7,13 +6,17 @@ import { Velocity } from '../../core/types/Velocity';
 import { CircleShape } from '../../core/types/Shape';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { ENEMYCONFIG } from '../../configs/enemies/enemy.config';
+import { EnemyCharacteristics } from './enemy.characteristics';
+import { speedPerPoint } from '../../consts/consts';
 
 export class Enemy extends GameObject<CircleShape> {
-  private collision: EnemyCollision;
-  public velocity: Velocity;
-  private freezeStatus: { from: number; duration: number };
   public readonly defaultColor: HSLA;
   public currentColor: HSLA;
+  public readonly defaultSize: number;
+  private _velocity: Velocity;
+
+  private Collision: EnemyCollision;
+  public Characteristics: EnemyCharacteristics;
 
   constructor(
     position: Position,
@@ -23,25 +26,43 @@ export class Enemy extends GameObject<CircleShape> {
   ) {
     super(position, { shape: 'circle', size });
 
-    this.collision = new EnemyCollision(this);
-    this.velocity = velocity;
-    this.freezeStatus = { from: 0, duration: 0 };
     this.defaultColor = color;
     this.currentColor = color;
+    this.defaultSize = size;
+    this._velocity = velocity;
+
+    this.Collision = new EnemyCollision(this);
+    this.Characteristics = new EnemyCharacteristics({ enemy: this });
   }
 
   public override onUpdate(deltaTime: number): void {
-    // If freezed, don't update position
-    if (this.isFreezed() === true) return;
+    this.Characteristics.onUpdate();
 
-    this.prevPosition = { x: this.position.x, y: this.position.y };
+    // If is not freezed, update position
+    if (
+      this.Characteristics.MStatus.isAppliedStatusByName('stunned') === false
+    ) {
+      this.prevPosition = { x: this.position.x, y: this.position.y };
 
-    this.position.x += this.velocity.x * deltaTime;
-    this.position.y += this.velocity.y * deltaTime;
+      // Гениально посчитал velocity. Переделать нужно
+      const defaultSpeed =
+        Math.abs(this.velocity.x) + Math.abs(this.velocity.y);
+      const currentSpeed = defaultSpeed + this.Characteristics.speedChange;
+
+      const currentVelocity = {
+        x: (this.velocity.x / defaultSpeed) * currentSpeed,
+        y: (this.velocity.y / defaultSpeed) * currentSpeed,
+      };
+
+      this.position.x += currentVelocity.x * speedPerPoint * deltaTime;
+      this.position.y += currentVelocity.y * speedPerPoint * deltaTime;
+    }
+
+    this.objectModel.size = this.defaultSize * this.Characteristics.sizeScale;
   }
 
   public override afterUpdate(deltaTime: number): void {
-    this.collision.afterUpdate(deltaTime);
+    this.Collision.afterUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
@@ -56,7 +77,15 @@ export class Enemy extends GameObject<CircleShape> {
     });
   }
 
-  public isFreezed(): boolean {
+  public set setVelocity(v: Velocity) {
+    this._velocity = v;
+  }
+
+  public get velocity(): Velocity {
+    return { ...this._velocity };
+  }
+
+  /*   public isFreezed(): boolean {
     if (
       time.timestamp / 1000 <
       this.freezeStatus.from + this.freezeStatus.duration
@@ -75,5 +104,5 @@ export class Enemy extends GameObject<CircleShape> {
 
     this.freezeStatus.from = time.timestamp / 1000;
     this.freezeStatus.duration = seconds;
-  }
+  } */
 }

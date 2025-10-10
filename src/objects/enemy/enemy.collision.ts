@@ -30,12 +30,16 @@ export class EnemyCollision {
   }
 
   private collisionWithWallsHandler(collision: Collision): void {
-    if (collision.x !== 'no') this.enemy.velocity.x *= -1;
-    if (collision.y !== 'no') this.enemy.velocity.y *= -1;
+    const newVelocity = this.enemy.velocity;
+    if (collision.x !== 'no') newVelocity.x *= -1;
+    if (collision.y !== 'no') newVelocity.y *= -1;
+    this.enemy.setVelocity = newVelocity;
   }
 
   private collisionWithSaveZonesHandler(collision: Collision): void {
-    if (collision.x !== 'no') this.enemy.velocity.x *= -1;
-    if (collision.y !== 'no') this.enemy.velocity.y *= -1;
+    const newVelocity = this.enemy.velocity;
+    if (collision.x !== 'no') newVelocity.x *= -1;
+    if (collision.y !== 'no') newVelocity.y *= -1;
+    this.enemy.setVelocity = newVelocity;
   }
 }

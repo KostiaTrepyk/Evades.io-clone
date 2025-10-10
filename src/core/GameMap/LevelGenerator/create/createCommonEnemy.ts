@@ -17,7 +17,7 @@ export function createCommonEnemy(options: CommonEnemyOptions): void {
       maxY: renderer._canvasSize.y - (options.size.max / 2 + 2),
     }),
     getRandomSize(options.size.min, options.size.max),
-    getRandomVelocity(options.speed * 25)
+    getRandomVelocity(options.speed)
   );
   newCommonEnemy.create();
 }
