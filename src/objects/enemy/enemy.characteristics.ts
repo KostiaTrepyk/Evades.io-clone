@@ -1,4 +1,5 @@
 import { MStatus } from '../../core/modules/status/MStatus';
+import { HSLA } from '../../core/utils/hsla';
 import { Enemy } from './enemy';
 
 // FIX ME Нужно ещё цвет изменять!!!
@@ -15,6 +16,7 @@ const statusNames = [
   'speedReduction',
   'sizeIncreased',
   'sizeReduction',
+  'changeDirection',
 ] as const;
 type StatusName = (typeof statusNames)[number];
 
@@ -56,6 +58,34 @@ export class EnemyCharacteristics {
       if (status.effects.sizeScale === undefined) return acc;
       return acc + status.effects.sizeScale;
     }, 1);
+  }
+
+  public getColor(): HSLA {
+    const newColor = this.Enemy.defaultColor.clone();
+
+    if (this.MStatus.isAppliedStatusByName('disabled')) {
+      newColor.setAlpha = 0.5;
+    } else if (
+      this.MStatus.isAppliedStatusByName('sizeReduction') ||
+      this.MStatus.isAppliedStatusByName('speedReduction')
+    ) {
+      newColor.setSaturation = 45;
+      newColor.setHue = 200;
+    } else if (
+      this.MStatus.isAppliedStatusByName('sizeIncreased') ||
+      this.MStatus.isAppliedStatusByName('speedBoost')
+    ) {
+      newColor.setSaturation = 45;
+      newColor.setHue = 0;
+    } else if (this.MStatus.isAppliedStatusByName('stunned')) {
+      newColor.setSaturation = 0;
+      newColor.setLightness = 40;
+    } else if (this.MStatus.isAppliedStatusByName('changeDirection')) {
+      newColor.setSaturation = 45;
+      newColor.setHue = 110;
+    }
+
+    return newColor;
   }
 
   public get sizeScale(): number {

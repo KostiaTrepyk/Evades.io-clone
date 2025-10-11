@@ -9,6 +9,13 @@ import { ENEMYCONFIG } from '../../configs/enemies/enemy.config';
 import { EnemyCharacteristics } from './enemy.characteristics';
 import { speedPerPoint } from '../../consts/consts';
 
+export interface EnemyParams {
+  position: Position;
+  size: number;
+  velocity: Velocity;
+  color: { hue: number };
+}
+
 export class Enemy extends GameObject<CircleShape> {
   public readonly defaultColor: HSLA;
   public currentColor: HSLA;
@@ -18,16 +25,16 @@ export class Enemy extends GameObject<CircleShape> {
   private Collision: EnemyCollision;
   public Characteristics: EnemyCharacteristics;
 
-  constructor(
-    position: Position,
-    size: number,
-    velocity: Velocity,
-    color: HSLA
-  ) {
+  constructor(params: EnemyParams) {
+    const { position, size, velocity, color } = params;
+
     super(position, { shape: 'circle', size });
 
-    this.defaultColor = color;
-    this.currentColor = color;
+    const enemyColor = ENEMYCONFIG.defaultColor.clone();
+    enemyColor.setHue = color.hue;
+
+    this.defaultColor = enemyColor.clone();
+    this.currentColor = enemyColor.clone();
     this.defaultSize = size;
     this._velocity = velocity;
 
@@ -37,6 +44,8 @@ export class Enemy extends GameObject<CircleShape> {
 
   public override onUpdate(deltaTime: number): void {
     this.Characteristics.onUpdate();
+
+    this.currentColor = this.Characteristics.getColor();
 
     // If is not freezed, update position
     if (
@@ -84,25 +93,4 @@ export class Enemy extends GameObject<CircleShape> {
   public get velocity(): Velocity {
     return { ...this._velocity };
   }
-
-  /*   public isFreezed(): boolean {
-    if (
-      time.timestamp / 1000 <
-      this.freezeStatus.from + this.freezeStatus.duration
-    )
-      return true;
-    return false;
-  }
-
-  public freeze(seconds: number): void {
-    // Check prev freeze status
-    if (
-      this.freezeStatus.from + this.freezeStatus.duration >=
-      time.timestamp / 1000 + seconds
-    )
-      return;
-
-    this.freezeStatus.from = time.timestamp / 1000;
-    this.freezeStatus.duration = seconds;
-  } */
 }

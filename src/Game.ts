@@ -1,15 +1,16 @@
 import { Character } from './objects/character/character';
 import { gameLoop, renderer, userInput } from './core/global';
 import { gameMap } from './core/GameMap/Configuration/GameMapConfiguration';
-import { Rime } from './objects/characters/rime/rime';
+import { Morph } from './objects/characters/morph/morph';
 
 export class Game {
   private character: Character;
 
   constructor() {
-    this.character = new Rime(
-      { x: renderer.canvasSize.x / 2, y: renderer.canvasSize.y / 2 }
-    );
+    this.character = new Morph({
+      x: renderer._canvasSize.x / 2,
+      y: renderer._canvasSize.y / 2,
+    });
   }
 
   /** В теории запускает игру и биндит клавиши. Я так понял что он собирает игру из других классов типа: Renderer, UserInput и так дальше. */

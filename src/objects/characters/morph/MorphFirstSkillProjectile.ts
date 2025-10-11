@@ -67,14 +67,10 @@ export class MorphFirstSkillProjectile extends Projectile {
       });
     }
 
-    // FIX ME Не правильно изменяет цвет
-    const newEnemyColor = enemy.defaultColor.clone();
-    newEnemyColor.setHue = 110;
-    newEnemyColor.setSaturation = 50;
-    newEnemyColor.setLightness = 50;
-    newEnemyColor.setAlpha = 0.8;
-
-    enemy.currentColor = newEnemyColor;
+    enemy.Characteristics.MStatus.applyStatus({
+      id: this.statusId,
+      name: 'changeDirection',
+    });
 
     const newVelocity = enemy.velocity;
 

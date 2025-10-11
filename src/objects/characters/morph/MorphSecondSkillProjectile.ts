@@ -67,15 +67,6 @@ export class MorphSecondSkillProjectile extends Projectile {
       });
     }
 
-    // FIX ME Не правильно изменяет цвет
-    const newEnemyColor = enemy.defaultColor.clone();
-    newEnemyColor.setHue = 0;
-    newEnemyColor.setSaturation = 50;
-    newEnemyColor.setLightness = 50;
-    newEnemyColor.setAlpha = 0.8;
-
-    enemy.currentColor = newEnemyColor;
-
     const enemyHalfSpeed =
       (Math.abs(enemy.velocity.x) + Math.abs(enemy.velocity.y)) / 2;
 

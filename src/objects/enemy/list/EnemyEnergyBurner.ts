@@ -7,17 +7,23 @@ import { Character } from '../../character/character';
 import { Enemy } from '../enemy';
 import { ENERGYBURNERENEMYCONFIG } from '../../../configs/enemies/energyBurnerEnemy.config';
 
+export interface EnemyEnergyBurnerParams {
+  position: Position;
+  velocity: Velocity;
+}
+
 export class EnemyEnergyBurner extends Enemy {
   private radius: number;
   private energySteals: number;
 
-  constructor(startPosition: Position, velocity: Velocity) {
-    super(
-      startPosition,
-      ENERGYBURNERENEMYCONFIG.size,
+  constructor(params: EnemyEnergyBurnerParams) {
+    const { position, velocity } = params;
+    super({
+      position,
+      size: ENERGYBURNERENEMYCONFIG.size,
       velocity,
-      ENERGYBURNERENEMYCONFIG.color
-    );
+      color: { hue: ENERGYBURNERENEMYCONFIG.color.hue },
+    });
     this.radius = ENERGYBURNERENEMYCONFIG.auraRadius;
     this.energySteals = ENERGYBURNERENEMYCONFIG.energySteals;
   }

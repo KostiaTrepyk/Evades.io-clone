@@ -116,8 +116,8 @@ export function generateLevel({
 
       case enemyTypeOptions.type === EnemyTypes.EnemyEnergyBurner:
         Array.from({ length: enemyTypeOptions.count }).forEach(() => {
-          const newEnemyEnergyBurner = new EnemyEnergyBurner(
-            getRandomPosition({
+          const newEnemyEnergyBurner = new EnemyEnergyBurner({
+            position: getRandomPosition({
               minX: saveZoneWidth + (enemyEnergyBurnerSize + 2),
               maxX:
                 renderer._canvasSize.x -
@@ -126,8 +126,8 @@ export function generateLevel({
               minY: enemyEnergyBurnerSize + 2,
               maxY: renderer._canvasSize.y - (enemyEnergyBurnerSize + 2),
             }),
-            getRandomVelocity(enemyTypeOptions.speed)
-          );
+            velocity: getRandomVelocity(enemyTypeOptions.speed),
+          });
           newEnemyEnergyBurner.create();
         });
         break;

@@ -69,6 +69,6 @@ export const MORPHCONFIG = {
     ] as { x: number; y: number }[][],
     projectileSpeed: 28,
     projectileSize: 42,
-    projectileColor: new HSLA(0, 75, 50, 1),
+    projectileColor: new HSLA(200, 75, 50, 1),
   },
 } as const;

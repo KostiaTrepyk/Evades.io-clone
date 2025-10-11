@@ -2,7 +2,9 @@ export interface Status<
   StatusName extends string,
   Effect extends Record<string, any>
 > {
+  /** Id по которому можно убирать не нужные эффекты не боясь убрать то что ещё нужно. */
   id: Symbol;
+  /** От имени зависит цвет эффекта. */
   name: StatusName;
   effects?: Effect;
 }

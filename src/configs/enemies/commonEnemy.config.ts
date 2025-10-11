@@ -1,5 +1,3 @@
-import { HSLA } from '../../core/utils/hsla';
-
 export const COMMONENEMYCONFIG = {
-  color: new HSLA(0, 0, 60, 1),
+  color: { hue: 0 },
 } as const;

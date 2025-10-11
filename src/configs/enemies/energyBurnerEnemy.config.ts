@@ -1,7 +1,7 @@
 import { HSLA } from '../../core/utils/hsla';
 
 export const ENERGYBURNERENEMYCONFIG = {
-  color: new HSLA(235, 100, 60, 1),
+  color: { hue: 235 },
   energySteals: 12,
   size: 50,
 
