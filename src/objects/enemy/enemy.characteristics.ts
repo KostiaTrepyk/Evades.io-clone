@@ -2,13 +2,14 @@ import { MStatus } from '../../core/modules/status/MStatus';
 import { HSLA } from '../../core/utils/hsla';
 import { Enemy } from './enemy';
 
-// FIX ME Нужно ещё цвет изменять!!!
-
-// + Лучше сделать  на статусах. Сделать статусы для врагов.
-// + Если не могут убить - прозрачные
-// + Если замедленные, уменьшенные - голубые. Ускоренные, увеличение - красные
-// ? Изменили передвижение в другую сторону - зеленые
-// + Если скорость = 0 тогда tilted (более тёмные)
+// Статусы для врагов.
+// Если не могут убить - полу-прозрачные
+// Если замедленные - голубой
+// Уменьшенные - голубой-зелёный
+// Ускоренные - жёлтый
+// Увеличение - оранжевый
+// Изменили передвижение в другую сторону - зелёный
+// Если скорость = 0 тогда tilted (более тёмные)
 const statusNames = [
   'disabled',
   'stunned',
@@ -63,26 +64,46 @@ export class EnemyCharacteristics {
   public getColor(): HSLA {
     const newColor = this.Enemy.defaultColor.clone();
 
+    const statuses = this.MStatus.statuses;
+    for (let i = statuses.length - 1; i >= 0; i++) {
+      const status = statuses[i];
+
+      if (status.name === 'disabled') continue;
+
+      if (status.name === 'sizeReduction') {
+        newColor.setSaturation = 45;
+        newColor.setHue = 145;
+        break;
+      }
+      if (status.name === 'speedReduction') {
+        newColor.setSaturation = 45;
+        newColor.setHue = 180;
+        break;
+      }
+      if (status.name === 'sizeIncreased') {
+        newColor.setSaturation = 45;
+        newColor.setHue = 45;
+        break;
+      }
+      if (status.name === 'speedBoost') {
+        newColor.setSaturation = 45;
+        newColor.setHue = 60;
+        break;
+      }
+      if (status.name === 'changeDirection') {
+        newColor.setSaturation = 45;
+        newColor.setHue = 115;
+        break;
+      }
+      if (status.name === 'stunned') {
+        newColor.setSaturation = 0;
+        newColor.setLightness = 40;
+        break;
+      }
+    }
+
     if (this.MStatus.isAppliedStatusByName('disabled')) {
       newColor.setAlpha = 0.5;
-    } else if (
-      this.MStatus.isAppliedStatusByName('sizeReduction') ||
-      this.MStatus.isAppliedStatusByName('speedReduction')
-    ) {
-      newColor.setSaturation = 45;
-      newColor.setHue = 200;
-    } else if (
-      this.MStatus.isAppliedStatusByName('sizeIncreased') ||
-      this.MStatus.isAppliedStatusByName('speedBoost')
-    ) {
-      newColor.setSaturation = 45;
-      newColor.setHue = 0;
-    } else if (this.MStatus.isAppliedStatusByName('stunned')) {
-      newColor.setSaturation = 0;
-      newColor.setLightness = 40;
-    } else if (this.MStatus.isAppliedStatusByName('changeDirection')) {
-      newColor.setSaturation = 45;
-      newColor.setHue = 110;
     }
 
     return newColor;

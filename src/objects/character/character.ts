@@ -61,7 +61,7 @@ export abstract class Character extends GameObject<CircleShape> {
 
     this.isDead = true;
     this.characterMovement.block();
-    this.timeToDeath = 10;
+    this.timeToDeath = 3;
   }
 
   public override onUpdate(deltaTime: number): void {
