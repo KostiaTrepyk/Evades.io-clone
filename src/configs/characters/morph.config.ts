@@ -36,7 +36,7 @@ export const MORPHCONFIG = {
     ] as { x: number; y: number }[][],
     projectileSpeed: 28,
     projectileSize: 42,
-    projectileColor: new HSLA(100, 75, 50, 1),
+    projectileColor: new HSLA(110, 75, 50, 1),
   },
 
   secondSpell: {

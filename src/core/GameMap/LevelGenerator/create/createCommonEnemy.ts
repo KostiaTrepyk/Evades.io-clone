@@ -1,15 +1,14 @@
 import { CommonEnemy } from '../../../../objects/enemy/list/CommonEnemy';
 import { renderer } from '../../../global';
+import { getRandomPosition } from '../../../utils/other/getRandomPosition';
+import { getRandomSize } from '../../../utils/other/getRandomSize';
+import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
 import { saveZoneWidth } from '../LevelGenerator';
-import {
-  getRandomPosition,
-  getRandomSize,
-  getRandomVelocity,
-} from '../helpers/helpers';
+
 import { CommonEnemyOptions } from '../types';
 
-export function createCommonEnemy(options: CommonEnemyOptions): void {
-  const newCommonEnemy = new CommonEnemy({
+export function createCommonEnemy(options: CommonEnemyOptions): CommonEnemy {
+  return new CommonEnemy({
     position: getRandomPosition({
       minX: saveZoneWidth + (options.size.max / 2 + 2),
       maxX: renderer._canvasSize.x - saveZoneWidth - (options.size.max / 2 + 2),
@@ -19,5 +18,4 @@ export function createCommonEnemy(options: CommonEnemyOptions): void {
     size: getRandomSize(options.size.min, options.size.max),
     velocity: getRandomVelocity(options.speed),
   });
-  newCommonEnemy.create();
 }

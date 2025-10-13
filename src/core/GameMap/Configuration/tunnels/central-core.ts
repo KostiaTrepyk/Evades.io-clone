@@ -1,6 +1,6 @@
 import { EnemyTypes } from '../../LevelGenerator/types';
 import { Stage } from '../../Stage';
-import { Tunel } from '../../Tunel';
+import { Tunnel } from '../../Tunnel';
 
 const firstStage: Stage = new Stage(
   5,
@@ -13,12 +13,22 @@ const firstStage: Stage = new Stage(
         size: { min: 60, max: 60 },
         speed: 2.5,
       },
+      {
+        type: EnemyTypes.EnemyEnergyBurner,
+        count: 0,
+        speed: 6,
+      },
     ],
   },
   [
     {
       type: EnemyTypes.CommonEnemy,
       count: { perLevel: 1.3, max: 56 },
+      speed: { perLevel: 0.145, max: 8 },
+    },
+    {
+      type: EnemyTypes.EnemyEnergyBurner,
+      count: { perLevel: 0.1, max: 4 },
       speed: { perLevel: 0.145, max: 8 },
     },
   ]
@@ -57,12 +67,22 @@ const thirdStage: Stage = new Stage(
         size: { min: 30, max: 150 },
         speed: 4,
       },
+      {
+        type: EnemyTypes.EnemySpeedReduction,
+        count: 0,
+        speed: 2,
+      },
     ],
   },
   [
     {
       type: EnemyTypes.CommonEnemy,
       count: { perLevel: 1, max: 40 },
+      speed: { perLevel: 0.4, max: 7.5 },
+    },
+    {
+      type: EnemyTypes.EnemySpeedReduction,
+      count: { perLevel: 0.25, max: 8 },
       speed: { perLevel: 0.4, max: 7.5 },
     },
   ]
@@ -90,7 +110,7 @@ const fourthStage: Stage = new Stage(
   ]
 );
 
-const centralCore = new Tunel(
+const centralCore = new Tunnel(
   'Central Core',
   40,
   [firstStage, secondStage, thirdStage, fourthStage],

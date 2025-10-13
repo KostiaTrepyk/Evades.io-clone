@@ -4,6 +4,7 @@
         "COMMONENEMYCONFIG",
         "cooldown",
         "ENEMYCONFIG",
+        "ENEMYSPEEDREDUCTIONCONFIG",
         "ENERGYBURNERENEMYCONFIG",
         "GAMECONFIG",
         "lightgreen",

@@ -13,7 +13,7 @@ export interface EnemyParams {
   position: Position;
   size: number;
   velocity: Velocity;
-  color: { hue: number };
+  color?: { hue: number };
 }
 
 export class Enemy extends GameObject<CircleShape> {
@@ -31,7 +31,10 @@ export class Enemy extends GameObject<CircleShape> {
     super(position, { shape: 'circle', size });
 
     const enemyColor = ENEMYCONFIG.defaultColor.clone();
-    enemyColor.setHue = color.hue;
+    if (color !== undefined) {
+      enemyColor.setHue = color.hue;
+      enemyColor.setSaturation = 100;
+    }
 
     this.defaultColor = enemyColor.clone();
     this.currentColor = enemyColor.clone();
@@ -74,7 +77,7 @@ export class Enemy extends GameObject<CircleShape> {
     this.Collision.afterUpdate(deltaTime);
   }
 
-  public override onRender(ctx: CanvasRenderingContext2D): void {
+  public override onRender(ctx: CanvasRenderingContext2D, hue?: number): void {
     drawCircle(ctx, {
       position: this.position,
       size: this.objectModel.size,

@@ -6,6 +6,7 @@ import { Velocity } from '../../../core/types/Velocity';
 import { Character } from '../../character/character';
 import { Enemy } from '../enemy';
 import { ENERGYBURNERENEMYCONFIG } from '../../../configs/enemies/energyBurnerEnemy.config';
+import { drawCircle } from '../../../core/utils/canvas/drawCircle';
 
 export interface EnemyEnergyBurnerParams {
   position: Position;
@@ -13,8 +14,9 @@ export interface EnemyEnergyBurnerParams {
 }
 
 export class EnemyEnergyBurner extends Enemy {
-  private radius: number;
-  private energySteals: number;
+  private enemyEnergyBurnerEffectId: Symbol = Symbol(
+    'EnemyEnergyBurnerEffectId aura'
+  );
 
   constructor(params: EnemyEnergyBurnerParams) {
     const { position, velocity } = params;
@@ -24,8 +26,6 @@ export class EnemyEnergyBurner extends Enemy {
       velocity,
       color: { hue: ENERGYBURNERENEMYCONFIG.color.hue },
     });
-    this.radius = ENERGYBURNERENEMYCONFIG.auraRadius;
-    this.energySteals = ENERGYBURNERENEMYCONFIG.energySteals;
   }
 
   public override onUpdate(deltaTime: number): void {
@@ -37,29 +37,43 @@ export class EnemyEnergyBurner extends Enemy {
 
     const aura = new GameObject(this.position, {
       shape: 'circle',
-      size: this.radius * 2,
+      size: ENERGYBURNERENEMYCONFIG.auraRadius * 2,
     });
 
+    // FIX ME Работает только последний.
     if (doItemsCollide(player, aura).doesCollide === true) {
-      this.stealEnergy(player, deltaTime);
-    }
+      this.applyStealEnergyEffect(player);
+    } else this.removeStealEnergyEffect(player);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    super.onRender(ctx);
+    drawCircle(ctx, {
+      position: this.position,
+      size: ENERGYBURNERENEMYCONFIG.auraRadius * 2,
+      fill: { color: ENERGYBURNERENEMYCONFIG.auraColor },
+    });
 
-    ctx.beginPath();
-    ctx.fillStyle = ENERGYBURNERENEMYCONFIG.auraColor.toString();
-    ctx.arc(this.position.x, this.position.y, this.radius, 0, 360);
-    ctx.fill();
+    super.onRender(ctx);
   }
 
-  private stealEnergy(player: Character, deltaTime: number): void {
-    const playerCurrentEnergy = player.characteristics.getEnergy.current;
+  public override delete(): void {
+    const player = gameObjectManager.player;
+    if (player) this.removeStealEnergyEffect(player);
 
-    // FIX ME Не забирает энергию до 0
-    player.characteristics.removeEnergy(
-      playerCurrentEnergy - this.energySteals * deltaTime
-    );
+    super.delete();
+  }
+
+  private applyStealEnergyEffect(player: Character): void {
+    player.characteristics.MStatus.applyStatus({
+      id: this.enemyEnergyBurnerEffectId,
+      name: 'energyRegenerationReduction',
+      effects: {
+        energy: { regeneration: -ENERGYBURNERENEMYCONFIG.energySteals },
+      },
+    });
+  }
+
+  private removeStealEnergyEffect(player: Character): void {
+    player.characteristics.MStatus.removeStatus(this.enemyEnergyBurnerEffectId);
   }
 }

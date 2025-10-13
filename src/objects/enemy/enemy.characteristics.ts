@@ -92,7 +92,7 @@ export class EnemyCharacteristics {
       }
       if (status.name === 'changeDirection') {
         newColor.setSaturation = 45;
-        newColor.setHue = 115;
+        newColor.setHue = 110;
         break;
       }
       if (status.name === 'stunned') {

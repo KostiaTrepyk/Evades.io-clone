@@ -1,7 +1,7 @@
 import { GenerateLevelOptions } from './LevelGenerator/LevelGenerator';
 import { Stage } from './Stage';
 
-export class Tunel {
+export class Tunnel {
   private _levelsToWin: number;
   private _stages: Stage[];
   private _name: string;
@@ -11,7 +11,7 @@ export class Tunel {
     name: string,
     levelsToWin: number,
     stages: Stage[],
-    type: 'Tunel' | 'Area'
+    type: 'Tunnel' | 'Area'
   ) {
     this._levelsToWin = levelsToWin;
     this._stages = stages;
@@ -19,7 +19,7 @@ export class Tunel {
     this._type = type;
   }
 
-  public getlevelConfiguration(level: number): GenerateLevelOptions {
+  public getLevelConfiguration(level: number): GenerateLevelOptions {
     const maxLevels = this._stages.reduce(
       (acc, stage) => acc + stage.levelCount,
       0

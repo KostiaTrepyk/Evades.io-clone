@@ -1,13 +1,13 @@
 import { Character } from './objects/character/character';
 import { gameLoop, renderer, userInput } from './core/global';
 import { gameMap } from './core/GameMap/Configuration/GameMapConfiguration';
-import { Morph } from './objects/characters/morph/morph';
+import { Magmax } from './objects/characters/magmax/magmax';
 
 export class Game {
   private character: Character;
 
   constructor() {
-    this.character = new Morph({
+    this.character = new Magmax({
       x: renderer._canvasSize.x / 2,
       y: renderer._canvasSize.y / 2,
     });

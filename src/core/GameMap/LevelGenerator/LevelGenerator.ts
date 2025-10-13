@@ -1,34 +1,39 @@
-import { enemyEnergyBurnerSize } from '../../../consts/enemies';
-import { EnemyEnergyBurner } from '../../../objects/enemy/list/EnemyEnergyBurner';
 import { PointOrb } from '../../../objects/pointOrb/PointOrb';
 import { Portal } from '../../../objects/portal/portal';
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
 import { gameObjectManager, renderer } from '../../global';
+import { getRandomPosition } from '../../utils/other/getRandomPosition';
 import { gameMap } from '../Configuration/GameMapConfiguration';
 import { createCommonEnemy } from './create/createCommonEnemy';
-import { getRandomPosition, getRandomVelocity } from './helpers/helpers';
+import { createEnemyEnergyBurner } from './create/createEnemyEnergyBurner';
+import { createEnemySpeedReduction } from './create/createEnemySpeedReduction';
 import {
   CommonEnemyOptions,
   EnemyEnergyBurnerOptions,
+  EnemySpeedReductionOptions,
   EnemyTypes,
 } from './types';
 
 export const saveZoneWidth = 300;
 
 export interface GenerateLevelOptions {
-  enemies: (CommonEnemyOptions | EnemyEnergyBurnerOptions)[];
+  enemies: (
+    | CommonEnemyOptions
+    | EnemyEnergyBurnerOptions
+    | EnemySpeedReductionOptions
+  )[];
   pointOrbCount: number;
   playerPosition?: 'start' | 'end';
   portals: {
     prevLevel?: boolean;
     nextLevel?: boolean;
-    prevTunel?: boolean;
-    nextTunel?: boolean;
+    prevTunnel?: boolean;
+    nextTunnel?: boolean;
   };
 }
 
 export function generateLevel({
-  enemies: enemyTypes,
+  enemies,
   pointOrbCount,
   playerPosition = 'start',
   portals,
@@ -82,53 +87,54 @@ export function generateLevel({
     );
     portalToNextLevel.create();
   }
-  if (portals.prevTunel) {
+  if (portals.prevTunnel) {
     const portalToPrevTunel = new Portal(
       {
         x: 150,
         y: 25,
       },
       { x: 300, y: 50 },
-      () => gameMap.prevTunel()
+      () => gameMap.prevTunnel()
     );
     portalToPrevTunel.create();
   }
-  if (portals.nextTunel) {
+  if (portals.nextTunnel) {
     const portalToNextTunel = new Portal(
       {
         x: 150,
         y: renderer.canvasSize.y - 25,
       },
       { x: 300, y: 50 },
-      () => gameMap.nextTunel()
+      () => gameMap.nextTunnel()
     );
     portalToNextTunel.create();
   }
 
   // Create enemies
-  enemyTypes.forEach((enemyTypeOptions) => {
-    switch (true) {
-      case enemyTypeOptions.type === EnemyTypes.CommonEnemy:
+  enemies.forEach((enemyTypeOptions) => {
+    switch (enemyTypeOptions.type) {
+      case EnemyTypes.CommonEnemy:
         Array.from({ length: enemyTypeOptions.count }).forEach(() => {
-          createCommonEnemy(enemyTypeOptions);
+          const commonEnemy = createCommonEnemy(enemyTypeOptions);
+          commonEnemy.create();
         });
         break;
 
-      case enemyTypeOptions.type === EnemyTypes.EnemyEnergyBurner:
+      case EnemyTypes.EnemyEnergyBurner:
         Array.from({ length: enemyTypeOptions.count }).forEach(() => {
-          const newEnemyEnergyBurner = new EnemyEnergyBurner({
-            position: getRandomPosition({
-              minX: saveZoneWidth + (enemyEnergyBurnerSize + 2),
-              maxX:
-                renderer._canvasSize.x -
-                saveZoneWidth -
-                (enemyEnergyBurnerSize + 2),
-              minY: enemyEnergyBurnerSize + 2,
-              maxY: renderer._canvasSize.y - (enemyEnergyBurnerSize + 2),
-            }),
-            velocity: getRandomVelocity(enemyTypeOptions.speed),
-          });
-          newEnemyEnergyBurner.create();
+          const enemyEnergyBurner = createEnemyEnergyBurner(
+            enemyTypeOptions.speed
+          );
+          enemyEnergyBurner.create();
+        });
+        break;
+
+      case EnemyTypes.EnemySpeedReduction:
+        Array.from({ length: enemyTypeOptions.count }).forEach(() => {
+          const enemySpeedReduction = createEnemySpeedReduction(
+            enemyTypeOptions.speed
+          );
+          enemySpeedReduction.create();
         });
         break;
 
@@ -152,8 +158,9 @@ export function generateLevel({
 }
 
 function clearLevel() {
-  gameObjectManager.enemies = [];
-  gameObjectManager.pointOrbs = [];
-  gameObjectManager.saveZones = [];
-  gameObjectManager.portals = [];
+  gameObjectManager.enemies.forEach((e) => e.delete());
+  gameObjectManager.pointOrbs.forEach((p) => p.delete());
+  gameObjectManager.saveZones.forEach((s) => s.delete());
+  gameObjectManager.portals.forEach((s) => s.delete());
+  gameObjectManager.projectiles.forEach((p) => p.delete());
 }

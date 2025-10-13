@@ -9,7 +9,7 @@ import { MMoveDirection } from '../../../core/modules/movement/MMoveDirection';
 import { drawCircle } from '../../../core/utils/canvas/drawCircle';
 import { Enemy } from '../../enemy/enemy';
 
-const freezeStatusId = Symbol();
+const freezeStatusId = Symbol('Rime stun');
 
 export class Rime extends Character {
   public override firstSkill: CommonSkill;

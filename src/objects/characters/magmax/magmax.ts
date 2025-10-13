@@ -2,7 +2,9 @@ import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
 import { MAGMAXCONFIG } from '../../../configs/characters/magmax.config';
 import { ToggleSkill } from '../../character/skills/toggleSkill';
-import { characterStatusIds } from '../../character/character.characteristics';
+
+const magmaxFirstSkillId = Symbol('Magmax speed boost');
+const magmaxSecondSkillId = Symbol('Magmax immortality');
 
 export class Magmax extends Character {
   public override firstSkill: ToggleSkill;
@@ -37,10 +39,7 @@ export class Magmax extends Character {
         this.color = MAGMAXCONFIG.color.firstSpellActive;
       },
       cancelSkill: () => {
-        this.color = MAGMAXCONFIG.color.default;
-        this.characteristics.MStatus.removeStatus(
-          characterStatusIds.speedBoost
-        );
+        this.removeSpeedBoost();
       },
       condition: () =>
         this.level.upgrades.firstSpell.current > 0 && !this.isDead,
@@ -67,32 +66,49 @@ export class Magmax extends Character {
         this.color = MAGMAXCONFIG.color.secondSpellActive;
       },
       cancelSkill: () => {
-        this.color = MAGMAXCONFIG.color.default;
-        this.characteristics.MStatus.removeStatus(characterStatusIds.immortal);
+        this.removeImmortality();
       },
       condition: () =>
         this.level.upgrades.secondSpell.current > 0 && !this.isDead,
     });
   }
 
-  private applySpeedBoost() {
+  public override die(): void {
+    super.die();
+
+    if (this.characteristics.MStatus.isAppliedStatusByName('immortal')) return;
+    this.removeSpeedBoost();
+    this.removeImmortality();
+  }
+
+  private applySpeedBoost(): void {
     const speedBoost =
       this.spellsUpgrades.first.speed[
         this.level.upgrades.firstSpell.current - 1
       ];
 
     this.characteristics.MStatus.applyStatus({
-      id: characterStatusIds.speedBoost,
+      id: magmaxFirstSkillId,
       name: 'speedBoost',
-      effects: { speed: speedBoost },
+      effects: { speed: { type: 'number', value: speedBoost } },
     });
   }
 
-  private applyImmortality() {
+  private removeSpeedBoost(): void {
+    this.color = MAGMAXCONFIG.color.default;
+    this.characteristics.MStatus.removeStatus(magmaxFirstSkillId);
+  }
+
+  private applyImmortality(): void {
     this.characteristics.MStatus.applyStatus({
-      id: characterStatusIds.immortal,
+      id: magmaxSecondSkillId,
       name: 'immortal',
-      effects: { speed: -9999 },
+      effects: { speed: { type: 'percentage', value: 0 } },
     });
+  }
+
+  private removeImmortality(): void {
+    this.color = MAGMAXCONFIG.color.default;
+    this.characteristics.MStatus.removeStatus(magmaxSecondSkillId);
   }
 }

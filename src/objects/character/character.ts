@@ -7,10 +7,7 @@ import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
 import { CharacterLevels } from './character.levels';
-import {
-  CharacterCharacteristics,
-  characterStatusIds,
-} from './character.characteristics';
+import { CharacterCharacteristics } from './character.characteristics';
 import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 
@@ -57,7 +54,7 @@ export abstract class Character extends GameObject<CircleShape> {
   }
 
   public die(): void {
-    if (this.characteristics.MStatus.isAppliedStatusById(characterStatusIds.immortal)) return;
+    if (this.characteristics.MStatus.isAppliedStatusByName('immortal')) return;
 
     this.isDead = true;
     this.characterMovement.block();

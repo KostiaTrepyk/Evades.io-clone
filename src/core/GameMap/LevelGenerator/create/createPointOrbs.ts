@@ -1,7 +1,7 @@
 import { PointOrb } from '../../../../objects/pointOrb/PointOrb';
 import { renderer } from '../../../global';
+import { getRandomPosition } from '../../../utils/other/getRandomPosition';
 import { saveZoneWidth } from '../LevelGenerator';
-import { getRandomPosition } from '../helpers/helpers';
 
 export function createPointOrbs(count: number): void {
   Array.from({ length: count }).forEach(() => {

@@ -41,8 +41,8 @@ export class Stage {
     if (level > 0) result.portals.prevLevel = true;
 
     if (level === 0) {
-      result.portals.nextTunel = true;
-      result.portals.prevTunel = true;
+      result.portals.nextTunnel = true;
+      result.portals.prevTunnel = true;
     }
 
     // Enemies

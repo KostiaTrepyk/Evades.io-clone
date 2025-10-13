@@ -15,9 +15,9 @@ const firstSkillEffectCooldown = 1;
 /** In seconds */
 const secondSkillEffectCooldown = 2;
 
-const firstSkillId = Symbol();
-const secondSkillSpeedId = Symbol();
-const secondSkillSizeId = Symbol();
+const firstSkillId = Symbol('Morph change move direction');
+const secondSkillSpeedId = Symbol('Morph size reduction');
+const secondSkillSizeId = Symbol('Morph speed reduction');
 
 export class Morph extends Character {
   override firstSkill: CommonSkill;

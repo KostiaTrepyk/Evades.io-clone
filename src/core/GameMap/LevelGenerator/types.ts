@@ -1,6 +1,7 @@
 export enum EnemyTypes {
   'CommonEnemy' = 'CommonEnemy',
   'EnemyEnergyBurner' = 'EnemyEnergyBurner',
+  'EnemySpeedReduction' = 'EnemySpeedReduction',
 }
 
 export interface CommonEnemyOptions {
@@ -12,6 +13,12 @@ export interface CommonEnemyOptions {
 
 export interface EnemyEnergyBurnerOptions {
   type: EnemyTypes.EnemyEnergyBurner;
+  count: number;
+  speed: number;
+}
+
+export interface EnemySpeedReductionOptions {
+  type: EnemyTypes.EnemySpeedReduction;
   count: number;
   speed: number;
 }
