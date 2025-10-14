@@ -2,7 +2,7 @@ import { HSLA } from '../../core/utils/hsla';
 
 export const ENEMYSPEEDREDUCTIONCONFIG = {
   color: { hue: 0 },
-  energySteals: 12,
+  slowRatio: 0.6,
   size: 50,
 
   auraRadius: 225,

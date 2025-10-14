@@ -64,7 +64,12 @@ export class EnemySpeedReduction extends Enemy {
     player.characteristics.MStatus.applyStatus({
       id: this.enemySpeedReductionEffectId,
       name: 'speedReduction',
-      effects: { speed: { type: 'percentage', value: 0.5 } },
+      effects: {
+        speed: {
+          type: 'percentage',
+          value: ENEMYSPEEDREDUCTIONCONFIG.slowRatio,
+        },
+      },
     });
   }
 

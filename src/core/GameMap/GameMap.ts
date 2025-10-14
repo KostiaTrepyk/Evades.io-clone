@@ -62,7 +62,7 @@ export class GameMap {
     );
   }
 
-  public getCurrentTunnelDetails(): {
+  public getPlayerDetails(): {
     currentLevel: number;
     tunnel: Tunnel;
   } {

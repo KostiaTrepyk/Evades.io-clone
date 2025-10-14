@@ -159,7 +159,16 @@ export class Morph extends Character {
     return projectile;
   }
 
-  // Получается мы комбиним moveDirection вектор с перпендикуляром и умножаем на ratio.
+  /* Это получается что мы берём два вектора: вектор направления игрока и его перпендикуляр вправо.
+      1)  Вектор направления игрока умножаем на ratio.x   <- это движение вперёд
+      2)  Перпендикуляр умножаем на ratio.y   <- это движение вправо
+      3)  Складываем оба вектора и получаем x, y но полученный вектор не нормализован.
+      4)  Считаем длину вектора.
+      5)  Делим x, y на длину вектора (длина вектора должна быть равна 1 что-бы не искажать скорость. 
+          Если будет равна например 2, тогда скорость будет в два раза выше).
+      
+      Ниже написано сокращенно.
+  */
   /** Compute projectile velocity in world coords from local ratio */
   private computeProjectileVelocity(
     moveDirection: MoveDirection,
@@ -173,7 +182,7 @@ export class Morph extends Character {
     let worldX = moveDirection.x * ratio.x + perp.x * ratio.y;
     let worldY = moveDirection.y * ratio.x + perp.y * ratio.y;
 
-    // normalize world direction to unit vector. Нормализует как-то но как я ещё не понял
+    // normalize world direction to unit vector.
     const worldLen = Math.hypot(worldX, worldY) || 1;
     const nx = worldX / worldLen;
     const ny = worldY / worldLen;

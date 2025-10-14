@@ -1,12 +1,11 @@
-import { PointOrb } from '../../../objects/pointOrb/PointOrb';
 import { Portal } from '../../../objects/portal/portal';
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
 import { gameObjectManager, renderer } from '../../global';
-import { getRandomPosition } from '../../utils/other/getRandomPosition';
 import { gameMap } from '../Configuration/GameMapConfiguration';
 import { createCommonEnemy } from './create/createCommonEnemy';
 import { createEnemyEnergyBurner } from './create/createEnemyEnergyBurner';
 import { createEnemySpeedReduction } from './create/createEnemySpeedReduction';
+import { createPointOrbs } from './create/createPointOrbs';
 import {
   CommonEnemyOptions,
   EnemyEnergyBurnerOptions,
@@ -88,7 +87,7 @@ export function generateLevel({
     portalToNextLevel.create();
   }
   if (portals.prevTunnel) {
-    const portalToPrevTunel = new Portal(
+    const portalToPrevTunnel = new Portal(
       {
         x: 150,
         y: 25,
@@ -96,10 +95,10 @@ export function generateLevel({
       { x: 300, y: 50 },
       () => gameMap.prevTunnel()
     );
-    portalToPrevTunel.create();
+    portalToPrevTunnel.create();
   }
   if (portals.nextTunnel) {
-    const portalToNextTunel = new Portal(
+    const portalToNextTunnel = new Portal(
       {
         x: 150,
         y: renderer.canvasSize.y - 25,
@@ -107,7 +106,7 @@ export function generateLevel({
       { x: 300, y: 50 },
       () => gameMap.nextTunnel()
     );
-    portalToNextTunel.create();
+    portalToNextTunnel.create();
   }
 
   // Create enemies
@@ -144,17 +143,7 @@ export function generateLevel({
   });
 
   // Create pointOrbs
-  Array.from({ length: pointOrbCount }).forEach(() => {
-    const pointOrb = new PointOrb(
-      getRandomPosition({
-        minX: saveZoneWidth + 50,
-        maxX: renderer._canvasSize.x - saveZoneWidth - 50,
-        minY: 50,
-        maxY: renderer._canvasSize.y - 50,
-      })
-    );
-    pointOrb.create();
-  });
+  createPointOrbs(pointOrbCount);
 }
 
 function clearLevel() {

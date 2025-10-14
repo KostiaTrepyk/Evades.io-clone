@@ -77,8 +77,8 @@ export class Magmax extends Character {
     super.die();
 
     if (this.characteristics.MStatus.isAppliedStatusByName('immortal')) return;
-    this.removeSpeedBoost();
-    this.removeImmortality();
+    this.firstSkill.deactivate();
+    this.secondSkill.deactivate();
   }
 
   private applySpeedBoost(): void {
