@@ -1,6 +1,6 @@
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 
-type Upgrade = {
+export type Upgrade = {
   current: number;
   max: number;
 };

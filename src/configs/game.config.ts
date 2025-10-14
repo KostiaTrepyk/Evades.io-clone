@@ -5,7 +5,6 @@ export const GAMECONFIG = {
   characterSlowRatio: 0.5,
 
   fpsGame: 180,
-  fpsUI: 20,
 
   /*   orders: {
     update: {

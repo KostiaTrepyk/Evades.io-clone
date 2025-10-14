@@ -13,6 +13,7 @@
         "MORPHCONFIG",
         "POINTORBCONFIG",
         "RIMECONFIG",
-        "SAVEZONECONFIG"
+        "SAVEZONECONFIG",
+        "UICONFIG"
     ]
 }
