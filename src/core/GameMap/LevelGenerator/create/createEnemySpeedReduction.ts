@@ -6,6 +6,7 @@ import { getRandomPosition } from '../../../utils/other/getRandomPosition';
 import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
 import { saveZoneWidth } from '../LevelGenerator';
 
+//FIX ME size - enemyEnergyBurnerSize??????????
 export function createEnemySpeedReduction(speed: number): EnemySpeedReduction {
   return new EnemySpeedReduction({
     position: getRandomPosition({

@@ -1,13 +1,14 @@
 import { GameObject } from '../../core/common/GameObject';
 import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
-import { EnemyCollision } from './enemy.collision';
 import { Velocity } from '../../core/types/Velocity';
 import { CircleShape } from '../../core/types/Shape';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { ENEMYCONFIG } from '../../configs/enemies/enemy.config';
 import { EnemyCharacteristics } from './enemy.characteristics';
 import { speedPerPoint } from '../../consts/consts';
+import { MEnemyMoveDefault } from '../../core/modules/movement/enemy/MEnemyMoveDefault';
+import { MEnemyMove } from '../../core/modules/movement/enemy/MEnemyMove.type';
 
 export interface EnemyParams {
   position: Position;
@@ -22,7 +23,7 @@ export class Enemy extends GameObject<CircleShape> {
   public readonly defaultSize: number;
   private _velocity: Velocity;
 
-  private Collision: EnemyCollision;
+  protected EnemyMovement: MEnemyMove;
   public Characteristics: EnemyCharacteristics;
 
   constructor(params: EnemyParams) {
@@ -41,7 +42,7 @@ export class Enemy extends GameObject<CircleShape> {
     this.defaultSize = size;
     this._velocity = velocity;
 
-    this.Collision = new EnemyCollision(this);
+    this.EnemyMovement = new MEnemyMoveDefault(this);
     this.Characteristics = new EnemyCharacteristics({ enemy: this });
   }
 
@@ -74,7 +75,7 @@ export class Enemy extends GameObject<CircleShape> {
   }
 
   public override afterUpdate(deltaTime: number): void {
-    this.Collision.afterUpdate(deltaTime);
+    this.EnemyMovement.afterUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D, hue?: number): void {

@@ -1,9 +1,10 @@
-import { Enemy } from './enemy';
-import { MCollisionWalls } from '../../core/modules/collision/MCollisionWalls';
-import { Collision } from '../../core/types/Collision';
-import { MCollisionSaveZone } from '../../core/modules/collision/MCollisionSaveZone';
+import { MCollisionSaveZone } from '../../collision/MCollisionSaveZone';
+import { MCollisionWalls } from '../../collision/MCollisionWalls';
+import { Collision } from '../../../types/Collision';
+import { Enemy } from '../../../../objects/enemy/enemy';
+import { MEnemyMove } from './MEnemyMove.type';
 
-export class EnemyCollision {
+export class MEnemyMoveDefault implements MEnemyMove {
   private enemy: Enemy;
   private mCollisionWalls: MCollisionWalls;
   private mCollisionSaveZone: MCollisionSaveZone;

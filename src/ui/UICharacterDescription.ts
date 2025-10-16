@@ -83,7 +83,7 @@ export class UICharacterDescription {
           });
         }
 
-        this.drawCharacteristic(ctx, {
+        this.drawCharacteristicSection(ctx, {
           player,
           value: (player.characteristics.getSpeed / speedPerPoint).toFixed(1),
           centeredPosition,
@@ -100,7 +100,7 @@ export class UICharacterDescription {
     const energySection: Section = {
       width: defaultSectionWidth,
       draw: (ctx, centeredPosition) => {
-        this.drawCharacteristic(ctx, {
+        this.drawCharacteristicSection(ctx, {
           player,
           value: `${player.characteristics.getEnergy.current.toFixed(0)}/${
             player.characteristics.getEnergy.max
@@ -119,7 +119,7 @@ export class UICharacterDescription {
     const regenerationSection: Section = {
       width: defaultSectionWidth,
       draw: (ctx, centeredPosition) => {
-        this.drawCharacteristic(ctx, {
+        this.drawCharacteristicSection(ctx, {
           player,
           value: player.characteristics.getEnergy.regeneration.toFixed(1),
           centeredPosition,
@@ -136,7 +136,7 @@ export class UICharacterDescription {
     const firstSkillSection: Section = {
       width: defaultSectionWidth,
       draw: (ctx, centeredPosition) => {
-        this.drawSkill(ctx, {
+        this.drawSkillSection(ctx, {
           player,
           centeredPosition,
           useHint: '[ J ]',
@@ -150,7 +150,7 @@ export class UICharacterDescription {
     const secondSkillSection: Section = {
       width: defaultSectionWidth,
       draw: (ctx, centeredPosition) => {
-        this.drawSkill(ctx, {
+        this.drawSkillSection(ctx, {
           player,
           centeredPosition,
           useHint: '[ K ]',
@@ -247,7 +247,7 @@ export class UICharacterDescription {
     );
   }
 
-  private drawSkill(
+  private drawSkillSection(
     ctx: CanvasRenderingContext2D,
     params: {
       player: Character;
@@ -304,7 +304,7 @@ export class UICharacterDescription {
     }
   }
 
-  private drawCharacteristic(
+  private drawCharacteristicSection(
     ctx: CanvasRenderingContext2D,
     params: {
       player: Character;

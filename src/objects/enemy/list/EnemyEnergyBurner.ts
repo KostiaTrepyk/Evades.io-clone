@@ -32,24 +32,28 @@ export class EnemyEnergyBurner extends Enemy {
     super.onUpdate(deltaTime);
 
     const player = gameObjectManager.player;
+    if (player === undefined) return;
 
-    if (!player) return;
+    const size = ENERGYBURNERENEMYCONFIG.auraRadius * 2;
+    const scale = this.Characteristics.sizeScale;
 
     const aura = new GameObject(this.position, {
       shape: 'circle',
-      size: ENERGYBURNERENEMYCONFIG.auraRadius * 2,
+      size: size * scale,
     });
 
-    // FIX ME Работает только последний.
-    if (doItemsCollide(player, aura).doesCollide === true) {
-      this.applyStealEnergyEffect(player);
-    } else this.removeStealEnergyEffect(player);
+    const { doesCollide } = doItemsCollide(player, aura);
+
+    if (doesCollide === true) this.applyStealEnergyEffect(player);
+    else this.removeStealEnergyEffect(player);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
+    const size = ENERGYBURNERENEMYCONFIG.auraRadius * 2;
+    const scale = this.Characteristics.sizeScale;
     drawCircle(ctx, {
       position: this.position,
-      size: ENERGYBURNERENEMYCONFIG.auraRadius * 2,
+      size: size * scale,
       fill: { color: ENERGYBURNERENEMYCONFIG.auraColor },
     });
 

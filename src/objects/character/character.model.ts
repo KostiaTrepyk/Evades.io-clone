@@ -1,10 +1,10 @@
 import { Position } from '../../core/types/Position';
-import { GAMECONFIG } from '../../configs/game.config';
 import { Character } from './character';
 import { drawRectangle } from '../../core/utils/canvas/drawRectangle';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { drawText } from '../../core/utils/canvas/drawText';
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
+import { UICONFIG } from '../../configs/ui.config';
 
 export const RenderCharacterModel = {
   showMana: (ctx: CanvasRenderingContext2D, character: Character) => {
@@ -29,14 +29,14 @@ export const RenderCharacterModel = {
         y: position.y,
       },
       size: { height: manaBarHeight, width: manaBarWidth * manaPercentage },
-      fill: { color: GAMECONFIG.colors.ui.mana.fill },
+      fill: { color: UICONFIG.colors.mana.fill },
     });
     drawRectangle(ctx, {
       position,
       size: { height: manaBarHeight, width: manaBarWidth },
       stroke: {
-        color: GAMECONFIG.colors.ui.mana.stroke.color,
-        width: GAMECONFIG.colors.ui.mana.stroke.width,
+        color: UICONFIG.colors.mana.stroke.color,
+        width: UICONFIG.colors.mana.stroke.width,
       },
     });
   },
