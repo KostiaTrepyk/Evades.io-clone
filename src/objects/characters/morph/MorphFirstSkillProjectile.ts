@@ -53,6 +53,9 @@ export class MorphFirstSkillProjectile extends Projectile {
   }
 
   private collisionWithEnemy(enemy: Enemy, projectile: Projectile): void {
+    // Skip if enemy has disabled statuses.
+    if (enemy.isStatusesDisabled === true) return;
+
     const affectedEnemy = this.player.enemyEffectedByFirstSkill.find(
       ({ enemy: effectedEnemy }) => effectedEnemy === enemy
     );
@@ -67,7 +70,7 @@ export class MorphFirstSkillProjectile extends Projectile {
       });
     }
 
-    enemy.Characteristics.MStatus.applyStatus({
+    enemy.EnemyStatus.MStatus.applyStatus({
       id: this.statusId,
       name: 'changeDirection',
     });

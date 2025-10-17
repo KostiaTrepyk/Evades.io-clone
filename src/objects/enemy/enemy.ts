@@ -5,7 +5,7 @@ import { Velocity } from '../../core/types/Velocity';
 import { CircleShape } from '../../core/types/Shape';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { ENEMYCONFIG } from '../../configs/enemies/enemy.config';
-import { EnemyCharacteristics } from './enemy.characteristics';
+import { EnemyStatus } from './enemy.status';
 import { speedPerPoint } from '../../consts/consts';
 import { MEnemyMoveDefault } from '../../core/modules/movement/enemy/MEnemyMoveDefault';
 import { MEnemyMove } from '../../core/modules/movement/enemy/MEnemyMove.type';
@@ -14,7 +14,7 @@ export interface EnemyParams {
   position: Position;
   size: number;
   velocity: Velocity;
-  color?: { hue: number };
+  color?: HSLA;
 }
 
 export class Enemy extends GameObject<CircleShape> {
@@ -24,43 +24,39 @@ export class Enemy extends GameObject<CircleShape> {
   private _velocity: Velocity;
 
   protected EnemyMovement: MEnemyMove;
-  public Characteristics: EnemyCharacteristics;
+  public EnemyStatus: EnemyStatus;
 
   constructor(params: EnemyParams) {
     const { position, size, velocity, color } = params;
 
     super(position, { shape: 'circle', size });
 
-    const enemyColor = ENEMYCONFIG.defaultColor.clone();
-    if (color !== undefined) {
-      enemyColor.setHue = color.hue;
-      enemyColor.setSaturation = 100;
-    }
-
+    const enemyColor = color || ENEMYCONFIG.defaultColor.clone();
     this.defaultColor = enemyColor.clone();
     this.currentColor = enemyColor.clone();
+
     this.defaultSize = size;
     this._velocity = velocity;
 
     this.EnemyMovement = new MEnemyMoveDefault(this);
-    this.Characteristics = new EnemyCharacteristics({ enemy: this });
+    this.EnemyStatus = new EnemyStatus({ enemy: this });
   }
 
   public override onUpdate(deltaTime: number): void {
-    this.Characteristics.onUpdate();
+    this.EnemyStatus.onUpdate();
 
-    this.currentColor = this.Characteristics.getColor();
+    this.currentColor = this.EnemyStatus.getColor();
 
     // If is not freezed, update position
     if (
-      this.Characteristics.MStatus.isAppliedStatusByName('stunned') === false
+      this.EnemyStatus.MStatus.isAppliedStatusByName('stunned') === false
     ) {
       this.prevPosition = { x: this.position.x, y: this.position.y };
 
       // Гениально посчитал velocity. Переделать нужно
       const defaultSpeed =
         Math.abs(this.velocity.x) + Math.abs(this.velocity.y);
-      const currentSpeed = defaultSpeed + this.Characteristics.speedChange;
+      const currentSpeed = defaultSpeed + this.EnemyStatus.speedChange;
 
       const currentVelocity = {
         x: (this.velocity.x / defaultSpeed) * currentSpeed,
@@ -71,7 +67,7 @@ export class Enemy extends GameObject<CircleShape> {
       this.position.y += currentVelocity.y * speedPerPoint * deltaTime;
     }
 
-    this.objectModel.size = this.defaultSize * this.Characteristics.sizeScale;
+    this.objectModel.size = this.defaultSize * this.EnemyStatus.sizeScale;
   }
 
   public override afterUpdate(deltaTime: number): void {
@@ -96,5 +92,9 @@ export class Enemy extends GameObject<CircleShape> {
 
   public get velocity(): Velocity {
     return { ...this._velocity };
+  }
+
+  get isStatusesDisabled(): boolean {
+    return this.EnemyStatus.MStatus.isDisabled;
   }
 }

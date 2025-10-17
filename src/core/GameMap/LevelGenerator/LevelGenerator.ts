@@ -3,11 +3,13 @@ import { SaveZone } from '../../../objects/saveZone/SaveZone';
 import { gameObjectManager, renderer } from '../../global';
 import { gameMap } from '../Configuration/GameMapConfiguration';
 import { createCommonEnemy } from './create/createCommonEnemy';
+import { createEnemyBorder } from './create/createEnemyBorder';
 import { createEnemyEnergyBurner } from './create/createEnemyEnergyBurner';
 import { createEnemySpeedReduction } from './create/createEnemySpeedReduction';
 import { createPointOrbs } from './create/createPointOrbs';
 import {
   CommonEnemyOptions,
+  EnemyBorderOptions,
   EnemyEnergyBurnerOptions,
   EnemySpeedReductionOptions,
   EnemyTypes,
@@ -20,6 +22,7 @@ export interface GenerateLevelOptions {
     | CommonEnemyOptions
     | EnemyEnergyBurnerOptions
     | EnemySpeedReductionOptions
+    | EnemyBorderOptions
   )[];
   pointOrbCount: number;
   playerPosition?: 'start' | 'end';
@@ -133,6 +136,17 @@ export function generateLevel({
           const enemySpeedReduction = createEnemySpeedReduction(
             enemyTypeOptions.speed
           );
+          enemySpeedReduction.create();
+        });
+        break;
+
+      case EnemyTypes.EnemyBorder:
+        Array.from({ length: enemyTypeOptions.count }).forEach((_, i) => {
+          const enemySpeedReduction = createEnemyBorder({
+            speed: enemyTypeOptions.speed,
+            count: enemyTypeOptions.count,
+            order: i,
+          });
           enemySpeedReduction.create();
         });
         break;

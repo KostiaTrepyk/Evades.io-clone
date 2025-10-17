@@ -53,6 +53,9 @@ export class MorphSecondSkillProjectile extends Projectile {
   }
 
   private collisionWithEnemy(enemy: Enemy, projectile: Projectile): void {
+    // Skip if enemy has disabled statuses.
+    if (enemy.isStatusesDisabled === true) return;
+
     const affectedEnemy = this.player.enemyEffectedBySecondSkill.find(
       ({ enemy: effectedEnemy }) => effectedEnemy === enemy
     );
@@ -70,12 +73,12 @@ export class MorphSecondSkillProjectile extends Projectile {
     const enemyHalfSpeed =
       (Math.abs(enemy.velocity.x) + Math.abs(enemy.velocity.y)) / 2;
 
-    enemy.Characteristics.MStatus.applyStatus({
+    enemy.EnemyStatus.MStatus.applyStatus({
       id: this.statusIds.size,
       name: 'sizeReduction',
       effects: { sizeScale: -0.5 },
     });
-    enemy.Characteristics.MStatus.applyStatus({
+    enemy.EnemyStatus.MStatus.applyStatus({
       id: this.statusIds.speed,
       name: 'speedReduction',
       effects: { speed: -enemyHalfSpeed },

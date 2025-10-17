@@ -11,6 +11,9 @@ export interface Status<
 
 export interface MStatusParams<StatusName extends string> {
   availableStatusNames: readonly StatusName[];
+  /** Disables all statuses and color changes.
+   * @default false */
+  isDisableAllStatuses?: boolean;
 }
 
 export class MStatus<
@@ -19,18 +22,38 @@ export class MStatus<
 > {
   private _availableStatusNames: readonly StatusName[];
   private _statuses: Status<StatusName, Effect>[];
+  private _isDisabledAllStatuses: boolean;
 
   constructor(params: MStatusParams<StatusName>) {
-    const { availableStatusNames } = params;
+    const { availableStatusNames, isDisableAllStatuses } = params;
 
     this._availableStatusNames = availableStatusNames;
+    this._isDisabledAllStatuses = isDisableAllStatuses || false;
     this._statuses = [];
   }
 
-  // FIX ME Передаём ссылку на объект. Опасно! Но если использовать structuredClone, тогда не будет работать this.removeStatus
-  public applyStatus(status: Status<StatusName, Effect>): void {
-    if (this.isAppliedStatusById(status.id)) return;
+  /** Enables application of new statuses.  */
+  public enable(): void {
+    this._isDisabledAllStatuses = false;
+  }
+
+  /** Clears all statuses and disables the application of new statuses.  */
+  public disable(): void {
+    this._isDisabledAllStatuses = true;
+    this._statuses = [];
+  }
+
+  get isDisabled(): boolean {
+    return this._isDisabledAllStatuses;
+  }
+
+  /** Returns true if the status is applied, false otherwise. */
+  public applyStatus(status: Status<StatusName, Effect>): boolean {
+    if (this._isDisabledAllStatuses === true) return false;
+    if (this.isAppliedStatusById(status.id)) return false;
+
     this._statuses.push(status);
+    return true;
   }
 
   public removeStatus(id: Symbol): void {

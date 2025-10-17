@@ -24,7 +24,7 @@ export class EnemyEnergyBurner extends Enemy {
       position,
       size: ENERGYBURNERENEMYCONFIG.size,
       velocity,
-      color: { hue: ENERGYBURNERENEMYCONFIG.color.hue },
+      color: ENERGYBURNERENEMYCONFIG.color,
     });
   }
 
@@ -35,7 +35,7 @@ export class EnemyEnergyBurner extends Enemy {
     if (player === undefined) return;
 
     const size = ENERGYBURNERENEMYCONFIG.auraRadius * 2;
-    const scale = this.Characteristics.sizeScale;
+    const scale = this.EnemyStatus.sizeScale;
 
     const aura = new GameObject(this.position, {
       shape: 'circle',
@@ -50,7 +50,7 @@ export class EnemyEnergyBurner extends Enemy {
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
     const size = ENERGYBURNERENEMYCONFIG.auraRadius * 2;
-    const scale = this.Characteristics.sizeScale;
+    const scale = this.EnemyStatus.sizeScale;
     drawCircle(ctx, {
       position: this.position,
       size: size * scale,

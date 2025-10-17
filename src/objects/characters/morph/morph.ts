@@ -78,7 +78,7 @@ export class Morph extends Character {
           timestamp + firstSkillEffectCooldown * 1000 > time.timestamp;
         if (!shouldBeCleared) {
           enemy.currentColor = enemy.defaultColor.clone();
-          enemy.Characteristics.MStatus.removeStatus(firstSkillId);
+          enemy.EnemyStatus.MStatus.removeStatus(firstSkillId);
         }
         return shouldBeCleared;
       }
@@ -91,8 +91,8 @@ export class Morph extends Character {
           timestamp + secondSkillEffectCooldown * 1000 > time.timestamp;
         if (!shouldBeCleared) {
           enemy.currentColor = enemy.defaultColor.clone();
-          enemy.Characteristics.MStatus.removeStatus(secondSkillSpeedId);
-          enemy.Characteristics.MStatus.removeStatus(secondSkillSizeId);
+          enemy.EnemyStatus.MStatus.removeStatus(secondSkillSpeedId);
+          enemy.EnemyStatus.MStatus.removeStatus(secondSkillSizeId);
         }
         return shouldBeCleared;
       }

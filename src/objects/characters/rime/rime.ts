@@ -66,7 +66,7 @@ export class Rime extends Character {
 
       if (!shouldBeCleared) {
         enemy.currentColor = enemy.defaultColor.clone();
-        enemy.Characteristics.MStatus.removeStatus(freezeStatusId);
+        enemy.EnemyStatus.MStatus.removeStatus(freezeStatusId);
       }
       return shouldBeCleared;
     });
@@ -133,6 +133,9 @@ export class Rime extends Character {
     );
 
     enemiesToFreeze.forEach((enemyToFreeze) => {
+      // Skip if enemy has disabled statuses.
+      if (enemyToFreeze.isStatusesDisabled === true) return;
+
       const freezedEnemy = this.freezedEnemies.find(
         ({ enemy }) => enemy === enemyToFreeze
       );
@@ -142,7 +145,7 @@ export class Rime extends Character {
           enemy: enemyToFreeze,
           timestamp: time.timestamp,
         });
-        enemyToFreeze.Characteristics.MStatus.applyStatus({
+        enemyToFreeze.EnemyStatus.MStatus.applyStatus({
           id: freezeStatusId,
           name: 'stunned',
         });

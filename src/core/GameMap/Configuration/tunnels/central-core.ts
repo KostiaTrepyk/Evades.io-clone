@@ -45,11 +45,21 @@ const secondStage: Stage = new Stage(
         size: { min: 45, max: 45 },
         speed: 8,
       },
+      {
+        type: EnemyTypes.EnemyBorder,
+        count: 5,
+        speed: 8,
+      },
     ],
   },
   [
     {
       type: EnemyTypes.CommonEnemy,
+      count: { perLevel: 0.4, max: 8 },
+      speed: { perLevel: 0.5, max: 20 },
+    },
+    {
+      type: EnemyTypes.EnemyBorder,
       count: { perLevel: 0.4, max: 8 },
       speed: { perLevel: 0.5, max: 20 },
     },

@@ -26,21 +26,24 @@ interface Effect {
   sizeScale?: number;
 }
 
-export interface EnemyCharacteristicsParams {
+export interface EnemyStatusParams {
   enemy: Enemy;
 }
 
-export class EnemyCharacteristics {
+export class EnemyStatus {
   private Enemy: Enemy;
   private _sizeScale: number;
   private _speedChange: number;
 
   public MStatus: MStatus<StatusName, Effect>;
 
-  constructor(params: EnemyCharacteristicsParams) {
+  constructor(params: EnemyStatusParams) {
     const { enemy } = params;
 
-    this.MStatus = new MStatus({ availableStatusNames: statusNames });
+    this.MStatus = new MStatus({
+      availableStatusNames: statusNames,
+      isDisableAllStatuses: false,
+    });
 
     this.Enemy = enemy;
     this._sizeScale = 1;
