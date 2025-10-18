@@ -1,5 +1,5 @@
 import { POINTORBCONFIG } from '../../configs/pointOrb.config';
-import { GameObject } from '../../core/common/GameObject';
+import { GameObject } from '../../core/common/GameObject/GameObject';
 import { Position } from '../../core/types/Position';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';
@@ -14,6 +14,7 @@ export class PointOrb extends GameObject<'circle'> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
+    super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
       size: this.objectModel.size,

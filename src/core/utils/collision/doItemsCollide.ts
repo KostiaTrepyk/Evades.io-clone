@@ -1,4 +1,4 @@
-import { GameObject } from '../../common/GameObject';
+import { GameObject } from '../../common/GameObject/GameObject';
 
 interface DoItemsCollideReturn {
   doesCollide: boolean;

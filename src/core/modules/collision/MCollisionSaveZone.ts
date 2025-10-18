@@ -1,5 +1,5 @@
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
-import { GameObject } from '../../common/GameObject';
+import { GameObject } from '../../common/GameObject/GameObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Collision } from '../../types/Collision';

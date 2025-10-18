@@ -1,5 +1,5 @@
 import { PointOrb } from '../../../objects/pointOrb/PointOrb';
-import { GameObject } from '../../common/GameObject';
+import { GameObject } from '../../common/GameObject/GameObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Shape } from '../../types/Shape';

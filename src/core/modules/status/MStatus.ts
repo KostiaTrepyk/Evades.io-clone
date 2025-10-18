@@ -43,10 +43,6 @@ export class MStatus<
     this._statuses = [];
   }
 
-  get isDisabled(): boolean {
-    return this._isDisabledAllStatuses;
-  }
-
   /** Returns true if the status is applied, false otherwise. */
   public applyStatus(status: Status<StatusName, Effect>): boolean {
     if (this._isDisabledAllStatuses === true) return false;
@@ -75,5 +71,9 @@ export class MStatus<
 
   public get availableStatusNames() {
     return this._availableStatusNames;
+  }
+
+  get isDisabled(): boolean {
+    return this._isDisabledAllStatuses;
   }
 }

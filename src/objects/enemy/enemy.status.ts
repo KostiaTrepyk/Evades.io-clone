@@ -1,3 +1,4 @@
+import { Module } from '../../core/common/Module';
 import { MStatus } from '../../core/modules/status/MStatus';
 import { HSLA } from '../../core/utils/hsla';
 import { Enemy } from './enemy';
@@ -30,7 +31,7 @@ export interface EnemyStatusParams {
   enemy: Enemy;
 }
 
-export class EnemyStatus {
+export class EnemyStatus implements Module {
   private Enemy: Enemy;
   private _sizeScale: number;
   private _speedChange: number;
@@ -50,7 +51,7 @@ export class EnemyStatus {
     this._speedChange = 0;
   }
 
-  public onUpdate(): void {
+  public beforeUpdate(): void {
     this._speedChange = this.MStatus.statuses.reduce((acc, status) => {
       if (status.effects === undefined) return acc;
       if (status.effects.speed === undefined) return acc;

@@ -1,7 +1,7 @@
 import { CircleShape, Shapes } from '../../core/types/Shape';
 import { Position } from '../../core/types/Position';
 import { gameObjectManager } from '../../core/global';
-import { GameObject } from '../../core/common/GameObject';
+import { GameObject } from '../../core/common/GameObject/GameObject';
 import { doItemsCollide } from '../../core/utils/collision/doItemsCollide';
 import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
@@ -36,6 +36,44 @@ export abstract class Character extends GameObject<CircleShape> {
     this.isDead = false;
   }
 
+  public override beforeUpdate(deltaTime: number): void {
+    // Должно быть первым что-бы правильно просчитать скорость игрока и эго эффекты
+    this.characteristics.beforeUpdate(deltaTime);
+  }
+
+  public override onUpdate(deltaTime: number): void {
+    // Update death timer
+    if (this.isDead) {
+      if (this.timeToDeath === undefined) return;
+
+      this.timeToDeath -= deltaTime;
+      if (this.timeToDeath <= 0) {
+        // FIX ME GAME OVER не сделано еще!!!!!!!!!!
+        // this.delete();
+        this.revive();
+      }
+    }
+
+    this.firstSkill.onUpdate(deltaTime);
+    this.secondSkill.onUpdate(deltaTime);
+
+    this.characterMovement.onUpdate(deltaTime);
+  }
+
+  public override afterUpdate(deltaTime: number): void {
+    this.collision.afterUpdate(deltaTime);
+  }
+
+  public override onRender(ctx: CanvasRenderingContext2D): void {
+    RenderCharacterModel.showMana(ctx, this);
+
+    if (this.isDead) {
+      RenderCharacterModel.dead(ctx, this);
+    } else {
+      RenderCharacterModel.default(ctx, this);
+    }
+  }
+
   public override create(): void {
     super.create();
     this.level.init();
@@ -59,41 +97,5 @@ export abstract class Character extends GameObject<CircleShape> {
     this.isDead = true;
     this.characterMovement.block();
     this.timeToDeath = 3;
-  }
-
-  public override onUpdate(deltaTime: number): void {
-    // Update death timer
-    if (this.isDead) {
-      if (this.timeToDeath === undefined) return;
-
-      this.timeToDeath -= deltaTime;
-      if (this.timeToDeath <= 0) {
-        // FIX ME GAME OVER не сделано еще!!!!!!!!!!
-        // this.delete();
-        this.revive();
-      }
-    }
-
-    // Должно быть первым что-бы правильно просчитать скорость игрока и эго эффекты
-    this.characteristics.onUpdate(deltaTime);
-
-    this.firstSkill.onUpdate(deltaTime);
-    this.secondSkill.onUpdate(deltaTime);
-
-    this.characterMovement.onUpdate(deltaTime);
-  }
-
-  public override afterUpdate(deltaTime: number): void {
-    this.collision.afterUpdate(deltaTime);
-  }
-
-  public override onRender(ctx: CanvasRenderingContext2D): void {
-    RenderCharacterModel.showMana(ctx, this);
-
-    if (this.isDead) {
-      RenderCharacterModel.dead(ctx, this);
-    } else {
-      RenderCharacterModel.default(ctx, this);
-    }
   }
 }

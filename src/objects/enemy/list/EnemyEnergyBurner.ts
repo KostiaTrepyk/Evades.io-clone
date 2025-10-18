@@ -1,4 +1,4 @@
-import { GameObject } from '../../../core/common/GameObject';
+import { GameObject } from '../../../core/common/GameObject/GameObject';
 import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
 import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';

@@ -1,4 +1,7 @@
-export abstract class Module {
-  public abstract onUpdate?(deltaTime: number): void;
-  public abstract afterUpdate?(deltaTime: number): void;
+import { GameObjectLoopMethods } from './GameObject/GameObjectLoopMethods';
+
+export abstract class Module implements GameObjectLoopMethods {
+  beforeUpdate?(deltaTime: number): void;
+  onUpdate?(deltaTime: number): void;
+  afterUpdate?(deltaTime: number): void;
 }

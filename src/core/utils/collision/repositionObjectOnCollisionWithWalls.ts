@@ -1,4 +1,4 @@
-import { GameObject } from '../../common/GameObject';
+import { GameObject } from '../../common/GameObject/GameObject';
 import { renderer } from '../../global';
 import { Collision } from '../../types/Collision';
 import { Shape } from '../../types/Shape';

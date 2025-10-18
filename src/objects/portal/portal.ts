@@ -1,4 +1,4 @@
-import { GameObject } from '../../core/common/GameObject';
+import { GameObject } from '../../core/common/GameObject/GameObject';
 import { doItemsCollide } from '../../core/utils/collision/doItemsCollide';
 import { gameObjectManager } from '../../core/global';
 import { Position } from '../../core/types/Position';
@@ -18,6 +18,7 @@ export class Portal extends GameObject<'rectangle'> {
   }
 
   public override onUpdate(deltaTime: number): void {
+    super.onUpdate?.(deltaTime);
     // Если существует игрок, проверяем на коллизию.
     if (gameObjectManager.player !== undefined) {
       const { doesCollide } = doItemsCollide(this, gameObjectManager.player);
@@ -26,6 +27,7 @@ export class Portal extends GameObject<'rectangle'> {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
+    super.onRender?.(ctx);
     drawRectangle(ctx, {
       position: this.position,
       size: { height: this.objectModel.size.y, width: this.objectModel.size.x },

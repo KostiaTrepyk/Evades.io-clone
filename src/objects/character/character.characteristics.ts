@@ -1,5 +1,6 @@
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { speedPerPoint } from '../../consts/consts';
+import { Module } from '../../core/common/Module';
 import { MStatus } from '../../core/modules/status/MStatus';
 import { CharacterLevels } from './character.levels';
 
@@ -22,7 +23,7 @@ interface Effect {
   };
 }
 
-export class CharacterCharacteristics {
+export class CharacterCharacteristics implements Module {
   private readonly characterLevels: CharacterLevels;
 
   private speed: number;
@@ -43,8 +44,10 @@ export class CharacterCharacteristics {
 
   // FIX ME Не уверен что нужно каждый фрейм обновлять
   // FIX ME Читабельность говно. Ещё и странно работает.
-  public onUpdate(deltaTime: number): void {
+  public beforeUpdate(deltaTime: number): void {
     const upgrades = this.characterLevels.upgrades;
+    console.log(upgrades);
+    
     const characteristics = CHARACTERCONFIG.characteristics;
 
     const defaultSpeed = characteristics.default.speed;

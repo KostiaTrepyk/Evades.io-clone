@@ -1,5 +1,6 @@
-import { userInput } from '../../global';
-import { MoveDirection } from '../../types/moveDirection';
+import { Module } from '../../../common/Module';
+import { userInput } from '../../../global';
+import { MoveDirection } from '../../../types/moveDirection';
 
 /**
  * Handles calculation and normalization of movement direction based on user input.
@@ -19,7 +20,7 @@ import { MoveDirection } from '../../types/moveDirection';
  * const direction = moveDir.moveDirection; // { x: number, y: number }
  * ```
  */
-export class MMoveDirection {
+export class MMoveDirection implements Module {
   private _moveDirection: MoveDirection;
 
   constructor() {
@@ -27,7 +28,8 @@ export class MMoveDirection {
     this._moveDirection = { x: 1, y: 0 };
   }
 
-  public onUpdate(): void {
+  /** Should be applied before player movement. */
+  public beforeUpdate(): void {
     this.calculateMovementDirection();
   }
 

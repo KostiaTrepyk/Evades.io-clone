@@ -4,7 +4,7 @@ import { Enemy } from '../objects/enemy/enemy';
 import { PointOrb } from '../objects/pointOrb/PointOrb';
 import { Portal } from '../objects/portal/portal';
 import { SaveZone } from '../objects/saveZone/SaveZone';
-import { GameObject } from './common/GameObject';
+import { GameObject } from './common/GameObject/GameObject';
 import { Shape } from './types/Shape';
 
 /* Хочу переделать что-бы просто указывать очерёдность рендера и апдейта в файле кфг.
@@ -31,14 +31,22 @@ export class GameObjectManager {
   }
 
   public updateAll(deltaTime: number): void {
+    // Before update    
+    this.player?.beforeUpdate(deltaTime);
+    this.projectiles.forEach((projectile) => projectile.beforeUpdate?.(deltaTime));
+    this.enemies.forEach((enemy) => enemy.beforeUpdate?.(deltaTime));
+    this.portals.forEach((portal) => portal.beforeUpdate?.(deltaTime));
+    
+    // Update
     this.player?.onUpdate(deltaTime);
     this.projectiles.forEach((projectile) => projectile.onUpdate(deltaTime));
     this.enemies.forEach((enemy) => enemy.onUpdate(deltaTime));
     this.portals.forEach((portal) => portal.onUpdate(deltaTime));
-
-    this.player?.afterUpdate(deltaTime);
+    
+    // After update
+    this.player?.afterUpdate?.(deltaTime);
     this.projectiles.forEach((projectile) => projectile.afterUpdate?.(deltaTime))
-    this.enemies.forEach((enemy) => enemy.afterUpdate(deltaTime));
+    this.enemies.forEach((enemy) => enemy.afterUpdate?.(deltaTime));
     this.portals.forEach((portal) => portal.afterUpdate?.(deltaTime));
   }
 

@@ -1,4 +1,4 @@
-import { GameObject } from '../../core/common/GameObject';
+import { GameObject } from '../../core/common/GameObject/GameObject';
 import { CircleShape } from '../../core/types/Shape';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';
@@ -27,11 +27,13 @@ export class Projectile extends GameObject<CircleShape> {
   }
 
   public override onUpdate(deltaTime: number): void {
+    super.onUpdate?.(deltaTime);
     this.position.x += this.velocity.x * speedPerPoint * deltaTime;
     this.position.y += this.velocity.y * speedPerPoint * deltaTime;
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
+    super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
       size: this.objectModel.size,

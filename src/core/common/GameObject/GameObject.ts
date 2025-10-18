@@ -1,6 +1,7 @@
-import { gameObjectManager } from '../global';
-import { Position } from '../types/Position';
-import { CircleShape, RectangleShape, Shape } from '../types/Shape';
+import { gameObjectManager } from '../../global';
+import { Position } from '../../types/Position';
+import { CircleShape, RectangleShape, Shape } from '../../types/Shape';
+import { GameObjectLoopMethods } from './GameObjectLoopMethods';
 
 export type CircleProperties = { shape: CircleShape; size: number };
 export type RectangleProperties = {
@@ -15,7 +16,7 @@ export type ObjectModel<S extends Shape> = S extends CircleShape
   : never;
 
 /** Каждый объект может быть только шаром либо прямоугольником. */
-export class GameObject<S extends Shape> {
+export class GameObject<S extends Shape> implements GameObjectLoopMethods {
   public prevPosition: Position;
   public position: Position;
   public objectModel: ObjectModel<S>;
@@ -26,6 +27,11 @@ export class GameObject<S extends Shape> {
     this.objectModel = objectModel;
   }
 
+  public beforeUpdate?(deltaTime: number): void;
+  public onUpdate?(deltaTime: number): void;
+  public afterUpdate?(deltaTime: number): void;
+  public onRender?(ctx: CanvasRenderingContext2D): void;
+
   public create(): void {
     gameObjectManager.addGameObject(this);
   }
@@ -33,8 +39,4 @@ export class GameObject<S extends Shape> {
   public delete(): void {
     gameObjectManager.removeGameObject(this);
   }
-
-  public onUpdate?(deltaTime: number): void;
-  public afterUpdate?(deltaTime: number): void;
-  public onRender?(ctx: CanvasRenderingContext2D): void;
 }

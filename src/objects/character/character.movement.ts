@@ -1,8 +1,9 @@
 import { userInput } from '../../core/global';
 import { GAMECONFIG } from '../../configs/game.config';
 import { Character } from './character';
+import { Module } from '../../core/common/Module';
 
-export class CharacterMovement {
+export class CharacterMovement implements Module {
   private readonly player: Character;
   private isBlocked: boolean;
 

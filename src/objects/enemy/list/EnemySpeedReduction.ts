@@ -1,5 +1,5 @@
 import { ENEMYSPEEDREDUCTIONCONFIG } from '../../../configs/enemies/enemySpeedReductionconfig';
-import { GameObject } from '../../../core/common/GameObject';
+import { GameObject } from '../../../core/common/GameObject/GameObject';
 import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';

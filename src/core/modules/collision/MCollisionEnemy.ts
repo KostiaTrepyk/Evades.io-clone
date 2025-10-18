@@ -1,5 +1,5 @@
 import { Enemy } from '../../../objects/enemy/enemy';
-import { GameObject } from '../../common/GameObject';
+import { GameObject } from '../../common/GameObject/GameObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Shape } from '../../types/Shape';

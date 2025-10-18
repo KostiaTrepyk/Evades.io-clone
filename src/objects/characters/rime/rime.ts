@@ -1,11 +1,11 @@
-import { GameObject } from '../../../core/common/GameObject';
+import { GameObject } from '../../../core/common/GameObject/GameObject';
 import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
 import { gameObjectManager, time } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
 import { CommonSkill } from '../../character/skills/commonSkill';
 import { RIMECONFIG } from '../../../configs/characters/rime.config';
-import { MMoveDirection } from '../../../core/modules/movement/MMoveDirection';
+import { MMoveDirection } from '../../../core/modules/movement/player/MMoveDirection';
 import { drawCircle } from '../../../core/utils/canvas/drawCircle';
 import { Enemy } from '../../enemy/enemy';
 
@@ -56,6 +56,11 @@ export class Rime extends Character {
     });
   }
 
+  public override beforeUpdate(deltaTime: number): void {
+    super.beforeUpdate(deltaTime);
+    this.MMoveDirection.beforeUpdate();
+  }
+
   public override onUpdate(deltaTime: number): void {
     super.onUpdate(deltaTime);
 
@@ -70,8 +75,6 @@ export class Rime extends Character {
       }
       return shouldBeCleared;
     });
-
-    this.MMoveDirection.onUpdate();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

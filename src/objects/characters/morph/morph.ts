@@ -1,6 +1,6 @@
 import { MORPHCONFIG } from '../../../configs/characters/morph.config';
 import { time } from '../../../core/global';
-import { MMoveDirection } from '../../../core/modules/movement/MMoveDirection';
+import { MMoveDirection } from '../../../core/modules/movement/player/MMoveDirection';
 import { MoveDirection } from '../../../core/types/moveDirection';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';
@@ -66,10 +66,13 @@ export class Morph extends Character {
     });
   }
 
+  public override beforeUpdate(deltaTime: number): void {
+    super.beforeUpdate(deltaTime);
+    this.MMoveDirection.beforeUpdate();
+  }
+
   public override onUpdate(deltaTime: number): void {
     super.onUpdate(deltaTime);
-
-    this.MMoveDirection.onUpdate();
 
     // Позволяет наносить эффект не чаще чем раз в несколько секунд.
     this.enemyEffectedByFirstSkill = this.enemyEffectedByFirstSkill.filter(

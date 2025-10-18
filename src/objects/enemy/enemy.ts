@@ -1,4 +1,4 @@
-import { GameObject } from '../../core/common/GameObject';
+import { GameObject } from '../../core/common/GameObject/GameObject';
 import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
 import { Velocity } from '../../core/types/Velocity';
@@ -7,8 +7,8 @@ import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { ENEMYCONFIG } from '../../configs/enemies/enemy.config';
 import { EnemyStatus } from './enemy.status';
 import { speedPerPoint } from '../../consts/consts';
-import { MEnemyMoveDefault } from '../../core/modules/movement/enemy/MEnemyMoveDefault';
-import { MEnemyMove } from '../../core/modules/movement/enemy/MEnemyMove.type';
+import { MEnemyMovementDefault } from '../../core/modules/movement/enemy/MEnemyMovementDefault';
+import { AMEnemyMovement } from '../../core/modules/movement/enemy/MEnemyMovement.type';
 
 export interface EnemyParams {
   position: Position;
@@ -23,7 +23,8 @@ export class Enemy extends GameObject<CircleShape> {
   public readonly defaultSize: number;
   private _velocity: Velocity;
 
-  protected EnemyMovement: MEnemyMove;
+  /** Can be overridden by another enemy movement module. */
+  protected EnemyMovement: AMEnemyMovement;
   public EnemyStatus: EnemyStatus;
 
   constructor(params: EnemyParams) {
@@ -38,19 +39,22 @@ export class Enemy extends GameObject<CircleShape> {
     this.defaultSize = size;
     this._velocity = velocity;
 
-    this.EnemyMovement = new MEnemyMoveDefault(this);
+    this.EnemyMovement = new MEnemyMovementDefault(this);
     this.EnemyStatus = new EnemyStatus({ enemy: this });
   }
 
+  public override beforeUpdate(deltaTime: number): void {
+    super.beforeUpdate?.(deltaTime);
+    this.EnemyStatus.beforeUpdate();
+  }
+
   public override onUpdate(deltaTime: number): void {
-    this.EnemyStatus.onUpdate();
+    super.onUpdate?.(deltaTime);
 
     this.currentColor = this.EnemyStatus.getColor();
 
     // If is not freezed, update position
-    if (
-      this.EnemyStatus.MStatus.isAppliedStatusByName('stunned') === false
-    ) {
+    if (this.EnemyStatus.MStatus.isAppliedStatusByName('stunned') === false) {
       this.prevPosition = { x: this.position.x, y: this.position.y };
 
       // Гениально посчитал velocity. Переделать нужно
@@ -71,10 +75,12 @@ export class Enemy extends GameObject<CircleShape> {
   }
 
   public override afterUpdate(deltaTime: number): void {
+    super.afterUpdate?.(deltaTime);
     this.EnemyMovement.afterUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D, hue?: number): void {
+    super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
       size: this.objectModel.size,
@@ -94,6 +100,7 @@ export class Enemy extends GameObject<CircleShape> {
     return { ...this._velocity };
   }
 
+  /** Alias for Enemy.EnemyStatus.MStatus.isDisabled */
   get isStatusesDisabled(): boolean {
     return this.EnemyStatus.MStatus.isDisabled;
   }
