@@ -10,6 +10,7 @@ import { CharacterLevels } from './character.levels';
 import { CharacterCharacteristics } from './character.characteristics';
 import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
+import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 
 export abstract class Character extends GameObject<CircleShape> {
   public readonly UIColor: HSLA;
@@ -93,9 +94,10 @@ export abstract class Character extends GameObject<CircleShape> {
 
   public die(): void {
     if (this.characteristics.MStatus.isAppliedStatusByName('immortal')) return;
+    if (this.isDead === true) return;
 
     this.isDead = true;
     this.characterMovement.block();
-    this.timeToDeath = 3;
+    this.timeToDeath = CHARACTERCONFIG.timeToDeath;
   }
 }

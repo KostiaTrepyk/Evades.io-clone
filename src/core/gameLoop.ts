@@ -71,7 +71,7 @@ export class GameLoop {
     if (deltaTime < frameTime) return;
 
     // ====== обновления состояния ======
-    time.onUpdate(timestamp);
+    time.beforeAllUpdates(timestamp);
     gameObjectManager.updateAll(deltaTime);
     userInput.afterUpdate();
 

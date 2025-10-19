@@ -35,9 +35,7 @@ export class CharacterCollision {
   }
 
   private onCollisionEnemy(enemy: Enemy): void {
-    if (this.player.isDead === true) return;
     if (enemy.EnemyStatus.MStatus.isAppliedStatusByName('disabled')) return;
-
     this.player.die();
   }
 

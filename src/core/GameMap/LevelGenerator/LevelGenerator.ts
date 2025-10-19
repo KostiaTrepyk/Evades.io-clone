@@ -1,3 +1,4 @@
+import { EnemyShooter } from '../../../objects/enemy/list/EnemyShooter/EnemyShooter';
 import { Portal } from '../../../objects/portal/portal';
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
 import { gameObjectManager, renderer } from '../../global';
@@ -41,6 +42,15 @@ export function generateLevel({
   portals,
 }: GenerateLevelOptions) {
   clearLevel();
+
+  // DELETE ME --- Only for tests
+  const e = new EnemyShooter({
+    position: { x: 500, y: 200 },
+    velocity: { x: 5, y: 1 },
+    projectileSpeed: 12,
+  });
+  e.create();
+  // DELETE ME --- Only for tests
 
   // Player position
   if (gameObjectManager.player) {

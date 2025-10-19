@@ -6,7 +6,7 @@ export class Time {
     this._timestamp = 0;
   }
 
-  public onUpdate(timestamp: number): void {
+  public beforeAllUpdates(timestamp: number): void {
     this._timestamp = timestamp;
   }
 

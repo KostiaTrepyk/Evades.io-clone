@@ -46,8 +46,6 @@ export class CharacterCharacteristics implements Module {
   // FIX ME Читабельность говно. Ещё и странно работает.
   public beforeUpdate(deltaTime: number): void {
     const upgrades = this.characterLevels.upgrades;
-    console.log(upgrades);
-    
     const characteristics = CHARACTERCONFIG.characteristics;
 
     const defaultSpeed = characteristics.default.speed;

@@ -1,6 +1,7 @@
 import { HSLA } from '../../core/utils/hsla';
 
 export const CHARACTERCONFIG = {
+  timeToDeath: 3,
   characteristics: {
     default: {
       speed: 5,
