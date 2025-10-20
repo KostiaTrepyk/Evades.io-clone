@@ -2,14 +2,14 @@ import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 
 export type Upgrade = {
   current: number;
-  max: number;
+  readonly max: number;
 };
 
 export class CharacterLevels {
-  public currentLevel: number;
-  public atePointOrbs: number;
-  public upgradePoints: number;
-  public upgrades: {
+  private _currentLevel: number;
+  private _atePointOrbs: number;
+  private _upgradePoints: number;
+  private _upgrades: {
     speed: Upgrade;
     maxEnergy: Upgrade;
     energyRegeneration: Upgrade;
@@ -20,10 +20,10 @@ export class CharacterLevels {
   constructor() {
     const maxUpgrades = CHARACTERCONFIG.characteristics.maxUpgradeLevels;
 
-    this.currentLevel = 1;
-    this.atePointOrbs = 0;
-    this.upgradePoints = 100;
-    this.upgrades = {
+    this._currentLevel = 1;
+    this._atePointOrbs = 0;
+    this._upgradePoints = 100;
+    this._upgrades = {
       speed: { current: 0, max: maxUpgrades.speed },
       maxEnergy: { current: 0, max: maxUpgrades.energy.max },
       energyRegeneration: { current: 0, max: maxUpgrades.energy.regeneration },
@@ -37,63 +37,79 @@ export class CharacterLevels {
   }
 
   public addPointOrb() {
-    this.atePointOrbs++;
-    const nextLVLReq = this.levelUpReq();
+    this._atePointOrbs++;
+    const nextLVLReq = this.levelUpReq;
 
-    if (this.atePointOrbs >= nextLVLReq) {
+    if (this._atePointOrbs >= nextLVLReq) {
       this.levelUp();
     }
   }
 
-  public levelUp() {
-    this.atePointOrbs -= this.levelUpReq();
-    this.currentLevel++;
-    this.upgradePoints += 1;
-  }
-
-  public levelUpReq(): number {
-    if (this.currentLevel < 3) return 4;
-    if (this.currentLevel < 5) return 6;
-    if (this.currentLevel < 10) return 10;
-    if (this.currentLevel < 15) return 15;
-    if (this.currentLevel < 25) return 19;
-    return 22;
+  private levelUp() {
+    this._atePointOrbs -= this.levelUpReq;
+    this._currentLevel++;
+    this._upgradePoints += 1;
   }
 
   private handlerKeydown({ code }: KeyboardEvent): void {
-    if (this.upgradePoints <= 0) return;
+    if (this._upgradePoints <= 0) return;
 
     if (
       code === 'Digit1' &&
-      this.upgrades.speed.current < this.upgrades.speed.max
+      this._upgrades.speed.current < this._upgrades.speed.max
     ) {
-      this.upgrades.speed.current += 1;
-      this.upgradePoints -= 1;
+      this._upgrades.speed.current += 1;
+      this._upgradePoints -= 1;
     } else if (
       code === 'Digit2' &&
-      this.upgrades.maxEnergy.current < this.upgrades.maxEnergy.max
+      this._upgrades.maxEnergy.current < this._upgrades.maxEnergy.max
     ) {
-      this.upgrades.maxEnergy.current += 1;
-      this.upgradePoints -= 1;
+      this._upgrades.maxEnergy.current += 1;
+      this._upgradePoints -= 1;
     } else if (
       code === 'Digit3' &&
-      this.upgrades.energyRegeneration.current <
-        this.upgrades.energyRegeneration.max
+      this._upgrades.energyRegeneration.current <
+        this._upgrades.energyRegeneration.max
     ) {
-      this.upgrades.energyRegeneration.current += 1;
-      this.upgradePoints -= 1;
+      this._upgrades.energyRegeneration.current += 1;
+      this._upgradePoints -= 1;
     } else if (
       code === 'Digit4' &&
-      this.upgrades.firstSpell.current < this.upgrades.firstSpell.max
+      this._upgrades.firstSpell.current < this._upgrades.firstSpell.max
     ) {
-      this.upgrades.firstSpell.current += 1;
-      this.upgradePoints -= 1;
+      this._upgrades.firstSpell.current += 1;
+      this._upgradePoints -= 1;
     } else if (
       code === 'Digit5' &&
-      this.upgrades.secondSpell.current < this.upgrades.secondSpell.max
+      this._upgrades.secondSpell.current < this._upgrades.secondSpell.max
     ) {
-      this.upgrades.secondSpell.current += 1;
-      this.upgradePoints -= 1;
+      this._upgrades.secondSpell.current += 1;
+      this._upgradePoints -= 1;
     }
+  }
+
+  get levelUpReq(): number {
+    if (this._currentLevel < 3) return 4;
+    if (this._currentLevel < 5) return 6;
+    if (this._currentLevel < 10) return 10;
+    if (this._currentLevel < 15) return 15;
+    if (this._currentLevel < 25) return 19;
+    return 22;
+  }
+
+  get upgradePoints(): number {
+    return this._upgradePoints;
+  }
+
+  get currentLevel(): number {
+    return this._currentLevel;
+  }
+
+  get atePointOrbs(): number {
+    return this._atePointOrbs;
+  }
+
+  public get upgrades(): CharacterLevels['_upgrades'] {
+    return structuredClone(this._upgrades);
   }
 }

@@ -78,7 +78,7 @@ export class CommonSkill implements ISkill {
 
   public isEnoughEnergy(): boolean {
     return (
-      this.player.characteristics.getEnergy.current - this.energyUsage() >= 0
+      this.player.characteristics.energy.current - this.energyUsage() >= 0
     );
   }
 

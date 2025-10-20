@@ -45,11 +45,12 @@ export function generateLevel({
 
   // DELETE ME --- Only for tests
   const e = new EnemyShooter({
-    position: { x: 500, y: 200 },
+    position: { x: 1500, y: 300 },
     velocity: { x: 5, y: 1 },
-    projectileSpeed: 12,
+    projectileSpeed: 17,
+    shootDistance: 900,
   });
-  e.create();
+  e.init();
   // DELETE ME --- Only for tests
 
   // Player position
@@ -76,8 +77,8 @@ export function generateLevel({
     },
     { x: saveZoneWidth, y: renderer._canvasSize.y }
   );
-  saveZoneStart.create();
-  saveZoneEnd.create();
+  saveZoneStart.init();
+  saveZoneEnd.init();
 
   // Create Portals
   if (portals.prevLevel) {
@@ -86,7 +87,7 @@ export function generateLevel({
       { x: 50, y: renderer._canvasSize.y },
       () => gameMap.prevLevel()
     );
-    portalToPrevLevel.create();
+    portalToPrevLevel.init();
   }
   if (portals.nextLevel) {
     const portalToNextLevel = new Portal(
@@ -97,7 +98,7 @@ export function generateLevel({
       { x: 50, y: renderer._canvasSize.y },
       () => gameMap.nextLevel()
     );
-    portalToNextLevel.create();
+    portalToNextLevel.init();
   }
   if (portals.prevTunnel) {
     const portalToPrevTunnel = new Portal(
@@ -108,7 +109,7 @@ export function generateLevel({
       { x: 300, y: 50 },
       () => gameMap.prevTunnel()
     );
-    portalToPrevTunnel.create();
+    portalToPrevTunnel.init();
   }
   if (portals.nextTunnel) {
     const portalToNextTunnel = new Portal(
@@ -119,7 +120,7 @@ export function generateLevel({
       { x: 300, y: 50 },
       () => gameMap.nextTunnel()
     );
-    portalToNextTunnel.create();
+    portalToNextTunnel.init();
   }
 
   // Create enemies
@@ -128,7 +129,7 @@ export function generateLevel({
       case EnemyTypes.CommonEnemy:
         Array.from({ length: enemyTypeOptions.count }).forEach(() => {
           const commonEnemy = createCommonEnemy(enemyTypeOptions);
-          commonEnemy.create();
+          commonEnemy.init();
         });
         break;
 
@@ -137,7 +138,7 @@ export function generateLevel({
           const enemyEnergyBurner = createEnemyEnergyBurner(
             enemyTypeOptions.speed
           );
-          enemyEnergyBurner.create();
+          enemyEnergyBurner.init();
         });
         break;
 
@@ -146,7 +147,7 @@ export function generateLevel({
           const enemySpeedReduction = createEnemySpeedReduction(
             enemyTypeOptions.speed
           );
-          enemySpeedReduction.create();
+          enemySpeedReduction.init();
         });
         break;
 
@@ -157,7 +158,7 @@ export function generateLevel({
             count: enemyTypeOptions.count,
             order: i,
           });
-          enemySpeedReduction.create();
+          enemySpeedReduction.init();
         });
         break;
 

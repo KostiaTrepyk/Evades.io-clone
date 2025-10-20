@@ -32,7 +32,7 @@ export class GameObject<S extends Shape> implements GameObjectLoopMethods {
   public afterUpdate?(deltaTime: number): void;
   public onRender?(ctx: CanvasRenderingContext2D): void;
 
-  public create(): void {
+  public init(): void {
     gameObjectManager.addGameObject(this);
   }
 

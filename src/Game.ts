@@ -19,7 +19,7 @@ export class Game {
     renderer.init();
     userInput.bind();
 
-    this.character.create();
+    this.character.init();
     gameMap.generateCurrentLevel('start');
 
     // DELETE ME Чисто для тестов. Фаст тревел по картах.

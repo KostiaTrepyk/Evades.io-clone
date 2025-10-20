@@ -4,8 +4,9 @@ import { MCollisionPointOrb } from '../../core/modules/collision/MCollisionPoint
 import { Enemy } from '../enemy/enemy';
 import { PointOrb } from '../pointOrb/PointOrb';
 import { Character } from './character';
+import { Module } from '../../core/common/Module';
 
-export class CharacterCollision {
+export class CharacterCollision implements Module {
   private readonly player: Character;
   private readonly mCollisionWalls: MCollisionWalls;
   private readonly mCollisionEnemy: MCollisionEnemy;

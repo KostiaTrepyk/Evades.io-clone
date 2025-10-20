@@ -36,7 +36,7 @@ export class Magmax extends Character {
         if (this.secondSkill.getIsActive) {
           this.secondSkill.deactivate();
         }
-        this.color = MAGMAXCONFIG.color.firstSpellActive;
+        this.color.current = MAGMAXCONFIG.color.firstSpellActive.clone();
       },
       cancelSkill: () => {
         this.removeSpeedBoost();
@@ -63,7 +63,7 @@ export class Magmax extends Character {
           this.firstSkill.deactivate();
         }
 
-        this.color = MAGMAXCONFIG.color.secondSpellActive;
+        this.color.current = MAGMAXCONFIG.color.secondSpellActive.clone();
       },
       cancelSkill: () => {
         this.removeImmortality();
@@ -95,7 +95,7 @@ export class Magmax extends Character {
   }
 
   private removeSpeedBoost(): void {
-    this.color = MAGMAXCONFIG.color.default;
+    this.color.current = this.color.default.clone();
     this.characteristics.MStatus.removeStatus(magmaxFirstSkillId);
   }
 
@@ -108,7 +108,7 @@ export class Magmax extends Character {
   }
 
   private removeImmortality(): void {
-    this.color = MAGMAXCONFIG.color.default;
+    this.color.current = this.color.default.clone();
     this.characteristics.MStatus.removeStatus(magmaxSecondSkillId);
   }
 }

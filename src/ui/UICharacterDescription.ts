@@ -44,7 +44,7 @@ export class UICharacterDescription {
         drawCircle(ctx, {
           position: centeredPosition,
           size: 65,
-          fill: { color: player.UIColor },
+          fill: { color: player.color.default },
         });
         drawText(ctx, player.level.currentLevel.toString(), {
           position: { x: centeredPosition.x, y: centeredPosition.y + 3 },
@@ -85,7 +85,7 @@ export class UICharacterDescription {
 
         this.drawCharacteristicSection(ctx, {
           player,
-          value: (player.characteristics.getSpeed / speedPerPoint).toFixed(1),
+          value: (player.characteristics.speed / speedPerPoint).toFixed(1),
           centeredPosition,
           description: 'Speed',
           upgradeHint: '1',
@@ -102,8 +102,8 @@ export class UICharacterDescription {
       draw: (ctx, centeredPosition) => {
         this.drawCharacteristicSection(ctx, {
           player,
-          value: `${player.characteristics.getEnergy.current.toFixed(0)}/${
-            player.characteristics.getEnergy.max
+          value: `${player.characteristics.energy.current.toFixed(0)}/${
+            player.characteristics.energy.max
           }`,
           centeredPosition,
           description: 'Energy',
@@ -121,7 +121,7 @@ export class UICharacterDescription {
       draw: (ctx, centeredPosition) => {
         this.drawCharacteristicSection(ctx, {
           player,
-          value: player.characteristics.getEnergy.regeneration.toFixed(1),
+          value: player.characteristics.energy.regeneration.toFixed(1),
           centeredPosition,
           description: 'Regen',
           upgradeHint: '3',
@@ -210,7 +210,7 @@ export class UICharacterDescription {
       position: barPosition,
       barWidth,
       value: player.level.atePointOrbs,
-      maxValue: player.level.levelUpReq(),
+      maxValue: player.level.levelUpReq,
     });
 
     // Draw Sections
@@ -232,7 +232,7 @@ export class UICharacterDescription {
     ctx.beginPath();
     ctx.lineWidth = 1;
     ctx.strokeStyle = '#000d';
-    ctx.fillStyle = player.UIColor.toString();
+    ctx.fillStyle = player.color.default.toString();
     ctx.fillRect(
       position.x,
       position.y - this.expBarHeight,

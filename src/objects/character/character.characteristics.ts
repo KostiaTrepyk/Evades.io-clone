@@ -24,17 +24,17 @@ interface Effect {
 }
 
 export class CharacterCharacteristics implements Module {
-  private readonly characterLevels: CharacterLevels;
+  private readonly CharacterLevels: CharacterLevels;
 
-  private speed: number;
-  private energy: { current: number; max: number; regeneration: number };
+  private _speed: number;
+  private _energy: { current: number; max: number; regeneration: number };
   /** Can be used to increase/decrease speed, increase/decrease mana regeneration, etc. */
   public MStatus: MStatus<StatusName, Effect>;
 
   constructor(characterLevels: CharacterLevels) {
-    this.characterLevels = characterLevels;
-    this.speed = CHARACTERCONFIG.characteristics.default.speed;
-    this.energy = {
+    this.CharacterLevels = characterLevels;
+    this._speed = CHARACTERCONFIG.characteristics.default.speed;
+    this._energy = {
       current: CHARACTERCONFIG.characteristics.default.energy.max,
       max: CHARACTERCONFIG.characteristics.default.energy.max,
       regeneration: CHARACTERCONFIG.characteristics.default.energy.regeneration,
@@ -42,30 +42,29 @@ export class CharacterCharacteristics implements Module {
     this.MStatus = new MStatus({ availableStatusNames: statusNames });
   }
 
-  // FIX ME Не уверен что нужно каждый фрейм обновлять
   // FIX ME Читабельность говно. Ещё и странно работает.
   public beforeUpdate(deltaTime: number): void {
-    const upgrades = this.characterLevels.upgrades;
-    const characteristics = CHARACTERCONFIG.characteristics;
+    const upgrades = this.CharacterLevels.upgrades;
+    const defaultCharacteristics = CHARACTERCONFIG.characteristics.default;
+    const upgradesPerLevel = CHARACTERCONFIG.characteristics.upgradesPerLevel;
 
-    const defaultSpeed = characteristics.default.speed;
-    const speedFromUpgrades =
-      characteristics.upgradesPerLevel.speed * upgrades.speed.current;
+    const defaultSpeed = defaultCharacteristics.speed;
+    const speedFromUpgrades = upgradesPerLevel.speed * upgrades.speed.current;
 
-    const defaultEnergyMax = characteristics.default.energy.max;
+    const defaultEnergyMax = defaultCharacteristics.energy.max;
     const energyMaxFromUpgrades =
-      characteristics.upgradesPerLevel.energy.max * upgrades.maxEnergy.current;
+      upgradesPerLevel.energy.max * upgrades.maxEnergy.current;
 
     const defaultEnergyRegeneration =
-      characteristics.default.energy.regeneration;
+      defaultCharacteristics.energy.regeneration;
     const energyRegenerationFromUpgrades =
-      characteristics.upgradesPerLevel.energy.regeneration *
+      upgradesPerLevel.energy.regeneration *
       upgrades.energyRegeneration.current;
 
     // Apply upgrades
-    this.speed = (defaultSpeed + speedFromUpgrades) * speedPerPoint;
-    this.energy.max = defaultEnergyMax + energyMaxFromUpgrades;
-    this.energy.regeneration =
+    this._speed = (defaultSpeed + speedFromUpgrades) * speedPerPoint;
+    this._energy.max = defaultEnergyMax + energyMaxFromUpgrades;
+    this._energy.regeneration =
       defaultEnergyRegeneration + energyRegenerationFromUpgrades;
 
     // Apply effects
@@ -76,29 +75,29 @@ export class CharacterCharacteristics implements Module {
 
       if (speed !== undefined) {
         if (speed.type === 'number') {
-          this.speed = this.speed + speed.value * speedPerPoint;
+          this._speed = this._speed + speed.value * speedPerPoint;
         } else if (speed.type === 'percentage') {
-          this.speed = this.speed * speed.value;
+          this._speed = this._speed * speed.value;
         }
       }
       if (energy !== undefined) {
-        if (energy.max !== undefined) this.energy.max += energy.max;
+        if (energy.max !== undefined) this._energy.max += energy.max;
         if (energy.regeneration !== undefined)
-          this.energy.regeneration += energy.regeneration;
+          this._energy.regeneration += energy.regeneration;
       }
     });
 
     const { speed, energy } = this.calculateCharacteristics();
 
     // Ensure non-negative values
-    this.speed = Math.max(0, speed);
-    this.energy.max = Math.max(0, energy.max);
+    this._speed = Math.max(0, speed);
+    this._energy.max = Math.max(0, energy.max);
     // this.energy.regeneration = Math.max(0, this.energy.regeneration); Может быть на минусе.
 
     // Energy regeneration
-    this.energy.current = Math.min(
-      this.energy.max,
-      Math.max(this.energy.current + energy.regeneration * deltaTime, 0)
+    this._energy.current = Math.min(
+      this._energy.max,
+      Math.max(this._energy.current + energy.regeneration * deltaTime, 0)
     );
   }
 
@@ -106,7 +105,7 @@ export class CharacterCharacteristics implements Module {
     speed: number;
     energy: { max: number; regeneration: number };
   } {
-    const upgrades = this.characterLevels.upgrades;
+    const upgrades = this.CharacterLevels.upgrades;
     const characteristics = CHARACTERCONFIG.characteristics;
 
     const defaultSpeed: number = characteristics.default.speed;
@@ -157,17 +156,17 @@ export class CharacterCharacteristics implements Module {
 
   /** Возвращает true если энергии хватает и её уже списали. False если не хватает энергии и её на списали. */
   public removeEnergy(energy: number): boolean {
-    if (this.energy.current < energy) return false;
+    if (this._energy.current < energy) return false;
 
-    this.energy.current -= energy;
+    this._energy.current -= energy;
     return true;
   }
 
-  public get getSpeed(): CharacterCharacteristics['speed'] {
-    return this.speed;
+  public get speed(): CharacterCharacteristics['_speed'] {
+    return this._speed;
   }
 
-  public get getEnergy(): CharacterCharacteristics['energy'] {
-    return structuredClone(this.energy);
+  public get energy(): CharacterCharacteristics['_energy'] {
+    return structuredClone(this._energy);
   }
 }

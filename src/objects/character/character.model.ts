@@ -13,7 +13,7 @@ export const RenderCharacterModel = {
       y: character.position.y - character.objectModel.size / 2 - 8,
     };
 
-    const playerEnergy = character.characteristics.getEnergy;
+    const playerEnergy = character.characteristics.energy;
 
     const manaBarSizeAdjustment = character.objectModel.size / 22;
     const manaPercentage = playerEnergy.current / playerEnergy.max;
@@ -45,12 +45,12 @@ export const RenderCharacterModel = {
     drawCircle(ctx, {
       position: character.position,
       size: character.objectModel.size,
-      fill: { color: character.color },
+      fill: { color: character.color.current },
     });
   },
 
   dead: (ctx: CanvasRenderingContext2D, character: Character) => {
-    const color = character.color.clone();
+    const color = character.color.current.clone();
     color.setAlpha = 0.75;
 
     drawCircle(ctx, {

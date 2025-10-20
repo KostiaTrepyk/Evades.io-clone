@@ -88,7 +88,7 @@ export class ToggleSkill implements ISkill {
     const elapsedTime = (time.timestamp - this.lastUsedTimestamp) / 1000;
     const isNotCooldown: boolean = elapsedTime >= this.cooldown();
 
-    const playerEnergy = this.player.characteristics.getEnergy.current;
+    const playerEnergy = this.player.characteristics.energy.current;
     const needsEnergy = this.energyUsage() * deltaTime;
     const isEnoughEnergy: boolean = playerEnergy - needsEnergy >= 0;
 

@@ -9,17 +9,18 @@ export interface EnemyShooterParams {
   position: Position;
   velocity: Velocity;
   projectileSpeed: number;
+  shootDistance: number;
 }
 
 export class EnemyShooter extends Enemy {
   private lastShootTimeStamp: number;
   /** Time in seconds */
   private shootDeltaTime: number;
-
   private projectileSpeed: number;
+  private shootDistance: number;
 
   constructor(params: EnemyShooterParams) {
-    const { position, velocity } = params;
+    const { position, velocity, projectileSpeed, shootDistance } = params;
 
     super({
       position,
@@ -32,32 +33,39 @@ export class EnemyShooter extends Enemy {
     this.lastShootTimeStamp = -shootDeltaTime;
     this.shootDeltaTime = shootDeltaTime;
 
-    this.projectileSpeed = params.projectileSpeed;
+    this.projectileSpeed = projectileSpeed;
+    this.shootDistance = shootDistance;
   }
 
   public override onUpdate(deltaTime: number): void {
     super.onUpdate(deltaTime);
 
-    if (
-      time.timestamp - this.lastShootTimeStamp >=
-      this.shootDeltaTime * 1000
-    ) {
-      this.lastShootTimeStamp = time.timestamp;
-      this.shoot();
-    }
-  }
-
-  private shoot(): void {
     const playerPosition = this.getPlayerPosition();
 
     // If player is not created.
     if (playerPosition === undefined) return;
 
+    if (
+      time.timestamp - this.lastShootTimeStamp >=
+      this.shootDeltaTime * 1000
+    ) {
+      // Check distance
+      const deltaX = this.position.x - playerPosition.x;
+      const deltaY = this.position.y - playerPosition.y;
+      const distance = Math.abs(deltaX) + Math.abs(deltaY);
+      if (distance > this.shootDistance) return;
+
+      this.lastShootTimeStamp = time.timestamp;
+      this.shoot(playerPosition);
+    }
+  }
+
+  private shoot(playerPosition: Position): void {
     const projectile = this.createProjectile({
       startPosition: { x: this.position.x, y: this.position.y },
       playerPosition,
     });
-    projectile.create();
+    projectile.init();
     this.lastShootTimeStamp = time.timestamp;
   }
 

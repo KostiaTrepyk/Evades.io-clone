@@ -30,7 +30,7 @@ export class CharacterMovement implements Module {
     if (!isMovingX && !isMovingY) return;
 
     // normalizing the speed of the character
-    let normalizedSpeed: number = this.player.characteristics.getSpeed;
+    let normalizedSpeed: number = this.player.characteristics.speed;
     if (isMovingX && isMovingY) normalizedSpeed /= 1.333;
 
     if (isPressedShift) normalizedSpeed *= GAMECONFIG.characterSlowRatio;

@@ -107,7 +107,7 @@ export class Morph extends Character {
 
     MORPHCONFIG.firstSpell.projectiles[skillLevel].forEach((velocityRatio) => {
       const projectile = this.createFirstSkillProjectile(velocityRatio);
-      projectile.create();
+      projectile.init();
     });
   }
 
@@ -116,7 +116,7 @@ export class Morph extends Character {
 
     MORPHCONFIG.secondSpell.projectiles[skillLevel].forEach((velocityRatio) => {
       const projectile = this.createSecondSkillProjectile(velocityRatio);
-      projectile.create();
+      projectile.init();
     });
   }
 

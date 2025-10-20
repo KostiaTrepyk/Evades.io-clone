@@ -13,6 +13,6 @@ export function createPointOrbs(count: number): void {
         maxY: renderer._canvasSize.y - 50,
       })
     );
-    pointOrb.create();
+    pointOrb.init();
   });
 }
