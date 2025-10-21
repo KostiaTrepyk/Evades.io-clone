@@ -7,7 +7,6 @@ import { CommonSkill } from '../../character/skills/commonSkill';
 import { RIMECONFIG } from '../../../configs/characters/rime.config';
 import { MMoveDirection } from '../../../core/modules/movement/player/MMoveDirection';
 import { drawCircle } from '../../../core/utils/canvas/drawCircle';
-import { Enemy } from '../../enemy/enemy';
 
 const freezeStatusId = Symbol('Rime stun');
 
@@ -15,7 +14,6 @@ export class Rime extends Character {
   public override firstSkill: CommonSkill;
   public override secondSkill: CommonSkill;
   private secondSkillRangeVisibility: boolean;
-  private freezedEnemies: { enemy: Enemy; timestamp: number }[];
 
   private MMoveDirection: MMoveDirection;
 
@@ -24,7 +22,6 @@ export class Rime extends Character {
 
     this.MMoveDirection = new MMoveDirection();
     this.secondSkillRangeVisibility = false;
-    this.freezedEnemies = [];
 
     this.firstSkill = new CommonSkill(this, {
       keyCode: 'KeyJ',
@@ -59,22 +56,6 @@ export class Rime extends Character {
   public override beforeUpdate(deltaTime: number): void {
     super.beforeUpdate(deltaTime);
     this.MMoveDirection.beforeUpdate();
-  }
-
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate(deltaTime);
-
-    const secondSkillLevel = this.level.upgrades.secondSpell.current;
-    const freezeTime = RIMECONFIG.secondSpell.freezeTime[secondSkillLevel - 1];
-    this.freezedEnemies = this.freezedEnemies.filter(({ enemy, timestamp }) => {
-      const shouldBeCleared = timestamp + freezeTime * 1000 > time.timestamp;
-
-      if (!shouldBeCleared) {
-        enemy.currentColor = enemy.defaultColor.clone();
-        enemy.EnemyStatus.MStatus.removeStatus(freezeStatusId);
-      }
-      return shouldBeCleared;
-    });
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
@@ -139,22 +120,15 @@ export class Rime extends Character {
       // Skip if enemy has disabled statuses.
       if (enemyToFreeze.isStatusesDisabled === true) return;
 
-      const freezedEnemy = this.freezedEnemies.find(
-        ({ enemy }) => enemy === enemyToFreeze
-      );
+      const secondSkillLevel = this.level.upgrades.secondSpell.current;
+      const freezeTime =
+        RIMECONFIG.secondSpell.freezeTime[secondSkillLevel - 1];
 
-      if (freezedEnemy === undefined) {
-        this.freezedEnemies.push({
-          enemy: enemyToFreeze,
-          timestamp: time.timestamp,
-        });
-        enemyToFreeze.EnemyStatus.MStatus.applyStatus({
-          id: freezeStatusId,
-          name: 'stunned',
-        });
-      } else {
-        freezedEnemy.timestamp = time.timestamp;
-      }
+      enemyToFreeze.EnemyStatus.MStatus.applyStatus({
+        id: freezeStatusId,
+        name: 'stunned',
+        duration: freezeTime,
+      });
     });
   }
 }

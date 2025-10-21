@@ -40,6 +40,8 @@ export abstract class Character extends GameObject<CircleShape> {
   }
 
   public override onUpdate(deltaTime: number): void {
+    this.characteristics.onUpdate(deltaTime);
+
     // Update death timer
     if (this._isDead) {
       if (this._timeToDeath === undefined) return;

@@ -1,19 +1,12 @@
 import { MORPHCONFIG } from '../../../configs/characters/morph.config';
-import { time } from '../../../core/global';
 import { MMoveDirection } from '../../../core/modules/movement/player/MMoveDirection';
 import { MoveDirection } from '../../../core/types/moveDirection';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';
 import { Character } from '../../character/character';
 import { CommonSkill } from '../../character/skills/commonSkill';
-import { Enemy } from '../../enemy/enemy';
 import { MorphFirstSkillProjectile } from './MorphFirstSkillProjectile';
 import { MorphSecondSkillProjectile } from './MorphSecondSkillProjectile';
-
-/** In seconds */
-const firstSkillEffectCooldown = 1;
-/** In seconds */
-const secondSkillEffectCooldown = 2;
 
 const firstSkillId = Symbol('Morph change move direction');
 const secondSkillSpeedId = Symbol('Morph size reduction');
@@ -25,15 +18,10 @@ export class Morph extends Character {
 
   private MMoveDirection: MMoveDirection;
 
-  public enemyEffectedByFirstSkill: { enemy: Enemy; timestamp: number }[];
-  public enemyEffectedBySecondSkill: { enemy: Enemy; timestamp: number }[];
-
   constructor(startPosition: Position) {
     super(startPosition, MORPHCONFIG.size, MORPHCONFIG.color.default.clone());
 
     this.MMoveDirection = new MMoveDirection();
-    this.enemyEffectedByFirstSkill = [];
-    this.enemyEffectedBySecondSkill = [];
 
     this.firstSkill = new CommonSkill(this, {
       keyCode: 'KeyJ',
@@ -71,37 +59,6 @@ export class Morph extends Character {
     this.MMoveDirection.beforeUpdate();
   }
 
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate(deltaTime);
-
-    // Позволяет наносить эффект не чаще чем раз в несколько секунд.
-    this.enemyEffectedByFirstSkill = this.enemyEffectedByFirstSkill.filter(
-      ({ enemy, timestamp }) => {
-        const shouldBeCleared =
-          timestamp + firstSkillEffectCooldown * 1000 > time.timestamp;
-        if (!shouldBeCleared) {
-          enemy.currentColor = enemy.defaultColor.clone();
-          enemy.EnemyStatus.MStatus.removeStatus(firstSkillId);
-        }
-        return shouldBeCleared;
-      }
-    );
-
-    // Позволяет наносить эффект не чаще чем раз в несколько секунд.
-    this.enemyEffectedBySecondSkill = this.enemyEffectedBySecondSkill.filter(
-      ({ enemy, timestamp }) => {
-        const shouldBeCleared =
-          timestamp + secondSkillEffectCooldown * 1000 > time.timestamp;
-        if (!shouldBeCleared) {
-          enemy.currentColor = enemy.defaultColor.clone();
-          enemy.EnemyStatus.MStatus.removeStatus(secondSkillSpeedId);
-          enemy.EnemyStatus.MStatus.removeStatus(secondSkillSizeId);
-        }
-        return shouldBeCleared;
-      }
-    );
-  }
-
   private firstSkillHandler(): void {
     const skillLevel = Math.max(0, this.level.upgrades.firstSpell.current - 1);
 
@@ -132,7 +89,6 @@ export class Morph extends Character {
 
     const projectile = new MorphFirstSkillProjectile({
       statusId: firstSkillId,
-      player: this,
       startPosition: { x: this.position.x, y: this.position.y },
       velocity: { x: velocity.x, y: velocity.y },
       size: MORPHCONFIG.firstSpell.projectileSize,
@@ -152,7 +108,6 @@ export class Morph extends Character {
     );
 
     const projectile = new MorphSecondSkillProjectile({
-      player: this,
       startPosition: { x: this.position.x, y: this.position.y },
       velocity: { x: velocity.x, y: velocity.y },
       size: MORPHCONFIG.secondSpell.projectileSize,

@@ -8,6 +8,7 @@ export const MORPHCONFIG = {
 
   firstSpell: {
     energyUsage: 15,
+    duration: 1,
     cooldown: [2, 1.5, 1.2, 0.7, 0.3],
     projectiles: [
       [{ x: 1, y: 0 }],
@@ -41,6 +42,7 @@ export const MORPHCONFIG = {
 
   secondSpell: {
     energyUsage: 15,
+    duration: 2,
     cooldown: [2, 1.5, 1.2, 0.7, 0.3],
     projectiles: [
       [{ x: 1, y: 0 }],

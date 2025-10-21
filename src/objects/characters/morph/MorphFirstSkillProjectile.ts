@@ -1,4 +1,4 @@
-import { time } from '../../../core/global';
+import { MORPHCONFIG } from '../../../configs/characters/morph.config';
 import { MCollisionEnemy } from '../../../core/modules/collision/MCollisionEnemy';
 import { MCollisionWalls } from '../../../core/modules/collision/MCollisionWalls';
 import { Position } from '../../../core/types/Position';
@@ -6,11 +6,9 @@ import { Velocity } from '../../../core/types/Velocity';
 import { HSLA } from '../../../core/utils/hsla';
 import { Enemy } from '../../enemy/enemy';
 import { Projectile } from '../../projectile/projectile';
-import { Morph } from './morph';
 
 export interface MorphFirstSkillProjectileParams {
   statusId: Symbol;
-  player: Morph;
   startPosition: Position;
   size: number;
   velocity: Velocity;
@@ -19,18 +17,16 @@ export interface MorphFirstSkillProjectileParams {
 
 export class MorphFirstSkillProjectile extends Projectile {
   private statusId: Symbol;
-  private player: Morph;
 
   private MCollisionEnemy: MCollisionEnemy;
   private MCollisionWalls: MCollisionWalls;
 
   constructor(params: MorphFirstSkillProjectileParams) {
-    const { player, startPosition, size, velocity, color, statusId } = params;
+    const { startPosition, size, velocity, color, statusId } = params;
     super({ startPosition, size, velocity, color });
 
     this.statusId = statusId;
 
-    this.player = player;
     this.MCollisionEnemy = new MCollisionEnemy({
       object: this,
       onCollision: (enemy) => {
@@ -53,31 +49,18 @@ export class MorphFirstSkillProjectile extends Projectile {
   }
 
   private collisionWithEnemy(enemy: Enemy, projectile: Projectile): void {
-    // Skip if enemy has disabled statuses.
-    if (enemy.isStatusesDisabled === true) return;
-
-    const affectedEnemy = this.player.enemyEffectedByFirstSkill.find(
-      ({ enemy: effectedEnemy }) => effectedEnemy === enemy
-    );
-
-    // Если существует то обновляем время, если нет тогда делаем push
-    if (affectedEnemy !== undefined) {
-      affectedEnemy.timestamp = time.timestamp;
-    } else {
-      this.player.enemyEffectedByFirstSkill.push({
-        timestamp: time.timestamp,
-        enemy,
-      });
-    }
-
-    enemy.EnemyStatus.MStatus.applyStatus({
+    const isApplied = enemy.EnemyStatus.MStatus.applyStatus({
       id: this.statusId,
       name: 'changeDirection',
+      duration: MORPHCONFIG.firstSpell.duration,
     });
 
-    const newVelocity = enemy.velocity;
+    // Если эффект не может быть применён.
+    if (isApplied === false) return;
 
     // Изменяет направление полёта врага.
+    const newVelocity = enemy.velocity;
+
     if (projectile.velocity.x > 0) newVelocity.x = Math.abs(enemy.velocity.x);
     else if (projectile.velocity.x < 0)
       newVelocity.x = -Math.abs(enemy.velocity.x);

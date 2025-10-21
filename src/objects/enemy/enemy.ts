@@ -50,6 +50,7 @@ export class Enemy extends GameObject<CircleShape> {
 
   public override onUpdate(deltaTime: number): void {
     super.onUpdate?.(deltaTime);
+    this.EnemyStatus.onUpdate(deltaTime);
 
     this.currentColor = this.EnemyStatus.getColor();
 

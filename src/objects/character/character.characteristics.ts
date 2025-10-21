@@ -101,6 +101,10 @@ export class CharacterCharacteristics implements Module {
     );
   }
 
+  public onUpdate(deltaTime: number): void {
+    this.MStatus.onUpdate(deltaTime);
+  }
+
   private calculateCharacteristics(): {
     speed: number;
     energy: { max: number; regeneration: number };

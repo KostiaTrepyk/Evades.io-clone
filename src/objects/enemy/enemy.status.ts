@@ -64,6 +64,9 @@ export class EnemyStatus implements Module {
       return acc + status.effects.sizeScale;
     }, 1);
   }
+  public onUpdate(deltaTime: number): void {
+    this.MStatus.onUpdate(deltaTime);
+  }
 
   public getColor(): HSLA {
     const newColor = this.Enemy.defaultColor.clone();
