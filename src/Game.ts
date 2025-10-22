@@ -1,6 +1,6 @@
 import { Character } from './objects/character/character';
 import { gameLoop, renderer, userInput } from './core/global';
-import { gameMap } from './core/GameMap/Configuration/GameMapConfiguration';
+import { gameMap } from './configs/GameMap/GameMapConfiguration';
 import { Magmax } from './objects/characters/magmax/magmax';
 import { Morph } from './objects/characters/morph/morph';
 

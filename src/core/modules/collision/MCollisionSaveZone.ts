@@ -66,6 +66,6 @@ export class MCollisionSaveZone implements Module {
       repositionObjectOnCollisionWithObject(this.object, saveZone, collisions);
     }
 
-    return { doesCollide: doesCollide, collisions: collisions };
+    return { doesCollide, collisions };
   }
 }

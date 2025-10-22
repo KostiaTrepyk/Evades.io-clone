@@ -1,4 +1,4 @@
-import { gameMap } from '../core/GameMap/Configuration/GameMapConfiguration';
+import { gameMap } from '../configs/GameMap/GameMapConfiguration';
 import { drawText } from '../core/utils/canvas/drawText';
 import { HSLA } from '../core/utils/hsla';
 import { UICharacterDescription } from './UICharacterDescription';

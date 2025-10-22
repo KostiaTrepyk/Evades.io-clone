@@ -11,6 +11,24 @@ interface MCollisionPlayerParams {
   onCollision: (player: Character, collisions: Collision) => void;
 }
 
+/**
+ * Module that handles collision detection between a game object and the player.
+ *
+ * @implements {Module}
+ *
+ * @property {GameObject<Shape>} object - The game object to check collisions against
+ * @property {(player: Character, collisions: Collision) => void} onCollision - Callback function triggered when a collision occurs
+ *
+ * @example
+ * ```typescript
+ * const collisionModule = new MCollisionPlayer({
+ *   object: someGameObject,
+ *   onCollision: (player, collision) => {
+ *     // Handle collision
+ *   }
+ * });
+ * ```
+ */
 export class MCollisionPlayer implements Module {
   private object: GameObject<Shape>;
   private onCollision: (player: Character, collisions: Collision) => void;
@@ -20,7 +38,7 @@ export class MCollisionPlayer implements Module {
     this.onCollision = params.onCollision;
   }
 
-  afterUpdate(deltaTime: number): void {
+  public afterUpdate(deltaTime: number): void {
     const player = gameObjectManager.player;
 
     // Do nothing if no player

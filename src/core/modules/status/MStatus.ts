@@ -133,7 +133,6 @@ class Status<StatusName extends string, Effect extends Record<string, any>> {
 
   public onUpdate(deltaTime: number): void {
     if (this.duration === undefined) return;
-    console.log('Inv at: ', this.duration * 1000 + this.appliedAtTimeStamp);
     if (time.timestamp >= this.duration * 1000 + this.appliedAtTimeStamp) {
       this.MStatus.removeStatus(this.id);
     }

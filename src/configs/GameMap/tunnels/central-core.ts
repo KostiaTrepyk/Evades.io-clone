@@ -1,6 +1,6 @@
-import { EnemyTypes } from '../../LevelGenerator/types';
-import { Stage } from '../../Stage';
-import { Tunnel } from '../../Tunnel';
+import { EnemyTypes } from '../../../core/GameMap/LevelGenerator/types';
+import { Stage } from '../../../core/GameMap/Stage';
+import { Tunnel } from '../../../core/GameMap/Tunnel';
 
 const firstStage: Stage = new Stage(
   5,

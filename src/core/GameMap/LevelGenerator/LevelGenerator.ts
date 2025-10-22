@@ -1,13 +1,12 @@
-import { EnemyShooter } from '../../../objects/enemy/list/EnemyShooter/EnemyShooter';
 import { Portal } from '../../../objects/portal/portal';
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
 import { gameObjectManager, renderer } from '../../global';
-import { gameMap } from '../Configuration/GameMapConfiguration';
-import { createCommonEnemy } from './create/createCommonEnemy';
-import { createEnemyBorder } from './create/createEnemyBorder';
-import { createEnemyEnergyBurner } from './create/createEnemyEnergyBurner';
-import { createEnemySpeedReduction } from './create/createEnemySpeedReduction';
-import { createPointOrbs } from './create/createPointOrbs';
+import { gameMap } from '../../../configs/GameMap/GameMapConfiguration';
+import { createCommonEnemy } from './utils/createCommonEnemy';
+import { createEnemyBorder } from './utils/createEnemyBorder';
+import { createEnemyEnergyBurner } from './utils/createEnemyEnergyBurner';
+import { createEnemySpeedReduction } from './utils/createEnemySpeedReduction';
+import { createPointOrbs } from './utils/createPointOrbs';
 import {
   CommonEnemyOptions,
   EnemyBorderOptions,
@@ -42,16 +41,6 @@ export function generateLevel({
   portals,
 }: GenerateLevelOptions) {
   clearLevel();
-
-  // DELETE ME --- Only for tests
-  const e = new EnemyShooter({
-    position: { x: 1500, y: 300 },
-    velocity: { x: 5, y: 1 },
-    projectileSpeed: 17,
-    shootDistance: 900,
-  });
-  e.init();
-  // DELETE ME --- Only for tests
 
   // Player position
   if (gameObjectManager.player) {

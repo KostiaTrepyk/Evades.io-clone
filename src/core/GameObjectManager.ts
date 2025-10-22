@@ -41,10 +41,10 @@ export class GameObjectManager {
     this.player?.onUpdate(deltaTime);
     this.projectiles.forEach((projectile) => projectile.onUpdate(deltaTime));
     this.enemies.forEach((enemy) => enemy.onUpdate(deltaTime));
-    this.portals.forEach((portal) => portal.onUpdate(deltaTime));
+    this.portals.forEach((portal) => portal.afterUpdate?.(deltaTime));
     
     // After update
-    this.player?.afterUpdate?.(deltaTime);
+    this.player?.afterUpdate(deltaTime);
     this.projectiles.forEach((projectile) => projectile.afterUpdate?.(deltaTime))
     this.enemies.forEach((enemy) => enemy.afterUpdate?.(deltaTime));
     this.portals.forEach((portal) => portal.afterUpdate?.(deltaTime));
