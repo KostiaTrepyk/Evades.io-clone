@@ -1,22 +1,22 @@
 import { GenerateLevelOptions } from './LevelGenerator/LevelGenerator';
 import { Stage } from './Stage';
 
-export class Tunnel {
-  private _levelsToWin: number;
+export class Tunnel<TunnelNames extends Record<string, string>> {
+  public readonly levelsToWin: number;
   private _stages: Stage[];
-  private _name: string;
-  private _type: string;
+  public readonly name: TunnelNames[keyof TunnelNames];
+  public readonly type: 'Tunnel' | 'Area';
 
   constructor(
-    name: string,
+    name: TunnelNames[keyof TunnelNames],
     levelsToWin: number,
     stages: Stage[],
     type: 'Tunnel' | 'Area'
   ) {
-    this._levelsToWin = levelsToWin;
+    this.levelsToWin = levelsToWin;
     this._stages = stages;
-    this._name = name;
-    this._type = type;
+    this.name = name;
+    this.type = type;
   }
 
   public getLevelConfiguration(level: number): GenerateLevelOptions {
@@ -39,17 +39,5 @@ export class Tunnel {
     if (!currentStage) throw new Error('No stage');
 
     return currentStage.getLevelConfiguration(level);
-  }
-
-  public get levelsToWin(): number {
-    return this._levelsToWin;
-  }
-
-  public get name(): string {
-    return this._name;
-  }
-
-  public get type(): string {
-    return this._type;
   }
 }

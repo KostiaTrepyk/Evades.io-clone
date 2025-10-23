@@ -27,7 +27,7 @@ export class UIRenderer {
   }
 
   private renderLevelDescription() {
-    const currentTunnelDetails = gameMap.getPlayerDetails();
+    const currentTunnelDetails = gameMap.getPlayerPositionOnMap();
     drawText(
       this.ctx,
       `${currentTunnelDetails.tunnel.name}: ${

@@ -71,44 +71,44 @@ export function generateLevel({
 
   // Create Portals
   if (portals.prevLevel) {
-    const portalToPrevLevel = new Portal(
-      { x: 25, y: renderer._canvasSize.y / 2 },
-      { x: 50, y: renderer._canvasSize.y },
-      () => gameMap.prevLevel()
-    );
+    const portalToPrevLevel = new Portal({
+      startPosition: { x: 25, y: renderer._canvasSize.y / 2 },
+      size: { x: 50, y: renderer._canvasSize.y },
+      onEnter: () => gameMap.prevLevel(),
+    });
     portalToPrevLevel.init();
   }
   if (portals.nextLevel) {
-    const portalToNextLevel = new Portal(
-      {
+    const portalToNextLevel = new Portal({
+      startPosition: {
         x: renderer._canvasSize.x - 25,
         y: renderer._canvasSize.y / 2,
       },
-      { x: 50, y: renderer._canvasSize.y },
-      () => gameMap.nextLevel()
-    );
+      size: { x: 50, y: renderer._canvasSize.y },
+      onEnter: () => gameMap.nextLevel(),
+    });
     portalToNextLevel.init();
   }
   if (portals.prevTunnel) {
-    const portalToPrevTunnel = new Portal(
-      {
+    const portalToPrevTunnel = new Portal({
+      startPosition: {
         x: 150,
         y: 25,
       },
-      { x: 300, y: 50 },
-      () => gameMap.prevTunnel()
-    );
+      size: { x: 300, y: 50 },
+      onEnter: () => gameMap.moveToTunnel('Central Core'),
+    });
     portalToPrevTunnel.init();
   }
   if (portals.nextTunnel) {
-    const portalToNextTunnel = new Portal(
-      {
+    const portalToNextTunnel = new Portal({
+      startPosition: {
         x: 150,
         y: renderer.canvasSize.y - 25,
       },
-      { x: 300, y: 50 },
-      () => gameMap.nextTunnel()
-    );
+      size: { x: 300, y: 50 },
+      onEnter: () => gameMap.moveToTunnel('Central Core'),
+    });
     portalToNextTunnel.init();
   }
 

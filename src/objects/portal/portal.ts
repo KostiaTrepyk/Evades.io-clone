@@ -5,17 +5,19 @@ import { HSLA } from '../../core/utils/hsla';
 import { MCollisionPlayer } from '../../core/modules/collision/MCollisionPlayer';
 import { Character } from '../character/character';
 
+interface PortalParams {
+  startPosition: Position;
+  size: { x: number; y: number };
+  onEnter: () => void;
+}
+
 export class Portal extends GameObject<'rectangle'> {
   private onEnter: () => void;
   private MCollisionPlayer: MCollisionPlayer;
 
-  constructor(
-    startPosition: Position,
-    size: { x: number; y: number },
-    onEnter: () => void
-  ) {
-    super(startPosition, { shape: 'rectangle', size });
-    this.onEnter = onEnter;
+  constructor(params: PortalParams) {
+    super(params.startPosition, { shape: 'rectangle', size: params.size });
+    this.onEnter = params.onEnter;
 
     this.MCollisionPlayer = new MCollisionPlayer({
       object: this,

@@ -1,6 +1,7 @@
 import { EnemyTypes } from '../../../core/GameMap/LevelGenerator/types';
 import { Stage } from '../../../core/GameMap/Stage';
 import { Tunnel } from '../../../core/GameMap/Tunnel';
+import { tunnelNames } from '../GameMapConfiguration';
 
 const firstStage: Stage = new Stage(
   5,
@@ -120,7 +121,7 @@ const fourthStage: Stage = new Stage(
   ]
 );
 
-const centralCore = new Tunnel(
+const centralCore = new Tunnel<typeof tunnelNames>(
   'Central Core',
   40,
   [firstStage, secondStage, thirdStage, fourthStage],
