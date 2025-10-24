@@ -83,12 +83,6 @@ export abstract class Character extends GameObject<CircleShape> {
     this._isDead = false;
     this.characterMovement.unblock();
     this._timeToDeath = undefined;
-
-    gameObjectManager.enemies.forEach((enemy) => {
-      if (doItemsCollide(this, enemy).doesCollide === true) {
-        this.die();
-      }
-    });
   }
 
   public die(): void {

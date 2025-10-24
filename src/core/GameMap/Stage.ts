@@ -1,39 +1,24 @@
 import { GenerateLevelOptions } from './LevelGenerator/LevelGenerator';
-import { EnemyTypes } from './LevelGenerator/types';
-
-interface EnemyDifficulty {
-  type: EnemyTypes;
-  speed: {
-    perLevel: number;
-    max: number;
-  };
-  count: {
-    perLevel: number;
-    max: number;
-  };
-}
+import { LevelConfiguration } from './types';
 
 export class Stage {
   private _levelCount: number;
-  private _defaultLevelConfiguration: Omit<GenerateLevelOptions, 'portals'>;
-  private _difficulty: EnemyDifficulty[];
+  private _levelConfiguration: LevelConfiguration;
 
-  constructor(
-    levelCount: number,
-    defaultLevelConfiguration: Omit<GenerateLevelOptions, 'portals'>,
-    difficulty: EnemyDifficulty[]
-  ) {
+  constructor(levelCount: number, levelConfiguration: LevelConfiguration) {
     this._levelCount = levelCount;
-    this._defaultLevelConfiguration = {
-      ...defaultLevelConfiguration,
+    this._levelConfiguration = {
+      ...levelConfiguration,
     };
-    this._difficulty = difficulty;
   }
 
   public getLevelConfiguration(level: number): GenerateLevelOptions {
     const result: GenerateLevelOptions = {
-      ...structuredClone(this._defaultLevelConfiguration),
+      playerPosition: this._levelConfiguration.playerPosition,
+      pointOrbCount: this._levelConfiguration.pointOrbCount,
+      enemies: this._levelConfiguration.enemies,
       portals: {},
+      level,
     };
 
     // Portals
@@ -44,26 +29,6 @@ export class Stage {
       result.portals.nextTunnel = true;
       result.portals.prevTunnel = true;
     }
-
-    // Enemies
-    for (const enemyDifficulty of this._difficulty) {
-      const enemy = result.enemies.find(
-        (enemy) => enemy.type === enemyDifficulty.type
-      );
-
-      if (!enemy) continue;
-
-      enemy.count = Math.min(
-        Math.floor(enemy.count + enemyDifficulty.count.perLevel * level),
-        enemyDifficulty.count.max
-      );
-
-      enemy.speed = Math.min(
-        enemy.speed + enemyDifficulty.speed.perLevel * level,
-        enemyDifficulty.speed.max
-      );
-    }
-
     return result;
   }
 

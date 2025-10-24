@@ -5,7 +5,7 @@ import { HSLA } from '../../core/utils/hsla';
 import { MCollisionPlayer } from '../../core/modules/collision/MCollisionPlayer';
 import { Character } from '../character/character';
 
-interface PortalParams {
+export interface PortalParams {
   startPosition: Position;
   size: { x: number; y: number };
   onEnter: () => void;

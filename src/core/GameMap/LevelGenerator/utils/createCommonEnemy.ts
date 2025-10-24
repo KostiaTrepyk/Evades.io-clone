@@ -3,11 +3,17 @@ import { renderer } from '../../../global';
 import { getRandomPosition } from '../../../utils/other/getRandomPosition';
 import { getRandomSize } from '../../../utils/other/getRandomSize';
 import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
+import { CommonEnemyConfiguration } from '../../types';
 import { saveZoneWidth } from '../LevelGenerator';
 
-import { CommonEnemyOptions } from '../types';
+export interface CreateCommonEnemyParams {
+  size: { min: number; max: number };
+  speed: number;
+}
 
-export function createCommonEnemy(options: CommonEnemyOptions): CommonEnemy {
+export function createCommonEnemy(
+  options: CreateCommonEnemyParams
+): CommonEnemy {
   return new CommonEnemy({
     position: getRandomPosition({
       minX: saveZoneWidth + (options.size.max / 2 + 2),
