@@ -4,32 +4,31 @@ import { HSLA } from '../core/utils/hsla';
 import { UICharacterDescription } from './UICharacterDescription';
 
 export class UIRenderer {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
-
-  private UICharacterDescription: UICharacterDescription;
+  private _canvas: HTMLCanvasElement;
+  private _ctx: CanvasRenderingContext2D;
+  private _UICharacterDescription: UICharacterDescription;
 
   constructor() {
-    this.canvas = document.getElementById('interface')! as HTMLCanvasElement;
-    this.ctx = this.canvas.getContext('2d')!;
+    this._canvas = document.getElementById('interface')! as HTMLCanvasElement;
+    this._ctx = this._canvas.getContext('2d')!;
 
-    this.UICharacterDescription = new UICharacterDescription(this.ctx);
+    this._UICharacterDescription = new UICharacterDescription(this._ctx);
 
-    window.addEventListener('resize', this.setCanvasSize.bind(this));
-    this.setCanvasSize();
+    window.addEventListener('resize', this.resizeCanvas.bind(this));
+    this.resizeCanvas();
   }
 
   public render() {
-    this.ctx.reset();
+    this._ctx.reset();
 
-    this.UICharacterDescription.renderCharacterDescription();
+    this._UICharacterDescription.renderCharacterDescription();
     this.renderLevelDescription();
   }
 
   private renderLevelDescription() {
     const currentTunnelDetails = gameMap.getPlayerPositionOnMap();
     drawText(
-      this.ctx,
+      this._ctx,
       `${currentTunnelDetails.tunnel.name}: ${
         currentTunnelDetails.tunnel.type
       } ${currentTunnelDetails.currentLevel + 1}`,
@@ -37,15 +36,15 @@ export class UIRenderer {
         fill: { color: new HSLA(0, 0, 100, 1.0) },
         stroke: { width: 3, color: new HSLA(0, 0, 40, 1) },
         fontSize: 42,
-        position: { x: this.ctx.canvas.width / 2, y: 40 },
+        position: { x: this._ctx.canvas.width / 2, y: 40 },
         textAlign: 'center',
         textBaseline: 'middle',
       }
     );
   }
 
-  private setCanvasSize() {
-    this.ctx.canvas.width = window.innerWidth;
-    this.ctx.canvas.height = window.innerHeight;
+  private resizeCanvas() {
+    this._ctx.canvas.width = window.innerWidth;
+    this._ctx.canvas.height = window.innerHeight;
   }
 }

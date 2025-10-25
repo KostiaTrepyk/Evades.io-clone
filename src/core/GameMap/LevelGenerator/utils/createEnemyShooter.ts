@@ -19,9 +19,9 @@ export function createEnemyShooter(
   return new EnemyShooter({
     position: getRandomPosition({
       minX: saveZoneWidth + (halfSize + 2),
-      maxX: renderer._canvasSize.x - saveZoneWidth - (halfSize + 2),
+      maxX: renderer.canvasSize.x - saveZoneWidth - (halfSize + 2),
       minY: halfSize + 2,
-      maxY: renderer._canvasSize.y - (halfSize + 2),
+      maxY: renderer.canvasSize.y - (halfSize + 2),
     }),
     velocity: getRandomVelocity(options.speed),
     projectileSpeed: options.projectileSpeed,

@@ -2,16 +2,15 @@ import { cellSize } from '../consts/consts';
 import { CameraController } from './CameraController';
 
 export class Renderer {
-  private camera: CameraController;
-
-  private ctx: CanvasRenderingContext2D;
-  private canvas: HTMLCanvasElement;
-  public _canvasSize = { x: 4000, y: 800 };
+  private _camera: CameraController;
+  private _ctx: CanvasRenderingContext2D;
+  private _canvas: HTMLCanvasElement;
+  private _canvasSize = { x: 4000, y: 800 };
 
   constructor(camera: CameraController) {
-    this.canvas = document.getElementById('game')! as HTMLCanvasElement;
-    this.ctx = this.canvas.getContext('2d')!;
-    this.camera = camera;
+    this._canvas = document.getElementById('game')! as HTMLCanvasElement;
+    this._ctx = this._canvas.getContext('2d')!;
+    this._camera = camera;
   }
 
   public init() {
@@ -20,23 +19,23 @@ export class Renderer {
   }
 
   public renderFrame(cb: (ctx: CanvasRenderingContext2D) => void) {
-    this.ctx.reset();
+    this._ctx.reset();
 
     // Set camera transform
-    this.camera.onRender(this.ctx);
+    this._camera.onRender(this._ctx);
 
     // Set bgcolor
-    this.ctx.fillStyle = '#ffe';
-    this.ctx.fillRect(0, 0, this._canvasSize.x, this._canvasSize.y);
+    this._ctx.fillStyle = '#ffe';
+    this._ctx.fillRect(0, 0, this._canvasSize.x, this._canvasSize.y);
 
-    this.drawCells(this.ctx);
+    this.drawCells(this._ctx);
 
-    cb(this.ctx);
+    cb(this._ctx);
   }
 
   private adjustCanvasSizeToWindow() {
-    this.ctx.canvas.width = window.innerWidth;
-    this.ctx.canvas.height = window.innerHeight;
+    this._ctx.canvas.width = window.innerWidth;
+    this._ctx.canvas.height = window.innerHeight;
   }
 
   /** FIX ME Походу можно ускорить. Нужно позже подумать */

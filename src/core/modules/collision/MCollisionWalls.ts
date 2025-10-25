@@ -39,34 +39,34 @@ interface MCollisionWallsParams {
  * @param params.collisionType - Determines the collision handling strategy.
  */
 export class MCollisionWalls implements Module {
-  private object: GameObject<Shape>;
-  private onCollision?: (collision: Collision) => void;
-  private collisionType: CollisionType;
+  private _object: GameObject<Shape>;
+  private _onCollision?: (collision: Collision) => void;
+  private _collisionType: CollisionType;
 
   constructor(params: MCollisionWallsParams) {
-    this.object = params.object;
-    this.onCollision = params.onCollision;
-    this.collisionType = params.collisionType ?? 'onlyAfterCollision';
+    this._object = params.object;
+    this._onCollision = params.onCollision;
+    this._collisionType = params.collisionType ?? 'onlyAfterCollision';
   }
 
   public afterUpdate(deltaTime: number): void {
-    if (this.collisionType === 'applyCollision') {
-      const { collisions, doesCollide } = doesCollideWithWalls(this.object);
+    if (this._collisionType === 'applyCollision') {
+      const { collisions, doesCollide } = doesCollideWithWalls(this._object);
 
-      repositionObjectOnCollisionWithWalls(this.object, collisions);
+      repositionObjectOnCollisionWithWalls(this._object, collisions);
 
-      if (this.onCollision && doesCollide) {
-        this.onCollision(collisions);
+      if (this._onCollision && doesCollide) {
+        this._onCollision(collisions);
       }
 
       return;
     }
 
-    if (this.collisionType === 'onlyAfterCollision') {
-      const { collisions, doesCollide } = doesCollideWithWalls(this.object);
+    if (this._collisionType === 'onlyAfterCollision') {
+      const { collisions, doesCollide } = doesCollideWithWalls(this._object);
 
-      if (this.onCollision && doesCollide) {
-        this.onCollision(collisions);
+      if (this._onCollision && doesCollide) {
+        this._onCollision(collisions);
       }
     }
   }

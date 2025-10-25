@@ -13,11 +13,11 @@ export interface EnemyShooterParams {
 }
 
 export class EnemyShooter extends Enemy {
-  private lastShootTimeStamp: number;
+  private _lastShootTimeStamp: number;
   /** Time in seconds */
-  private shootDeltaTime: number;
-  private projectileSpeed: number;
-  private shootDistance: number;
+  private _shootDeltaTime: number;
+  private _projectileSpeed: number;
+  private _shootDistance: number;
 
   constructor(params: EnemyShooterParams) {
     const { position, velocity, projectileSpeed, shootDistance } = params;
@@ -30,11 +30,11 @@ export class EnemyShooter extends Enemy {
     });
 
     const shootDeltaTime = 2;
-    this.lastShootTimeStamp = -shootDeltaTime;
-    this.shootDeltaTime = shootDeltaTime;
+    this._lastShootTimeStamp = -shootDeltaTime;
+    this._shootDeltaTime = shootDeltaTime;
 
-    this.projectileSpeed = projectileSpeed;
-    this.shootDistance = shootDistance;
+    this._projectileSpeed = projectileSpeed;
+    this._shootDistance = shootDistance;
   }
 
   public override onUpdate(deltaTime: number): void {
@@ -46,16 +46,16 @@ export class EnemyShooter extends Enemy {
     if (playerPosition === undefined) return;
 
     if (
-      time.timestamp - this.lastShootTimeStamp >=
-      this.shootDeltaTime * 1000
+      time.timestamp - this._lastShootTimeStamp >=
+      this._shootDeltaTime * 1000
     ) {
       // Check distance
       const deltaX = this.position.x - playerPosition.x;
       const deltaY = this.position.y - playerPosition.y;
       const distance = Math.abs(deltaX) + Math.abs(deltaY);
-      if (distance > this.shootDistance) return;
+      if (distance > this._shootDistance) return;
 
-      this.lastShootTimeStamp = time.timestamp;
+      this._lastShootTimeStamp = time.timestamp;
       this.shoot(playerPosition);
     }
   }
@@ -66,7 +66,7 @@ export class EnemyShooter extends Enemy {
       playerPosition,
     });
     projectile.init();
-    this.lastShootTimeStamp = time.timestamp;
+    this._lastShootTimeStamp = time.timestamp;
   }
 
   private createProjectile(params: {
@@ -77,7 +77,7 @@ export class EnemyShooter extends Enemy {
       startPosition: params.startPosition,
       velocity: this.computeProjectileVelocity(
         params.playerPosition,
-        this.projectileSpeed
+        this._projectileSpeed
       ),
     });
 

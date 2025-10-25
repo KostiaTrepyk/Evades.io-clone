@@ -24,7 +24,7 @@ interface Effect {
 }
 
 export class CharacterCharacteristics implements Module {
-  private readonly CharacterLevels: CharacterLevels;
+  private readonly _CharacterLevels: CharacterLevels;
 
   private _speed: number;
   private _energy: { current: number; max: number; regeneration: number };
@@ -32,7 +32,7 @@ export class CharacterCharacteristics implements Module {
   public MStatus: MStatus<StatusName, Effect>;
 
   constructor(characterLevels: CharacterLevels) {
-    this.CharacterLevels = characterLevels;
+    this._CharacterLevels = characterLevels;
     this._speed = CHARACTERCONFIG.characteristics.default.speed;
     this._energy = {
       current: CHARACTERCONFIG.characteristics.default.energy.max,
@@ -44,7 +44,7 @@ export class CharacterCharacteristics implements Module {
 
   // FIX ME Читабельность говно. Ещё и странно работает.
   public beforeUpdate(deltaTime: number): void {
-    const upgrades = this.CharacterLevels.upgrades;
+    const upgrades = this._CharacterLevels.upgrades;
     const defaultCharacteristics = CHARACTERCONFIG.characteristics.default;
     const upgradesPerLevel = CHARACTERCONFIG.characteristics.upgradesPerLevel;
 
@@ -109,7 +109,7 @@ export class CharacterCharacteristics implements Module {
     speed: number;
     energy: { max: number; regeneration: number };
   } {
-    const upgrades = this.CharacterLevels.upgrades;
+    const upgrades = this._CharacterLevels.upgrades;
     const characteristics = CHARACTERCONFIG.characteristics;
 
     const defaultSpeed: number = characteristics.default.speed;

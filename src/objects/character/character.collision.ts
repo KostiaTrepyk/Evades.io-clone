@@ -7,41 +7,41 @@ import { Character } from './character';
 import { Module } from '../../core/common/Module';
 
 export class CharacterCollision implements Module {
-  private readonly player: Character;
-  private readonly mCollisionWalls: MCollisionWalls;
-  private readonly mCollisionEnemy: MCollisionEnemy;
-  private readonly mCollisionPointOrb: MCollisionPointOrb;
+  private readonly _player: Character;
+  private readonly _MCollisionWalls: MCollisionWalls;
+  private readonly _MCollisionEnemy: MCollisionEnemy;
+  private readonly _MCollisionPointOrb: MCollisionPointOrb;
 
   constructor(player: Character) {
-    this.player = player;
+    this._player = player;
 
-    this.mCollisionWalls = new MCollisionWalls({
+    this._MCollisionWalls = new MCollisionWalls({
       object: player,
       collisionType: 'applyCollision',
     });
-    this.mCollisionEnemy = new MCollisionEnemy({
+    this._MCollisionEnemy = new MCollisionEnemy({
       object: player,
       onCollision: this.onCollisionEnemy.bind(this),
     });
-    this.mCollisionPointOrb = new MCollisionPointOrb({
+    this._MCollisionPointOrb = new MCollisionPointOrb({
       object: player,
       onCollision: this.onCollisionPointOrb.bind(this),
     });
   }
 
   public afterUpdate(deltaTime: number): void {
-    this.mCollisionWalls.afterUpdate(deltaTime);
-    this.mCollisionEnemy.afterUpdate(deltaTime);
-    this.mCollisionPointOrb.afterUpdate(deltaTime);
+    this._MCollisionWalls.afterUpdate(deltaTime);
+    this._MCollisionEnemy.afterUpdate(deltaTime);
+    this._MCollisionPointOrb.afterUpdate(deltaTime);
   }
 
   private onCollisionEnemy(enemy: Enemy): void {
     if (enemy.EnemyStatus.MStatus.isAppliedStatusByName('disabled')) return;
-    this.player.die();
+    this._player.die();
   }
 
   private onCollisionPointOrb(pointOrb: PointOrb): void {
     pointOrb.delete();
-    this.player.level.addPointOrb();
+    this._player.level.addPointOrb();
   }
 }

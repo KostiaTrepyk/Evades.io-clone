@@ -14,7 +14,7 @@ export interface EnemyEnergyBurnerParams {
 }
 
 export class EnemyEnergyBurner extends Enemy {
-  private enemyEnergyBurnerEffectId: Symbol = Symbol(
+  private _enemyEnergyBurnerEffectId: Symbol = Symbol(
     'EnemyEnergyBurnerEffectId aura'
   );
 
@@ -69,7 +69,7 @@ export class EnemyEnergyBurner extends Enemy {
 
   private applyStealEnergyEffect(player: Character): void {
     player.characteristics.MStatus.applyStatus({
-      id: this.enemyEnergyBurnerEffectId,
+      id: this._enemyEnergyBurnerEffectId,
       name: 'energyRegenerationReduction',
       effects: {
         energy: { regeneration: -ENERGYBURNERENEMYCONFIG.energySteals },
@@ -78,6 +78,6 @@ export class EnemyEnergyBurner extends Enemy {
   }
 
   private removeStealEnergyEffect(player: Character): void {
-    player.characteristics.MStatus.removeStatus(this.enemyEnergyBurnerEffectId);
+    player.characteristics.MStatus.removeStatus(this._enemyEnergyBurnerEffectId);
   }
 }

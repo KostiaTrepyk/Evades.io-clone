@@ -48,7 +48,7 @@ export class LevelGenerator {
         player.position.x = player.objectModel.size / 2 + cellSize;
       } else if (playerPosition === 'end') {
         player.position.x =
-          renderer._canvasSize.x - player.objectModel.size / 2 - cellSize;
+          renderer.canvasSize.x - player.objectModel.size / 2 - cellSize;
       }
       player.position.y = renderer.canvasSize.y / 2;
     }
@@ -56,15 +56,15 @@ export class LevelGenerator {
 
   private createSaveZones(): void {
     const saveZoneStart = new SaveZone(
-      { x: saveZoneWidth / 2, y: renderer._canvasSize.y / 2 },
-      { x: saveZoneWidth, y: renderer._canvasSize.y }
+      { x: saveZoneWidth / 2, y: renderer.canvasSize.y / 2 },
+      { x: saveZoneWidth, y: renderer.canvasSize.y }
     );
     const saveZoneEnd = new SaveZone(
       {
-        x: renderer._canvasSize.x - saveZoneWidth / 2,
-        y: renderer._canvasSize.y / 2,
+        x: renderer.canvasSize.x - saveZoneWidth / 2,
+        y: renderer.canvasSize.y / 2,
       },
-      { x: saveZoneWidth, y: renderer._canvasSize.y }
+      { x: saveZoneWidth, y: renderer.canvasSize.y }
     );
     saveZoneStart.init();
     saveZoneEnd.init();
@@ -73,8 +73,8 @@ export class LevelGenerator {
   private createPortals(portals: GenerateLevelOptions['portals']): void {
     if (portals.prevLevel) {
       const portalToPrevLevel = createPortal({
-        startPosition: { x: cellSize / 2, y: renderer._canvasSize.y / 2 },
-        size: { x: cellSize, y: renderer._canvasSize.y },
+        startPosition: { x: cellSize / 2, y: renderer.canvasSize.y / 2 },
+        size: { x: cellSize, y: renderer.canvasSize.y },
         onEnter: () => gameMap.prevLevel(),
       });
       portalToPrevLevel.init();
@@ -82,10 +82,10 @@ export class LevelGenerator {
     if (portals.nextLevel) {
       const portalToNextLevel = createPortal({
         startPosition: {
-          x: renderer._canvasSize.x - cellSize / 2,
-          y: renderer._canvasSize.y / 2,
+          x: renderer.canvasSize.x - cellSize / 2,
+          y: renderer.canvasSize.y / 2,
         },
-        size: { x: cellSize, y: renderer._canvasSize.y },
+        size: { x: cellSize, y: renderer.canvasSize.y },
         onEnter: () => gameMap.nextLevel(),
       });
       portalToNextLevel.init();
@@ -118,78 +118,82 @@ export class LevelGenerator {
     enemies.forEach((enemyTypeOptions) => {
       switch (enemyTypeOptions.type) {
         case enemyTypes.CommonEnemy:
-          let count = Math.min(
+          const commonEnemyCount = Math.min(
             Math.floor(enemyTypeOptions.count.perLevel * level) +
               enemyTypeOptions.count.init,
             enemyTypeOptions.count.max
           );
-          let speed = Math.min(
+          const commonEnemySpeed = Math.min(
             enemyTypeOptions.speed.perLevel * level +
               enemyTypeOptions.speed.init,
             enemyTypeOptions.speed.max
           );
 
-          Array.from({ length: count }).forEach(() => {
+          Array.from({ length: commonEnemyCount }).forEach(() => {
             const commonEnemy = createCommonEnemy({
               size: enemyTypeOptions.size,
-              speed,
+              speed: commonEnemySpeed,
             });
             commonEnemy.init();
           });
           break;
 
         case enemyTypes.EnemyEnergyBurner:
-          count = Math.min(
+          const EnemyEnergyBurnerCount = Math.min(
             Math.floor(enemyTypeOptions.count.perLevel * level) +
               enemyTypeOptions.count.init,
             enemyTypeOptions.count.max
           );
-          speed = Math.min(
+          const EnemyEnergyBurnerSpeed = Math.min(
             enemyTypeOptions.speed.perLevel * level +
               enemyTypeOptions.speed.init,
             enemyTypeOptions.speed.max
           );
 
-          Array.from({ length: count }).forEach(() => {
-            const enemyEnergyBurner = createEnemyEnergyBurner(speed);
+          Array.from({ length: EnemyEnergyBurnerCount }).forEach(() => {
+            const enemyEnergyBurner = createEnemyEnergyBurner(
+              EnemyEnergyBurnerSpeed
+            );
             enemyEnergyBurner.init();
           });
           break;
 
         case enemyTypes.EnemySpeedReduction:
-          count = Math.min(
+          const EnemySpeedReductionCount = Math.min(
             Math.floor(enemyTypeOptions.count.perLevel * level) +
               enemyTypeOptions.count.init,
             enemyTypeOptions.count.max
           );
-          speed = Math.min(
+          const EnemySpeedReductionSpeed = Math.min(
             enemyTypeOptions.speed.perLevel * level +
               enemyTypeOptions.speed.init,
             enemyTypeOptions.speed.max
           );
 
-          Array.from({ length: count }).forEach(() => {
-            const enemySpeedReduction = createEnemySpeedReduction(speed);
+          Array.from({ length: EnemySpeedReductionCount }).forEach(() => {
+            const enemySpeedReduction = createEnemySpeedReduction(
+              EnemySpeedReductionSpeed
+            );
             enemySpeedReduction.init();
           });
           break;
 
         case enemyTypes.EnemyBorder:
-          count = Math.min(
+          const EnemyBorderCount = Math.min(
             Math.floor(enemyTypeOptions.count.perLevel * level) +
               enemyTypeOptions.count.init,
             enemyTypeOptions.count.max
           );
-          speed = Math.min(
+          const EnemyBorderSpeed = Math.min(
             enemyTypeOptions.speed.perLevel * level +
               enemyTypeOptions.speed.init,
             enemyTypeOptions.speed.max
           );
 
-          Array.from({ length: count }).forEach((_, i) => {
+          Array.from({ length: EnemyBorderCount }).forEach((_, i) => {
             const enemyBorder = createEnemyBorder({
-              speed: speed,
-              count: count,
+              speed: EnemyBorderSpeed,
+              count: EnemyBorderCount,
               order: i,
             });
             enemyBorder.init();
@@ -197,12 +201,12 @@ export class LevelGenerator {
           break;
 
         case enemyTypes.EnemyShooter:
-          count = Math.min(
+          const EnemyShooterCount = Math.min(
             Math.floor(enemyTypeOptions.count.perLevel * level) +
               enemyTypeOptions.count.init,
             enemyTypeOptions.count.max
           );
-          speed = Math.min(
+          const EnemyShooterSpeed = Math.min(
             enemyTypeOptions.speed.perLevel * level +
               enemyTypeOptions.speed.init,
             enemyTypeOptions.speed.max
@@ -213,9 +217,9 @@ export class LevelGenerator {
             enemyTypeOptions.projectileSpeed.max
           );
 
-          Array.from({ length: count }).forEach((_, i) => {
+          Array.from({ length: EnemyShooterCount }).forEach((_, i) => {
             const enemyShooter = createEnemyShooter({
-              speed,
+              speed: EnemyShooterSpeed,
               projectileSpeed: projectileSpeed,
               shootDistance: enemyTypeOptions.shootDistance,
             });
@@ -234,9 +238,9 @@ export class LevelGenerator {
       const pointOrb = new PointOrb(
         getRandomPosition({
           minX: saveZoneWidth + 50,
-          maxX: renderer._canvasSize.x - saveZoneWidth - 50,
+          maxX: renderer.canvasSize.x - saveZoneWidth - 50,
           minY: 50,
-          maxY: renderer._canvasSize.y - 50,
+          maxY: renderer.canvasSize.y - 50,
         })
       );
       pointOrb.init();

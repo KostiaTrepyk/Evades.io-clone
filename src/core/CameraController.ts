@@ -4,8 +4,6 @@ import { Position } from './types/Position';
 const zoom = 1.1;
 
 export class CameraController {
-  constructor() {}
-
   public onRender(ctx: CanvasRenderingContext2D) {
     const player = gameObjectManager.player;
 

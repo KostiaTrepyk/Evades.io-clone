@@ -15,7 +15,7 @@ export interface ProjectileParams {
 
 export class Projectile extends GameObject<CircleShape> {
   public velocity: Velocity;
-  private color: HSLA;
+  private _color: HSLA;
 
   constructor(params: ProjectileParams) {
     const { startPosition, size, velocity, color } = params;
@@ -23,7 +23,7 @@ export class Projectile extends GameObject<CircleShape> {
     super(startPosition, { shape: 'circle', size: size });
 
     this.velocity = velocity;
-    this.color = color;
+    this._color = color;
   }
 
   public override onUpdate(deltaTime: number): void {
@@ -37,7 +37,7 @@ export class Projectile extends GameObject<CircleShape> {
     drawCircle(ctx, {
       position: this.position,
       size: this.objectModel.size,
-      fill: { color: this.color },
+      fill: { color: this._color },
     });
   }
 }

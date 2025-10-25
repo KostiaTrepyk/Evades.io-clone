@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "./dist/",
-    "module": "ES6",
-    "target": "ES5",
+    "module": "es2022",
+    "target": "es2022",
     "allowJs": false,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
@@ -11,8 +11,8 @@
     "allowUnusedLabels": false,
     "alwaysStrict": true,
     "noImplicitOverride": true,
-    "allowUnreachableCode": false
-    // "noUnusedLocals": true,
+    "allowUnreachableCode": false,
+    "noUnusedLocals": true,
     // "noUnusedParameters": true,
   },
   "include": ["**/*.ts", "**/*.tsx", "webpack.config.js"]

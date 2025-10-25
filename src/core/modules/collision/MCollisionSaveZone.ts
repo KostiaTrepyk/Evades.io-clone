@@ -35,14 +35,14 @@ interface MCollisionSaveZoneParams {
  * ```
  */
 export class MCollisionSaveZone implements Module {
-  private object: GameObject<Shape>;
-  private collisionType?: CollisionType;
-  private onCollision?: (collision: Collision) => void;
+  private _object: GameObject<Shape>;
+  private _collisionType?: CollisionType;
+  private _onCollision?: (collision: Collision) => void;
 
   constructor(params: MCollisionSaveZoneParams) {
-    this.object = params.object;
-    this.collisionType = params.collisionType;
-    this.onCollision = params.onCollision;
+    this._object = params.object;
+    this._collisionType = params.collisionType;
+    this._onCollision = params.onCollision;
   }
 
   public afterUpdate(deltaTime: number): void {
@@ -50,8 +50,8 @@ export class MCollisionSaveZone implements Module {
       const { doesCollide, collisions } =
         this.collisionWithSaveZone.bind(this)(saveZone);
 
-      if (this.onCollision !== undefined && doesCollide === true) {
-        this.onCollision(collisions);
+      if (this._onCollision !== undefined && doesCollide === true) {
+        this._onCollision(collisions);
       }
     });
   }
@@ -60,10 +60,10 @@ export class MCollisionSaveZone implements Module {
     doesCollide: boolean;
     collisions: Collision;
   } {
-    const { doesCollide, collisions } = doItemsCollide(this.object, saveZone);
+    const { doesCollide, collisions } = doItemsCollide(this._object, saveZone);
 
-    if (this.collisionType === 'applyCollision' && doesCollide === true) {
-      repositionObjectOnCollisionWithObject(this.object, saveZone, collisions);
+    if (this._collisionType === 'applyCollision' && doesCollide === true) {
+      repositionObjectOnCollisionWithObject(this._object, saveZone, collisions);
     }
 
     return { doesCollide, collisions };

@@ -12,21 +12,21 @@ export interface PortalParams {
 }
 
 export class Portal extends GameObject<'rectangle'> {
-  private onEnter: () => void;
-  private MCollisionPlayer: MCollisionPlayer;
+  private _onEnter: () => void;
+  private _MCollisionPlayer: MCollisionPlayer;
 
   constructor(params: PortalParams) {
     super(params.startPosition, { shape: 'rectangle', size: params.size });
-    this.onEnter = params.onEnter;
+    this._onEnter = params.onEnter;
 
-    this.MCollisionPlayer = new MCollisionPlayer({
+    this._MCollisionPlayer = new MCollisionPlayer({
       object: this,
       onCollision: this.onCollisionWithPlayer.bind(this),
     });
   }
 
   public override afterUpdate(deltaTime: number): void {
-    this.MCollisionPlayer.afterUpdate(deltaTime);
+    this._MCollisionPlayer.afterUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
@@ -39,6 +39,6 @@ export class Portal extends GameObject<'rectangle'> {
   }
 
   private onCollisionWithPlayer(player: Character): void {
-    this.onEnter();
+    this._onEnter();
   }
 }

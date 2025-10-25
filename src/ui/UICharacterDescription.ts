@@ -14,13 +14,16 @@ type Section = {
 };
 
 export class UICharacterDescription {
-  private ctx: CanvasRenderingContext2D;
+  private _ctx: CanvasRenderingContext2D;
 
-  private height: number = UICONFIG.characterDescription.height;
-  private expBarHeight: number = UICONFIG.characterDescription.expBarHeight;
-  private sectionConfig = UICONFIG.characterDescription.section;
+  private _height: number = UICONFIG.characterDescription.height;
+  private _expBarHeight: number = UICONFIG.characterDescription.expBarHeight;
+  private _sectionConfig = UICONFIG.characterDescription.section;
 
-  private drawTextOptions: Omit<DrawTextOptions, 'position' | 'fontSize'> = {
+  private _drawTextOptions: Pick<
+    DrawTextOptions,
+    'fill' | 'stroke' | 'isBold' | 'textAlign' | 'textBaseline'
+  > = {
     fill: { color: new HSLA(0, 0, 100, 1) },
     stroke: { width: 0.5, color: new HSLA(0, 0, 27, 1) },
     isBold: false,
@@ -29,7 +32,7 @@ export class UICharacterDescription {
   };
 
   constructor(ctx: CanvasRenderingContext2D) {
-    this.ctx = ctx;
+    this._ctx = ctx;
   }
 
   public renderCharacterDescription() {
@@ -49,7 +52,7 @@ export class UICharacterDescription {
         drawText(ctx, player.level.currentLevel.toString(), {
           position: { x: centeredPosition.x, y: centeredPosition.y + 3 },
           fontSize: 36,
-          ...this.drawTextOptions,
+          ...this._drawTextOptions,
         });
 
         ctx.beginPath();
@@ -57,11 +60,11 @@ export class UICharacterDescription {
         ctx.strokeStyle = '#333';
         ctx.moveTo(
           centeredPosition.x + characterLevelSection.width / 2,
-          centeredPosition.y - this.height / 2
+          centeredPosition.y - this._height / 2
         );
         ctx.lineTo(
           centeredPosition.x + characterLevelSection.width / 2,
-          centeredPosition.y + this.height / 2
+          centeredPosition.y + this._height / 2
         );
         ctx.stroke();
       },
@@ -75,9 +78,9 @@ export class UICharacterDescription {
           drawText(ctx, `Points: ${player.level.upgradePoints}`, {
             position: {
               x: centeredPosition.x - speedSection.width / 2 + 10,
-              y: centeredPosition.y - this.height / 2 + 20,
+              y: centeredPosition.y - this._height / 2 + 20,
             },
-            fontSize: this.sectionConfig.useSkillHint.fontSize,
+            fontSize: this._sectionConfig.useSkillHint.fontSize,
             fill: { color: new HSLA(0, 0, 100, 1) },
             textAlign: 'start',
           });
@@ -175,8 +178,8 @@ export class UICharacterDescription {
       0
     );
     const barPosition: Position = {
-      x: (this.ctx.canvas.width - barWidth) / 2,
-      y: this.ctx.canvas.height - this.height,
+      x: (this._ctx.canvas.width - barWidth) / 2,
+      y: this._ctx.canvas.height - this._height,
     };
 
     const drawSection = (section: Section) => {
@@ -194,18 +197,18 @@ export class UICharacterDescription {
       if (section.draw) {
         const centeredPosition = {
           x: position.x + section.width / 2,
-          y: position.y + this.height / 2,
+          y: position.y + this._height / 2,
         };
-        section.draw(this.ctx, centeredPosition);
+        section.draw(this._ctx, centeredPosition);
       }
     };
 
     // bg color
-    this.ctx.fillStyle = '#000d';
-    this.ctx.fillRect(barPosition.x, barPosition.y, barWidth, this.height);
+    this._ctx.fillStyle = '#000d';
+    this._ctx.fillRect(barPosition.x, barPosition.y, barWidth, this._height);
 
     // Draw Exp bar
-    this.drawExpBar(this.ctx, {
+    this.drawExpBar(this._ctx, {
       player,
       position: barPosition,
       barWidth,
@@ -235,15 +238,15 @@ export class UICharacterDescription {
     ctx.fillStyle = player.color.default.toString();
     ctx.fillRect(
       position.x,
-      position.y - this.expBarHeight,
+      position.y - this._expBarHeight,
       barWidth * (value / maxValue),
-      this.expBarHeight
+      this._expBarHeight
     );
     ctx.strokeRect(
       position.x + 1,
-      position.y - this.expBarHeight,
+      position.y - this._expBarHeight,
       barWidth - 2,
-      this.expBarHeight
+      this._expBarHeight
     );
   }
 
@@ -269,19 +272,19 @@ export class UICharacterDescription {
 
     drawText(ctx, skillUpgrades.current.toString(), {
       position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
-      fontSize: this.sectionConfig.mainValue.fontSize,
-      ...this.drawTextOptions,
+      fontSize: this._sectionConfig.mainValue.fontSize,
+      ...this._drawTextOptions,
     });
     drawText(ctx, (cooldownPercentage * 100).toFixed(0), {
       position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
-      fontSize: this.sectionConfig.description.fontSize,
-      ...this.drawTextOptions,
+      fontSize: this._sectionConfig.description.fontSize,
+      ...this._drawTextOptions,
     });
     this.drawSkillPoints(
       ctx,
       {
         x: centeredPosition.x,
-        y: centeredPosition.y - this.height / 2 + 20,
+        y: centeredPosition.y - this._height / 2 + 20,
       },
       skillUpgrades.current
     );
@@ -293,13 +296,13 @@ export class UICharacterDescription {
       this.drawUpgradeHelper(ctx, {
         hint: upgradeHint,
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
-        fontSize: this.sectionConfig.upgradeHint.fontSize,
+        fontSize: this._sectionConfig.upgradeHint.fontSize,
       });
     } else if (skillUpgrades.current > 0) {
       this.drawUseHelper(ctx, {
         hint: useHint,
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
-        fontSize: this.sectionConfig.useSkillHint.fontSize,
+        fontSize: this._sectionConfig.useSkillHint.fontSize,
       });
     }
   }
@@ -326,20 +329,20 @@ export class UICharacterDescription {
 
     drawText(ctx, value, {
       position: { x: centeredPosition.x, y: centeredPosition.y - 7 },
-      fontSize: this.sectionConfig.mainValue.fontSize,
-      ...this.drawTextOptions,
+      fontSize: this._sectionConfig.mainValue.fontSize,
+      ...this._drawTextOptions,
     });
     drawText(ctx, description, {
       position: { x: centeredPosition.x, y: centeredPosition.y + 17 },
-      fontSize: this.sectionConfig.description.fontSize,
-      ...this.drawTextOptions,
+      fontSize: this._sectionConfig.description.fontSize,
+      ...this._drawTextOptions,
     });
 
     if (player.level.upgradePoints > 0 && isMaxLvl === false) {
       this.drawUpgradeHelper(ctx, {
         hint: upgradeHint,
         position: { x: centeredPosition.x, y: centeredPosition.y + 43 },
-        fontSize: this.sectionConfig.upgradeHint.fontSize,
+        fontSize: this._sectionConfig.upgradeHint.fontSize,
       });
     }
   }

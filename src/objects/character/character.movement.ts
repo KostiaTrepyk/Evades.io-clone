@@ -4,16 +4,16 @@ import { Character } from './character';
 import { Module } from '../../core/common/Module';
 
 export class CharacterMovement implements Module {
-  private readonly player: Character;
-  private isBlocked: boolean;
+  private readonly _player: Character;
+  private _isBlocked: boolean;
 
   constructor(player: Character) {
-    this.player = player;
-    this.isBlocked = false;
+    this._player = player;
+    this._isBlocked = false;
   }
 
   public onUpdate(deltaTime: number): void {
-    if (this.isBlocked) return;
+    if (this._isBlocked) return;
 
     const isPressedW: boolean = userInput.isKeypress('KeyW');
     const isPressedS: boolean = userInput.isKeypress('KeyS');
@@ -30,41 +30,41 @@ export class CharacterMovement implements Module {
     if (!isMovingX && !isMovingY) return;
 
     // normalizing the speed of the character
-    let normalizedSpeed: number = this.player.characteristics.speed;
+    let normalizedSpeed: number = this._player.characteristics.speed;
     if (isMovingX && isMovingY) normalizedSpeed /= 1.333;
 
     if (isPressedShift) normalizedSpeed *= GAMECONFIG.characterSlowRatio;
 
     if (isPressedW && isMovingY) {
-      this.player.prevPosition.y = this.player.position.y;
-      this.player.position.y -= normalizedSpeed * deltaTime;
+      this._player.prevPosition.y = this._player.position.y;
+      this._player.position.y -= normalizedSpeed * deltaTime;
     }
 
     if (isPressedS && isMovingY) {
-      this.player.prevPosition.y = this.player.position.y;
-      this.player.position.y += normalizedSpeed * deltaTime;
+      this._player.prevPosition.y = this._player.position.y;
+      this._player.position.y += normalizedSpeed * deltaTime;
     }
 
     if (isPressedA && isMovingX) {
-      this.player.prevPosition.x = this.player.position.x;
-      this.player.position.x -= normalizedSpeed * deltaTime;
+      this._player.prevPosition.x = this._player.position.x;
+      this._player.position.x -= normalizedSpeed * deltaTime;
     }
 
     if (isPressedD && isMovingX) {
-      this.player.prevPosition.x = this.player.position.x;
-      this.player.position.x += normalizedSpeed * deltaTime;
+      this._player.prevPosition.x = this._player.position.x;
+      this._player.position.x += normalizedSpeed * deltaTime;
     }
   }
 
   public unblock(): void {
-    this.isBlocked = false;
+    this._isBlocked = false;
   }
 
   public block(): void {
-    this.isBlocked = true;
+    this._isBlocked = true;
   }
 
-  public get getIsBlocked(): boolean {
-    return this.isBlocked;
+  public get isBlocked(): boolean {
+    return this._isBlocked;
   }
 }

@@ -5,12 +5,12 @@ import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';
 
 export class PointOrb extends GameObject<'circle'> {
-  private color: HSLA;
+  private _color: HSLA;
 
   constructor(startPosition: Position) {
     super(startPosition, { shape: 'circle', size: POINTORBCONFIG.size });
 
-    this.color = this.getRandomColor();
+    this._color = this.getRandomColor();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
@@ -18,7 +18,7 @@ export class PointOrb extends GameObject<'circle'> {
     drawCircle(ctx, {
       position: this.position,
       size: this.objectModel.size,
-      fill: { color: this.color },
+      fill: { color: this._color },
     });
   }
 

@@ -30,12 +30,12 @@ interface MCollisionPlayerParams {
  * ```
  */
 export class MCollisionPlayer implements Module {
-  private object: GameObject<Shape>;
-  private onCollision: (player: Character, collisions: Collision) => void;
+  private _object: GameObject<Shape>;
+  private _onCollision: (player: Character, collisions: Collision) => void;
 
   constructor(params: MCollisionPlayerParams) {
-    this.object = params.object;
-    this.onCollision = params.onCollision;
+    this._object = params.object;
+    this._onCollision = params.onCollision;
   }
 
   public afterUpdate(deltaTime: number): void {
@@ -44,8 +44,8 @@ export class MCollisionPlayer implements Module {
     // Do nothing if no player
     if (player === undefined) return;
 
-    const { doesCollide, collisions } = doItemsCollide(this.object, player);
+    const { doesCollide, collisions } = doItemsCollide(this._object, player);
 
-    if (doesCollide === true) this.onCollision(player, collisions);
+    if (doesCollide === true) this._onCollision(player, collisions);
   }
 }

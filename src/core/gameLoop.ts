@@ -10,14 +10,14 @@ import {
 
 /** Главный цикл игры */
 export class GameLoop {
-  private lastGameRenderTimestamp: number | null = null;
-  private lastUIRenderTimestamp: number | null = null;
-  private animationId: number | null = null;
-  private readonly loopBound: (timestamp: number) => void;
+  private _lastGameRenderTimestamp: number | null = null;
+  private _lastUIRenderTimestamp: number | null = null;
+  private _animationId: number | null = null;
+  private readonly _loopBound: (timestamp: number) => void;
 
   constructor() {
     // Привязываем метод один раз — это позволяет безопасно передавать его в rAF и отменять
-    this.loopBound = this.loop.bind(this);
+    this._loopBound = this.loop.bind(this);
   }
 
   /**
@@ -25,21 +25,21 @@ export class GameLoop {
    */
   public start(): void {
     // Если уже запущено, ничего не делаем
-    if (this.animationId != null) return;
+    if (this._animationId != null) return;
 
     // Даем rAF передать первый timestamp в loop
-    this.animationId = requestAnimationFrame(this.loopBound);
+    this._animationId = requestAnimationFrame(this._loopBound);
   }
 
   /**
    * Останавливает цикл и очищает состояние времени.
    */
   public stop(): void {
-    if (this.animationId !== null) {
-      cancelAnimationFrame(this.animationId);
-      this.animationId = null;
-      this.lastGameRenderTimestamp = null;
-      this.lastUIRenderTimestamp = null;
+    if (this._animationId !== null) {
+      cancelAnimationFrame(this._animationId);
+      this._animationId = null;
+      this._lastGameRenderTimestamp = null;
+      this._lastUIRenderTimestamp = null;
     }
   }
 
@@ -53,19 +53,19 @@ export class GameLoop {
     this.renderUI(timestamp);
 
     // Подготовка к следующему кадру
-    this.animationId = requestAnimationFrame(this.loopBound);
+    this._animationId = requestAnimationFrame(this._loopBound);
   }
 
   private renderGame(timestamp: number): void {
     const frameTime = 1 / GAMECONFIG.fpsGame;
 
     // ====== Инициализируем lastRender при первом кадре ======
-    if (this.lastGameRenderTimestamp === null) {
-      this.lastGameRenderTimestamp = timestamp - frameTime;
+    if (this._lastGameRenderTimestamp === null) {
+      this._lastGameRenderTimestamp = timestamp - frameTime;
     }
 
     // ====== deltaTime в секундах ======
-    const deltaTime = (timestamp - this.lastGameRenderTimestamp) / 1000;
+    const deltaTime = (timestamp - this._lastGameRenderTimestamp) / 1000;
 
     // ====== FPS Limitation ======
     if (deltaTime < frameTime) return;
@@ -78,25 +78,25 @@ export class GameLoop {
     // ====== рендер игровых объектов ======
     renderer.renderFrame((ctx) => gameObjectManager.renderAll(ctx));
 
-    this.lastGameRenderTimestamp = timestamp;
+    this._lastGameRenderTimestamp = timestamp;
   }
 
   private renderUI(timestamp: number): void {
     const frameTime = 1 / UICONFIG.fpsUI;
 
     // ====== Инициализируем lastRender при первом кадре ======
-    if (this.lastUIRenderTimestamp === null) {
-      this.lastUIRenderTimestamp = timestamp - frameTime;
+    if (this._lastUIRenderTimestamp === null) {
+      this._lastUIRenderTimestamp = timestamp - frameTime;
     }
 
     // ====== deltaTime в секундах ======
-    const deltaTime = (timestamp - this.lastUIRenderTimestamp) / 1000;
+    const deltaTime = (timestamp - this._lastUIRenderTimestamp) / 1000;
 
     // ====== FPS Limitation ======
     if (deltaTime < frameTime) return;
 
     uiRenderer.render();
 
-    this.lastUIRenderTimestamp = timestamp;
+    this._lastUIRenderTimestamp = timestamp;
   }
 }

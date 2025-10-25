@@ -1,8 +1,6 @@
 import { CircleShape, Shapes } from '../../core/types/Shape';
 import { Position } from '../../core/types/Position';
-import { gameObjectManager } from '../../core/global';
 import { GameObject } from '../../core/common/GameObject/GameObject';
-import { doItemsCollide } from '../../core/utils/collision/doItemsCollide';
 import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';

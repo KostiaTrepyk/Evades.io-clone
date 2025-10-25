@@ -31,19 +31,19 @@ interface MCollisionPointOrbParams {
  * @param params.onCollision - The callback to execute when a collision with an point orb occurs.
  */
 export class MCollisionPointOrb implements Module {
-  private object: GameObject<Shape>;
-  private onCollision: (pointOrb: PointOrb) => void;
+  private _object: GameObject<Shape>;
+  private _onCollision: (pointOrb: PointOrb) => void;
 
   constructor(params: MCollisionPointOrbParams) {
-    this.object = params.object;
-    this.onCollision = params.onCollision;
+    this._object = params.object;
+    this._onCollision = params.onCollision;
   }
 
   public afterUpdate(deltaTime: number): void {
     const pointOrbs = gameObjectManager.pointOrbs;
     pointOrbs.forEach((pointOrb) => {
-      if (doItemsCollide(this.object, pointOrb).doesCollide === true) {
-        this.onCollision(pointOrb);
+      if (doItemsCollide(this._object, pointOrb).doesCollide === true) {
+        this._onCollision(pointOrb);
       }
     });
   }

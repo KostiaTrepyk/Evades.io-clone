@@ -31,19 +31,19 @@ interface MCollisionEnemyParams {
  * @param params.onCollision - The callback to execute when a collision with an enemy occurs.
  */
 export class MCollisionEnemy implements Module {
-  private object: GameObject<Shape>;
-  private onCollision: (enemy: Enemy) => void;
+  private _object: GameObject<Shape>;
+  private _onCollision: (enemy: Enemy) => void;
 
   constructor(params: MCollisionEnemyParams) {
-    this.object = params.object;
-    this.onCollision = params.onCollision;
+    this._object = params.object;
+    this._onCollision = params.onCollision;
   }
 
   public afterUpdate(deltaTime: number): void {
     const enemies = gameObjectManager.enemies;
     enemies.forEach((enemy) => {
-      if (doItemsCollide(this.object, enemy).doesCollide === true) {
-        this.onCollision(enemy);
+      if (doItemsCollide(this._object, enemy).doesCollide === true) {
+        this._onCollision(enemy);
       }
     });
   }

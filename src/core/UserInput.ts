@@ -15,14 +15,14 @@ export type KeyCode =
 
 /** FIXME Система которая позволяет легко биндить нужные клавиши.  */
 export class UserInput {
-  private keydown: Set<KeyCode>;
-  private keyup: Set<KeyCode>;
-  private keypress: Set<KeyCode>;
+  private _keydown: Set<KeyCode>;
+  private _keyup: Set<KeyCode>;
+  private _keypress: Set<KeyCode>;
 
   constructor() {
-    this.keydown = new Set();
-    this.keyup = new Set();
-    this.keypress = new Set();
+    this._keydown = new Set();
+    this._keyup = new Set();
+    this._keypress = new Set();
   }
 
   public bind() {
@@ -37,42 +37,42 @@ export class UserInput {
     );
     document.removeEventListener('keyup', this.keyupEventHandler.bind(this));
 
-    this.keydown.clear();
-    this.keypress.clear();
-    this.keyup.clear();
+    this._keydown.clear();
+    this._keypress.clear();
+    this._keyup.clear();
   }
 
   public isKeypress(key: KeyCode): boolean {
-    return this.keypress.has(key);
+    return this._keypress.has(key);
   }
 
   public isKeydown(key: KeyCode): boolean {
-    return this.keydown.has(key);
+    return this._keydown.has(key);
   }
 
   public isKeyup(key: KeyCode): boolean {
-    return this.keyup.has(key);
+    return this._keyup.has(key);
   }
 
   /** Очищает состояния после update */
   public afterUpdate(): void {
-    this.keydown.clear();
-    this.keyup.clear();
+    this._keydown.clear();
+    this._keyup.clear();
   }
 
   private keydownEventHandler(event: KeyboardEvent): void {
     const { code, repeat } = event;
 
     if (!repeat) {
-      this.keydown.add(code as KeyCode);
-      this.keypress.add(code as KeyCode);
+      this._keydown.add(code as KeyCode);
+      this._keypress.add(code as KeyCode);
     }
   }
 
   private keyupEventHandler(event: KeyboardEvent): void {
     const { code } = event;
 
-    this.keyup.add(code as KeyCode);
-    this.keypress.delete(code as KeyCode);
+    this._keyup.add(code as KeyCode);
+    this._keypress.delete(code as KeyCode);
   }
 }

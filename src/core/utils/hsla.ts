@@ -1,8 +1,8 @@
 export class HSLA {
-  private hue: number;
-  private saturation: number;
-  private lightness: number;
-  private alpha: number;
+  private _hue: number;
+  private _saturation: number;
+  private _lightness: number;
+  private _alpha: number;
 
   constructor(
     hue: number,
@@ -10,27 +10,27 @@ export class HSLA {
     lightness: number,
     alpha: number
   ) {
-    this.hue = this.clampValue(hue, 0, 360);
-    this.saturation = this.clampValue(saturation, 0, 100);
-    this.lightness = this.clampValue(lightness, 0, 100);
-    this.alpha = this.clampValue(alpha, 0, 1);
+    this._hue = this.clampValue(hue, 0, 360);
+    this._saturation = this.clampValue(saturation, 0, 100);
+    this._lightness = this.clampValue(lightness, 0, 100);
+    this._alpha = this.clampValue(alpha, 0, 1);
   }
 
   public static fromString(colorString: string): HSLA {
     const [hue, saturation, light, alpha] = colorString
       .substring(5, colorString.length - 1)
       .split(',')
-      .map(value => parseFloat(value.trim()));
+      .map((value) => parseFloat(value.trim()));
 
     return new HSLA(hue, saturation, light, alpha);
   }
 
   public toString(): string {
-    return `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${this.alpha})`;
+    return `hsla(${this._hue}, ${this._saturation}%, ${this._lightness}%, ${this._alpha})`;
   }
 
   public clone(): HSLA {
-    return new HSLA(this.hue, this.saturation, this.lightness, this.alpha);
+    return new HSLA(this._hue, this._saturation, this._lightness, this._alpha);
   }
 
   static fromRGBA(r: number, g: number, b: number, a: number): HSLA {
@@ -76,38 +76,38 @@ export class HSLA {
   }
 
   get getHue(): number {
-    return this.hue;
+    return this._hue;
   }
 
   get getSaturation(): number {
-    return this.saturation;
+    return this._saturation;
   }
 
   get getLightness(): number {
-    return this.lightness;
+    return this._lightness;
   }
 
   get getAlpha(): number {
-    return this.alpha;
+    return this._alpha;
   }
 
   /** От 0 до 360 */
   set setHue(hue: number) {
-    this.hue = this.clampValue(hue, 0, 360);
+    this._hue = this.clampValue(hue, 0, 360);
   }
 
   /** От 0 до 100 */
   set setSaturation(saturation: number) {
-    this.saturation = this.clampValue(saturation, 0, 100);
+    this._saturation = this.clampValue(saturation, 0, 100);
   }
 
   /** От 0 до 100 */
   set setLightness(lightness: number) {
-    this.lightness = this.clampValue(lightness, 0, 100);
+    this._lightness = this.clampValue(lightness, 0, 100);
   }
 
   /** От 0 до 1 */
   set setAlpha(alpha: number) {
-    this.alpha = this.clampValue(alpha, 0, 1);
+    this._alpha = this.clampValue(alpha, 0, 1);
   }
 }

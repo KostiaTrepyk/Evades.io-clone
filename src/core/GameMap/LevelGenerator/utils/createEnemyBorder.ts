@@ -17,9 +17,9 @@ export function createEnemyBorder(params: {
   const halfSize = size / 2;
 
   const minX = saveZoneWidth + halfSize;
-  const maxX = renderer._canvasSize.x - saveZoneWidth - halfSize;
+  const maxX = renderer.canvasSize.x - saveZoneWidth - halfSize;
   const minY = halfSize;
-  const maxY = renderer._canvasSize.y - halfSize;
+  const maxY = renderer.canvasSize.y - halfSize;
 
   const length = {
     x: maxX - minX,

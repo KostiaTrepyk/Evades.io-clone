@@ -12,9 +12,9 @@ export function createEnemySpeedReduction(speed: number): EnemySpeedReduction {
     position: getRandomPosition({
       minX: saveZoneWidth + (enemyEnergyBurnerSize + 2),
       maxX:
-        renderer._canvasSize.x - saveZoneWidth - (enemyEnergyBurnerSize + 2),
+        renderer.canvasSize.x - saveZoneWidth - (enemyEnergyBurnerSize + 2),
       minY: enemyEnergyBurnerSize + 2,
-      maxY: renderer._canvasSize.y - (enemyEnergyBurnerSize + 2),
+      maxY: renderer.canvasSize.y - (enemyEnergyBurnerSize + 2),
     }),
     velocity: getRandomVelocity(speed),
   });

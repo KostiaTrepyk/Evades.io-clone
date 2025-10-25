@@ -5,20 +5,20 @@ import { Enemy } from '../../../../objects/enemy/enemy';
 import { AMEnemyMovement } from './MEnemyMovement.type';
 
 export class MEnemyMovementDefault implements AMEnemyMovement {
-  private enemy: Enemy;
-  private mCollisionWalls: MCollisionWalls;
-  private mCollisionSaveZone: MCollisionSaveZone;
+  private _enemy: Enemy;
+  private _MCollisionWalls: MCollisionWalls;
+  private _MCollisionSaveZone: MCollisionSaveZone;
 
   constructor(enemy: Enemy) {
-    this.enemy = enemy;
+    this._enemy = enemy;
 
-    this.mCollisionWalls = new MCollisionWalls({
+    this._MCollisionWalls = new MCollisionWalls({
       object: enemy,
       collisionType: 'applyCollision',
       onCollision: this.collisionWithWallsHandler.bind(this),
     });
 
-    this.mCollisionSaveZone = new MCollisionSaveZone({
+    this._MCollisionSaveZone = new MCollisionSaveZone({
       object: enemy,
       collisionType: 'applyCollision',
       onCollision: this.collisionWithSaveZonesHandler.bind(this),
@@ -26,21 +26,21 @@ export class MEnemyMovementDefault implements AMEnemyMovement {
   }
 
   public afterUpdate(deltaTime: number): void {
-    this.mCollisionWalls.afterUpdate(deltaTime);
-    this.mCollisionSaveZone.afterUpdate(deltaTime);
+    this._MCollisionWalls.afterUpdate(deltaTime);
+    this._MCollisionSaveZone.afterUpdate(deltaTime);
   }
 
   private collisionWithWallsHandler(collision: Collision): void {
-    const newVelocity = this.enemy.velocity;
+    const newVelocity = this._enemy.velocity;
     if (collision.x !== 'no') newVelocity.x *= -1;
     if (collision.y !== 'no') newVelocity.y *= -1;
-    this.enemy.setVelocity = newVelocity;
+    this._enemy.setVelocity = newVelocity;
   }
 
   private collisionWithSaveZonesHandler(collision: Collision): void {
-    const newVelocity = this.enemy.velocity;
+    const newVelocity = this._enemy.velocity;
     if (collision.x !== 'no') newVelocity.x *= -1;
     if (collision.y !== 'no') newVelocity.y *= -1;
-    this.enemy.setVelocity = newVelocity;
+    this._enemy.setVelocity = newVelocity;
   }
 }

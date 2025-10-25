@@ -32,7 +32,7 @@ export interface EnemyStatusParams {
 }
 
 export class EnemyStatus implements Module {
-  private Enemy: Enemy;
+  private _Enemy: Enemy;
   private _sizeScale: number;
   private _speedChange: number;
 
@@ -46,7 +46,7 @@ export class EnemyStatus implements Module {
       isDisableAllStatuses: false,
     });
 
-    this.Enemy = enemy;
+    this._Enemy = enemy;
     this._sizeScale = 1;
     this._speedChange = 0;
   }
@@ -69,7 +69,7 @@ export class EnemyStatus implements Module {
   }
 
   public getColor(): HSLA {
-    const newColor = this.Enemy.defaultColor.clone();
+    const newColor = this._Enemy.defaultColor.clone();
 
     const statuses = this.MStatus.statuses;
     for (let i = statuses.length - 1; i >= 0; i++) {

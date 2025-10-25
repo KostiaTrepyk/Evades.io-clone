@@ -15,9 +15,9 @@ export interface EnemyShooterProjectileParams {
 }
 
 export class EnemyShooterProjectile extends Projectile {
-  private MCollisionSaveZone: MCollisionSaveZone;
-  private MCollisionWalls: MCollisionWalls;
-  private MCollisionPlayer: MCollisionPlayer;
+  private _MCollisionSaveZone: MCollisionSaveZone;
+  private _MCollisionWalls: MCollisionWalls;
+  private _MCollisionPlayer: MCollisionPlayer;
 
   constructor(params: EnemyShooterProjectileParams) {
     super({
@@ -27,28 +27,28 @@ export class EnemyShooterProjectile extends Projectile {
       color: ENEMYSHOOTERCONFIG.color.clone(),
     });
 
-    this.MCollisionSaveZone = new MCollisionSaveZone({
+    this._MCollisionSaveZone = new MCollisionSaveZone({
       object: this,
       collisionType: 'onlyAfterCollision',
       onCollision: this.onCollisionWithSaveZone.bind(this),
     });
 
-    this.MCollisionWalls = new MCollisionWalls({
+    this._MCollisionWalls = new MCollisionWalls({
       object: this,
       collisionType: 'onlyAfterCollision',
       onCollision: this.onCollisionWithWalls.bind(this),
     });
 
-    this.MCollisionPlayer = new MCollisionPlayer({
+    this._MCollisionPlayer = new MCollisionPlayer({
       object: this,
       onCollision: this.onCollisionWithPlayer.bind(this),
     });
   }
 
   public override afterUpdate(deltaTime: number): void {
-    this.MCollisionPlayer.afterUpdate(deltaTime);
-    this.MCollisionSaveZone.afterUpdate(deltaTime);
-    this.MCollisionWalls.afterUpdate(deltaTime);
+    this._MCollisionPlayer.afterUpdate(deltaTime);
+    this._MCollisionSaveZone.afterUpdate(deltaTime);
+    this._MCollisionWalls.afterUpdate(deltaTime);
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

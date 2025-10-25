@@ -1,6 +1,6 @@
 import { GameObject } from '../../../core/common/GameObject/GameObject';
 import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
-import { gameObjectManager, time } from '../../../core/global';
+import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Character } from '../../character/character';
 import { CommonSkill } from '../../character/skills/commonSkill';

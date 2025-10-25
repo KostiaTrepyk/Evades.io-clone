@@ -14,7 +14,7 @@ interface EnemySpeedReductionParams {
 }
 
 export class EnemySpeedReduction extends Enemy {
-  private enemySpeedReductionEffectId: Symbol = Symbol(
+  private _enemySpeedReductionEffectId: Symbol = Symbol(
     'EnemySpeedReduction aura'
   );
 
@@ -67,7 +67,7 @@ export class EnemySpeedReduction extends Enemy {
 
   private applySpeedReductionEffect(player: Character): void {
     player.characteristics.MStatus.applyStatus({
-      id: this.enemySpeedReductionEffectId,
+      id: this._enemySpeedReductionEffectId,
       name: 'speedReduction',
       effects: {
         speed: {
@@ -80,7 +80,7 @@ export class EnemySpeedReduction extends Enemy {
 
   private removeSpeedReductionEffect(player: Character): void {
     player.characteristics.MStatus.removeStatus(
-      this.enemySpeedReductionEffectId
+      this._enemySpeedReductionEffectId
     );
   }
 }

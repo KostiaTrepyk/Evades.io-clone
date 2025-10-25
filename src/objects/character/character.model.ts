@@ -6,8 +6,8 @@ import { drawText } from '../../core/utils/canvas/drawText';
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { UICONFIG } from '../../configs/ui.config';
 
-export const RenderCharacterModel = {
-  showMana: (ctx: CanvasRenderingContext2D, character: Character) => {
+export class RenderCharacterModel {
+  public static showMana(ctx: CanvasRenderingContext2D, character: Character) {
     const position: Position = {
       x: character.position.x,
       y: character.position.y - character.objectModel.size / 2 - 8,
@@ -39,17 +39,17 @@ export const RenderCharacterModel = {
         width: UICONFIG.colors.mana.stroke.width,
       },
     });
-  },
+  }
 
-  default: (ctx: CanvasRenderingContext2D, character: Character) => {
+  public static default(ctx: CanvasRenderingContext2D, character: Character) {
     drawCircle(ctx, {
       position: character.position,
       size: character.objectModel.size,
       fill: { color: character.color.current },
     });
-  },
+  }
 
-  dead: (ctx: CanvasRenderingContext2D, character: Character) => {
+  public static dead(ctx: CanvasRenderingContext2D, character: Character) {
     const color = character.color.current.clone();
     color.setAlpha = 0.75;
 
@@ -69,5 +69,5 @@ export const RenderCharacterModel = {
       fontSize: CHARACTERCONFIG.dead.text.size,
       isBold: CHARACTERCONFIG.dead.text.isBold,
     });
-  },
-} as const;
+  }
+}
