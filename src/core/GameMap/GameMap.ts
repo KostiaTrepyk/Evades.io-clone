@@ -1,7 +1,5 @@
-import {
-  GenerateLevelOptions,
-  generateLevel,
-} from './LevelGenerator/LevelGenerator';
+import { levelGenerator } from '../global';
+import { GenerateLevelOptions } from './LevelGenerator/LevelGenerator';
 import { Tunnel } from './Tunnel';
 
 export class GameMap<TunnelNames extends Record<string, string>> {
@@ -38,7 +36,10 @@ export class GameMap<TunnelNames extends Record<string, string>> {
   }
 
   public generateCurrentLevel(playerPosition: 'start' | 'end'): void {
-    generateLevel({ ...this.getCurrentLevelConfiguration(), playerPosition });
+    levelGenerator.generateLevel({
+      ...this.getCurrentLevelConfiguration(),
+      playerPosition,
+    });
   }
 
   public getCurrentLevelConfiguration(): GenerateLevelOptions {

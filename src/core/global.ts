@@ -6,6 +6,7 @@ import { UserInput } from './UserInput';
 import { Renderer } from './Renderer';
 import { CameraController } from './CameraController';
 import { Time } from './Time';
+import { LevelGenerator } from './GameMap/LevelGenerator/LevelGenerator';
 
 const time = new Time();
 const userInput = new UserInput();
@@ -14,6 +15,7 @@ const camera = new CameraController();
 const uiRenderer = new UIRenderer();
 const renderer = new Renderer(camera);
 const gameLoop = new GameLoop();
+const levelGenerator = new LevelGenerator();
 
 const game = new Game();
 
@@ -25,4 +27,5 @@ export {
   uiRenderer,
   time,
   game,
+  levelGenerator,
 };

@@ -14,7 +14,7 @@ export class Stage {
 
   public getLevelConfiguration(level: number): GenerateLevelOptions {
     const result: GenerateLevelOptions = {
-      playerPosition: this._levelConfiguration.playerPosition,
+      playerPosition: this._levelConfiguration.playerPosition || 'start',
       pointOrbCount: this._levelConfiguration.pointOrbCount,
       enemies: this._levelConfiguration.enemies,
       portals: {},

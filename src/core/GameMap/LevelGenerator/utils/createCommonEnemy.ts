@@ -3,7 +3,6 @@ import { renderer } from '../../../global';
 import { getRandomPosition } from '../../../utils/other/getRandomPosition';
 import { getRandomSize } from '../../../utils/other/getRandomSize';
 import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
-import { CommonEnemyConfiguration } from '../../types';
 import { saveZoneWidth } from '../LevelGenerator';
 
 export interface CreateCommonEnemyParams {
