@@ -1,20 +1,25 @@
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
 import { gameObjectManager, renderer } from '../../global';
 import { gameMap } from '../../../configs/GameMap/GameMapConfiguration';
-import { createCommonEnemy } from './utils/createCommonEnemy';
 import { createEnemyBorder } from './utils/createEnemyBorder';
-import { createEnemyEnergyBurner } from './utils/createEnemyEnergyBurner';
 import { createEnemySpeedReduction } from './utils/createEnemySpeedReduction';
 import { createPortal } from './utils/createPortal';
-import { EnemyConfiguration, enemyTypes } from '../types';
+import {
+  CommonEnemyConfiguration,
+  EnemyBorderConfiguration,
+  EnemyConfiguration,
+  EnemyEnergyBurnerConfiguration,
+  EnemyShooterConfiguration,
+  EnemySpeedReductionConfiguration,
+  enemyTypes,
+} from '../types';
 import { createEnemyShooter } from './utils/createEnemyShooter';
-import { getRandomPosition } from '../../utils/other/getRandomPosition';
-import { PointOrb } from '../../../objects/pointOrb/PointOrb';
 import { cellSize } from '../../../consts/consts';
+import { createEnemyEnergyBurner } from './utils/createEnemyEnergyBurner';
+import { createCommonEnemy } from './utils/createCommonEnemy';
+import { createPointOrb } from './utils/createPointOrb';
 
-export const saveZoneWidth = 300;
-
-export interface GenerateLevelOptions {
+export interface GenerateLevelConfiguration {
   enemies: EnemyConfiguration[];
   pointOrbCount: number;
   playerPosition: 'start' | 'end';
@@ -24,23 +29,31 @@ export interface GenerateLevelOptions {
     prevTunnel?: boolean;
     nextTunnel?: boolean;
   };
+  saveZones: {
+    start: { width: number };
+    end: { width: number };
+  };
   level: number;
 }
 
 export class LevelGenerator {
-  public generateLevel(params: GenerateLevelOptions): void {
+  public generateLevel(params: GenerateLevelConfiguration): void {
     this.clearLevel();
 
     this.repositionPlayer(params.playerPosition);
 
-    this.createSaveZones();
-    this.createPortals(params.portals);
-    this.createEnemies(params.enemies, params.level);
-    this.createPointOrbs(params.pointOrbCount);
+    this.createAndInitAllSaveZones(params.saveZones);
+    this.createAndInitAllPortals(params.portals, params.saveZones);
+    this.createAndInitAllEnemies(
+      params.enemies,
+      params.saveZones,
+      params.level
+    );
+    this.createAndInitAllPointOrbs(params.pointOrbCount, params.saveZones);
   }
 
   private repositionPlayer(
-    playerPosition: GenerateLevelOptions['playerPosition']
+    playerPosition: GenerateLevelConfiguration['playerPosition']
   ): void {
     if (gameObjectManager.player) {
       const player = gameObjectManager.player;
@@ -54,23 +67,29 @@ export class LevelGenerator {
     }
   }
 
-  private createSaveZones(): void {
+  private createAndInitAllSaveZones(
+    saveZonesConfiguration: GenerateLevelConfiguration['saveZones']
+  ): void {
+    const { start, end } = saveZonesConfiguration;
     const saveZoneStart = new SaveZone(
-      { x: saveZoneWidth / 2, y: renderer.canvasSize.y / 2 },
-      { x: saveZoneWidth, y: renderer.canvasSize.y }
+      { x: start.width / 2, y: renderer.canvasSize.y / 2 },
+      { x: start.width, y: renderer.canvasSize.y }
     );
     const saveZoneEnd = new SaveZone(
       {
-        x: renderer.canvasSize.x - saveZoneWidth / 2,
+        x: renderer.canvasSize.x - end.width / 2,
         y: renderer.canvasSize.y / 2,
       },
-      { x: saveZoneWidth, y: renderer.canvasSize.y }
+      { x: end.width, y: renderer.canvasSize.y }
     );
     saveZoneStart.init();
     saveZoneEnd.init();
   }
 
-  private createPortals(portals: GenerateLevelOptions['portals']): void {
+  private createAndInitAllPortals(
+    portals: GenerateLevelConfiguration['portals'],
+    saveZones: GenerateLevelConfiguration['saveZones']
+  ): void {
     if (portals.prevLevel) {
       const portalToPrevLevel = createPortal({
         startPosition: { x: cellSize / 2, y: renderer.canvasSize.y / 2 },
@@ -79,6 +98,7 @@ export class LevelGenerator {
       });
       portalToPrevLevel.init();
     }
+
     if (portals.nextLevel) {
       const portalToNextLevel = createPortal({
         startPosition: {
@@ -90,141 +110,74 @@ export class LevelGenerator {
       });
       portalToNextLevel.init();
     }
+
     if (portals.prevTunnel) {
       const portalToPrevTunnel = createPortal({
-        startPosition: { x: saveZoneWidth / 2, y: cellSize / 2 },
-        size: { x: saveZoneWidth, y: cellSize },
+        startPosition: { x: saveZones.start.width / 2, y: cellSize / 2 },
+        size: { x: saveZones.start.width, y: cellSize },
         onEnter: () => gameMap.moveToTunnel('Central Core'),
       });
       portalToPrevTunnel.init();
     }
+
     if (portals.nextTunnel) {
       const portalToNextTunnel = createPortal({
         startPosition: {
-          x: saveZoneWidth / 2,
+          x: saveZones.start.width / 2,
           y: renderer.canvasSize.y - cellSize / 2,
         },
-        size: { x: saveZoneWidth, y: cellSize },
+        size: { x: saveZones.start.width, y: cellSize },
         onEnter: () => gameMap.moveToTunnel('Central Core'),
       });
       portalToNextTunnel.init();
     }
   }
 
-  private createEnemies(
-    enemies: GenerateLevelOptions['enemies'],
-    level: GenerateLevelOptions['level']
+  private createAndInitAllEnemies(
+    enemies: GenerateLevelConfiguration['enemies'],
+    saveZones: GenerateLevelConfiguration['saveZones'],
+    level: GenerateLevelConfiguration['level']
   ): void {
     enemies.forEach((enemyTypeOptions) => {
       switch (enemyTypeOptions.type) {
         case enemyTypes.CommonEnemy:
-          const commonEnemyCount = Math.min(
-            Math.floor(enemyTypeOptions.count.perLevel * level) +
-              enemyTypeOptions.count.init,
-            enemyTypeOptions.count.max
+          this.createAndInitAllCommonEnemies(
+            enemyTypeOptions,
+            saveZones,
+            level
           );
-          const commonEnemySpeed = Math.min(
-            enemyTypeOptions.speed.perLevel * level +
-              enemyTypeOptions.speed.init,
-            enemyTypeOptions.speed.max
-          );
-
-          Array.from({ length: commonEnemyCount }).forEach(() => {
-            const commonEnemy = createCommonEnemy({
-              size: enemyTypeOptions.size,
-              speed: commonEnemySpeed,
-            });
-            commonEnemy.init();
-          });
           break;
 
         case enemyTypes.EnemyEnergyBurner:
-          const EnemyEnergyBurnerCount = Math.min(
-            Math.floor(enemyTypeOptions.count.perLevel * level) +
-              enemyTypeOptions.count.init,
-            enemyTypeOptions.count.max
+          this.createAndInitAllEnergyBurnerEnemies(
+            enemyTypeOptions,
+            saveZones,
+            level
           );
-          const EnemyEnergyBurnerSpeed = Math.min(
-            enemyTypeOptions.speed.perLevel * level +
-              enemyTypeOptions.speed.init,
-            enemyTypeOptions.speed.max
-          );
-
-          Array.from({ length: EnemyEnergyBurnerCount }).forEach(() => {
-            const enemyEnergyBurner = createEnemyEnergyBurner(
-              EnemyEnergyBurnerSpeed
-            );
-            enemyEnergyBurner.init();
-          });
           break;
 
         case enemyTypes.EnemySpeedReduction:
-          const EnemySpeedReductionCount = Math.min(
-            Math.floor(enemyTypeOptions.count.perLevel * level) +
-              enemyTypeOptions.count.init,
-            enemyTypeOptions.count.max
+          this.createAndInitAllSpeedReductionEnemies(
+            enemyTypeOptions,
+            saveZones,
+            level
           );
-          const EnemySpeedReductionSpeed = Math.min(
-            enemyTypeOptions.speed.perLevel * level +
-              enemyTypeOptions.speed.init,
-            enemyTypeOptions.speed.max
-          );
-
-          Array.from({ length: EnemySpeedReductionCount }).forEach(() => {
-            const enemySpeedReduction = createEnemySpeedReduction(
-              EnemySpeedReductionSpeed
-            );
-            enemySpeedReduction.init();
-          });
           break;
 
         case enemyTypes.EnemyBorder:
-          const EnemyBorderCount = Math.min(
-            Math.floor(enemyTypeOptions.count.perLevel * level) +
-              enemyTypeOptions.count.init,
-            enemyTypeOptions.count.max
+          this.createAndInitAllBorderEnemies(
+            enemyTypeOptions,
+            saveZones,
+            level
           );
-          const EnemyBorderSpeed = Math.min(
-            enemyTypeOptions.speed.perLevel * level +
-              enemyTypeOptions.speed.init,
-            enemyTypeOptions.speed.max
-          );
-
-          Array.from({ length: EnemyBorderCount }).forEach((_, i) => {
-            const enemyBorder = createEnemyBorder({
-              speed: EnemyBorderSpeed,
-              count: EnemyBorderCount,
-              order: i,
-            });
-            enemyBorder.init();
-          });
           break;
 
         case enemyTypes.EnemyShooter:
-          const EnemyShooterCount = Math.min(
-            Math.floor(enemyTypeOptions.count.perLevel * level) +
-              enemyTypeOptions.count.init,
-            enemyTypeOptions.count.max
+          this.createAndInitAllShooterEnemies(
+            enemyTypeOptions,
+            saveZones,
+            level
           );
-          const EnemyShooterSpeed = Math.min(
-            enemyTypeOptions.speed.perLevel * level +
-              enemyTypeOptions.speed.init,
-            enemyTypeOptions.speed.max
-          );
-          const projectileSpeed = Math.min(
-            enemyTypeOptions.projectileSpeed.perLevel * level +
-              enemyTypeOptions.projectileSpeed.init,
-            enemyTypeOptions.projectileSpeed.max
-          );
-
-          Array.from({ length: EnemyShooterCount }).forEach((_, i) => {
-            const enemyShooter = createEnemyShooter({
-              speed: EnemyShooterSpeed,
-              projectileSpeed: projectileSpeed,
-              shootDistance: enemyTypeOptions.shootDistance,
-            });
-            enemyShooter.init();
-          });
           break;
 
         default:
@@ -233,20 +186,134 @@ export class LevelGenerator {
     });
   }
 
-  private createPointOrbs(count: number): void {
+  private createAndInitAllCommonEnemies(
+    config: CommonEnemyConfiguration,
+    saveZones: GenerateLevelConfiguration['saveZones'],
+    level: number
+  ): void {
+    const count = Math.min(
+      Math.floor(config.count.perLevel * level) + config.count.init,
+      config.count.max
+    );
+    const speed = Math.min(
+      config.speed.perLevel * level + config.speed.init,
+      config.speed.max
+    );
+
+    // Create and init enemy
     Array.from({ length: count }).forEach(() => {
-      const pointOrb = new PointOrb(
-        getRandomPosition({
-          minX: saveZoneWidth + 50,
-          maxX: renderer.canvasSize.x - saveZoneWidth - 50,
-          minY: 50,
-          maxY: renderer.canvasSize.y - 50,
-        })
-      );
+      const enemy = createCommonEnemy({ speed, size: config.size, saveZones });
+      enemy.init();
+    });
+  }
+
+  private createAndInitAllEnergyBurnerEnemies(
+    config: EnemyEnergyBurnerConfiguration,
+    saveZones: GenerateLevelConfiguration['saveZones'],
+    level: number
+  ): void {
+    const count = Math.min(
+      Math.floor(config.count.perLevel * level) + config.count.init,
+      config.count.max
+    );
+    const speed = Math.min(
+      config.speed.perLevel * level + config.speed.init,
+      config.speed.max
+    );
+
+    // Create and init enemy
+    Array.from({ length: count }).forEach(() => {
+      const enemy = createEnemyEnergyBurner(speed, saveZones);
+      enemy.init();
+    });
+  }
+
+  private createAndInitAllSpeedReductionEnemies(
+    config: EnemySpeedReductionConfiguration,
+    saveZones: GenerateLevelConfiguration['saveZones'],
+    level: number
+  ): void {
+    const count = Math.min(
+      Math.floor(config.count.perLevel * level) + config.count.init,
+      config.count.max
+    );
+    const speed = Math.min(
+      config.speed.perLevel * level + config.speed.init,
+      config.speed.max
+    );
+
+    // Create and init enemy
+    Array.from({ length: count }).forEach(() => {
+      const enemySpeedReduction = createEnemySpeedReduction(speed, saveZones);
+      enemySpeedReduction.init();
+    });
+  }
+
+  private createAndInitAllBorderEnemies(
+    config: EnemyBorderConfiguration,
+    saveZones: GenerateLevelConfiguration['saveZones'],
+    level: number
+  ): void {
+    const count = Math.min(
+      Math.floor(config.count.perLevel * level) + config.count.init,
+      config.count.max
+    );
+    const speed = Math.min(
+      config.speed.perLevel * level + config.speed.init,
+      config.speed.max
+    );
+
+    Array.from({ length: count }).forEach((_, i) => {
+      const enemyBorder = createEnemyBorder({
+        speed,
+        count,
+        order: i,
+        saveZones,
+      });
+      enemyBorder.init();
+    });
+  }
+
+  private createAndInitAllShooterEnemies(
+    config: EnemyShooterConfiguration,
+    saveZones: GenerateLevelConfiguration['saveZones'],
+    level: number
+  ): void {
+    const count = Math.min(
+      Math.floor(config.count.perLevel * level) + config.count.init,
+      config.count.max
+    );
+    const speed = Math.min(
+      config.speed.perLevel * level + config.speed.init,
+      config.speed.max
+    );
+    const projectileSpeed = Math.min(
+      config.projectileSpeed.perLevel * level + config.projectileSpeed.init,
+      config.projectileSpeed.max
+    );
+
+    Array.from({ length: count }).forEach((_, i) => {
+      const enemyShooter = createEnemyShooter({
+        speed: speed,
+        projectileSpeed: projectileSpeed,
+        shootDistance: config.shootDistance,
+        saveZones,
+      });
+      enemyShooter.init();
+    });
+  }
+
+  private createAndInitAllPointOrbs(
+    count: number,
+    saveZones: GenerateLevelConfiguration['saveZones']
+  ): void {
+    Array.from({ length: count }).forEach(() => {
+      const pointOrb = createPointOrb(saveZones);
       pointOrb.init();
     });
   }
 
+  /** Delete all objects except player. */
   private clearLevel(): void {
     gameObjectManager.enemies.forEach((e) => e.delete());
     gameObjectManager.pointOrbs.forEach((p) => p.delete());

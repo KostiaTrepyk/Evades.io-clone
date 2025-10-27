@@ -18,6 +18,7 @@ export type ObjectModel<S extends Shape> = S extends CircleShape
 /** Каждый объект может быть только шаром либо прямоугольником. */
 export class GameObject<S extends Shape> implements GameObjectLoopMethods {
   public prevPosition: Position;
+  /** Center of the object */
   public position: Position;
   public objectModel: ObjectModel<S>;
 

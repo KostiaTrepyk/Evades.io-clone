@@ -1,4 +1,4 @@
-import { GenerateLevelOptions } from './LevelGenerator/LevelGenerator';
+import { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
 import { Stage } from './Stage';
 
 export class Tunnel<TunnelNames extends Record<string, string>> {
@@ -19,7 +19,7 @@ export class Tunnel<TunnelNames extends Record<string, string>> {
     this.type = type;
   }
 
-  public getLevelConfiguration(level: number): GenerateLevelOptions {
+  public getLevelConfiguration(level: number): GenerateLevelConfiguration {
     const maxLevels = this._stages.reduce(
       (acc, stage) => acc + stage.levelCount,
       0

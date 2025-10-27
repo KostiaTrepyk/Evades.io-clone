@@ -3,14 +3,20 @@ import { EnemyEnergyBurner } from '../../../../objects/enemy/list/EnemyEnergyBur
 import { renderer } from '../../../global';
 import { getRandomPosition } from '../../../utils/other/getRandomPosition';
 import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
-import { saveZoneWidth } from '../LevelGenerator';
+import { GenerateLevelConfiguration } from '../LevelGenerator';
 
-export function createEnemyEnergyBurner(speed: number): EnemyEnergyBurner {
+/* FIX ME Позицию неправильно считает. */
+export function createEnemyEnergyBurner(
+  speed: number,
+  saveZones: GenerateLevelConfiguration['saveZones']
+): EnemyEnergyBurner {
   return new EnemyEnergyBurner({
     position: getRandomPosition({
-      minX: saveZoneWidth + (enemyEnergyBurnerSize + 2),
+      minX: saveZones.start.width + (enemyEnergyBurnerSize + 2),
       maxX:
-        renderer.canvasSize.x - saveZoneWidth - (enemyEnergyBurnerSize + 2),
+        renderer.canvasSize.x -
+        saveZones.end.width -
+        (enemyEnergyBurnerSize + 2),
       minY: enemyEnergyBurnerSize + 2,
       maxY: renderer.canvasSize.y - (enemyEnergyBurnerSize + 2),
     }),

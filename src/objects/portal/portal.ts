@@ -8,11 +8,11 @@ import { Character } from '../character/character';
 export interface PortalParams {
   startPosition: Position;
   size: { x: number; y: number };
-  onEnter: () => void;
+  onEnter: (player: Character) => void;
 }
 
 export class Portal extends GameObject<'rectangle'> {
-  private _onEnter: () => void;
+  private _onEnter: (player: Character) => void;
   private _MCollisionPlayer: MCollisionPlayer;
 
   constructor(params: PortalParams) {
@@ -39,6 +39,6 @@ export class Portal extends GameObject<'rectangle'> {
   }
 
   private onCollisionWithPlayer(player: Character): void {
-    this._onEnter();
+    this._onEnter(player);
   }
 }

@@ -1,7 +1,7 @@
 import { ENEMYBORDERCONFIG } from '../../../../configs/enemies/enemyBorder.config';
 import { EnemyBorder } from '../../../../objects/enemy/list/EnemyBorder';
 import { renderer } from '../../../global';
-import { saveZoneWidth } from '../LevelGenerator';
+import { GenerateLevelConfiguration } from '../LevelGenerator';
 
 /** Создаёт врага createEnemyBorder. В зависимости от количества этих врагов будет просчитываться их начальная позиция, так-как расстояние между врагами должно быть одинаковое.
  *  @argument params.speed - скорость врага которого создаём. В идеале скорость всех врагов данного типа на одном уровне должна быть одинаковая (Может быть разной, если так задумано).
@@ -12,12 +12,13 @@ export function createEnemyBorder(params: {
   speed: number;
   count: number;
   order: number;
+  saveZones: GenerateLevelConfiguration['saveZones'];
 }): EnemyBorder {
   const size = ENEMYBORDERCONFIG.size;
   const halfSize = size / 2;
 
-  const minX = saveZoneWidth + halfSize;
-  const maxX = renderer.canvasSize.x - saveZoneWidth - halfSize;
+  const minX = params.saveZones.start.width + halfSize;
+  const maxX = renderer.canvasSize.x - params.saveZones.end.width - halfSize;
   const minY = halfSize;
   const maxY = renderer.canvasSize.y - halfSize;
 

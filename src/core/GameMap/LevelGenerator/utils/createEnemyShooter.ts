@@ -4,12 +4,13 @@ import { EnemyShooter } from '../../../../objects/enemy/list/EnemyShooter/EnemyS
 import { renderer } from '../../../global';
 import { getRandomPosition } from '../../../utils/other/getRandomPosition';
 import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
-import { saveZoneWidth } from '../LevelGenerator';
+import { GenerateLevelConfiguration } from '../LevelGenerator';
 
 export interface CreateEnemyShooterParams {
   speed: number;
   projectileSpeed: number;
   shootDistance: number;
+  saveZones: GenerateLevelConfiguration['saveZones'];
 }
 
 export function createEnemyShooter(
@@ -18,8 +19,9 @@ export function createEnemyShooter(
   const halfSize = ENEMYSHOOTERCONFIG.size / 2;
   return new EnemyShooter({
     position: getRandomPosition({
-      minX: saveZoneWidth + (halfSize + 2),
-      maxX: renderer.canvasSize.x - saveZoneWidth - (halfSize + 2),
+      minX: options.saveZones.start.width + (halfSize + 2),
+      maxX:
+        renderer.canvasSize.x - options.saveZones.end.width - (halfSize + 2),
       minY: halfSize + 2,
       maxY: renderer.canvasSize.y - (halfSize + 2),
     }),

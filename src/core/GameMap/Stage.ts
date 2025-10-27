@@ -1,4 +1,4 @@
-import { GenerateLevelOptions } from './LevelGenerator/LevelGenerator';
+import { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
 import { LevelConfiguration } from './types';
 
 export class Stage {
@@ -12,12 +12,17 @@ export class Stage {
     };
   }
 
-  public getLevelConfiguration(level: number): GenerateLevelOptions {
-    const result: GenerateLevelOptions = {
+  public getLevelConfiguration(level: number): GenerateLevelConfiguration {
+    const result: GenerateLevelConfiguration = {
       playerPosition: this._levelConfiguration.playerPosition || 'start',
       pointOrbCount: this._levelConfiguration.pointOrbCount,
       enemies: this._levelConfiguration.enemies,
       portals: {},
+      // FIX ME Hard coded width
+      saveZones: {
+        start: { width: 300 },
+        end: { width: 300 },
+      },
       level,
     };
 
