@@ -25,8 +25,8 @@ export class MStatus<
     this._statuses = [];
   }
 
-  public onUpdate(deltaTime: number): void {
-    this.statuses.forEach((status) => status.onUpdate(deltaTime));
+  public onUpdate(): void {
+    this.statuses.forEach((status) => status.onUpdate(time.deltaTime));
   }
 
   /** Enables application of new statuses.  */
@@ -133,7 +133,7 @@ class Status<StatusName extends string, Effect extends Record<string, any>> {
 
   public onUpdate(deltaTime: number): void {
     if (this.duration === undefined) return;
-    if (time.timestamp >= this.duration * 1000 + this.appliedAtTimeStamp) {
+    if (time.timestamp >= this.duration + this.appliedAtTimeStamp) {
       this.MStatus.removeStatus(this.id);
     }
   }

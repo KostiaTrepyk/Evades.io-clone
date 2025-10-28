@@ -39,7 +39,7 @@ export class MCollisionPointOrb implements Module {
     this._onCollision = params.onCollision;
   }
 
-  public afterUpdate(deltaTime: number): void {
+  public afterUpdate(): void {
     const pointOrbs = gameObjectManager.pointOrbs;
     pointOrbs.forEach((pointOrb) => {
       if (doItemsCollide(this._object, pointOrb).doesCollide === true) {

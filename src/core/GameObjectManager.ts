@@ -32,26 +32,22 @@ export class GameObjectManager {
 
   public updateAll(deltaTime: number): void {
     // Before update
-    this.player?.beforeUpdate(deltaTime);
-    this.projectiles.forEach((projectile) =>
-      projectile.beforeUpdate?.(deltaTime)
-    );
-    this.enemies.forEach((enemy) => enemy.beforeUpdate?.(deltaTime));
-    this.portals.forEach((portal) => portal.beforeUpdate?.(deltaTime));
+    this.player?.beforeUpdate();
+    this.projectiles.forEach((projectile) => projectile.beforeUpdate?.());
+    this.enemies.forEach((enemy) => enemy.beforeUpdate?.());
+    this.portals.forEach((portal) => portal.beforeUpdate?.());
 
     // Update
-    this.player?.onUpdate(deltaTime);
-    this.projectiles.forEach((projectile) => projectile.onUpdate(deltaTime));
-    this.enemies.forEach((enemy) => enemy.onUpdate(deltaTime));
-    this.portals.forEach((portal) => portal.afterUpdate?.(deltaTime));
+    this.player?.onUpdate();
+    this.projectiles.forEach((projectile) => projectile.onUpdate());
+    this.enemies.forEach((enemy) => enemy.onUpdate());
+    this.portals.forEach((portal) => portal.afterUpdate?.());
 
     // After update
-    this.player?.afterUpdate(deltaTime);
-    this.projectiles.forEach((projectile) =>
-      projectile.afterUpdate?.(deltaTime)
-    );
-    this.enemies.forEach((enemy) => enemy.afterUpdate?.(deltaTime));
-    this.portals.forEach((portal) => portal.afterUpdate?.(deltaTime));
+    this.player?.afterUpdate();
+    this.projectiles.forEach((projectile) => projectile.afterUpdate?.());
+    this.enemies.forEach((enemy) => enemy.afterUpdate?.());
+    this.portals.forEach((portal) => portal.afterUpdate?.());
   }
 
   public renderAll(ctx: CanvasRenderingContext2D): void {

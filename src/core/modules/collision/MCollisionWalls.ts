@@ -49,7 +49,7 @@ export class MCollisionWalls implements Module {
     this._collisionType = params.collisionType ?? 'onlyAfterCollision';
   }
 
-  public afterUpdate(deltaTime: number): void {
+  public afterUpdate(): void {
     if (this._collisionType === 'applyCollision') {
       const { collisions, doesCollide } = doesCollideWithWalls(this._object);
 

@@ -5,6 +5,7 @@ import { HSLA } from '../../core/utils/hsla';
 import { Velocity } from '../../core/types/Velocity';
 import { Position } from '../../core/types/Position';
 import { speedPerPoint } from '../../consts/consts';
+import { time } from '../../core/global';
 
 export interface ProjectileParams {
   startPosition: Position;
@@ -26,10 +27,10 @@ export class Projectile extends GameObject<CircleShape> {
     this._color = color;
   }
 
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate?.(deltaTime);
-    this.position.x += this.velocity.x * speedPerPoint * deltaTime;
-    this.position.y += this.velocity.y * speedPerPoint * deltaTime;
+  public override onUpdate(): void {
+    super.onUpdate?.();
+    this.position.x += this.velocity.x * speedPerPoint * time.deltaTime;
+    this.position.y += this.velocity.y * speedPerPoint * time.deltaTime;
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

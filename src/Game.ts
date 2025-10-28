@@ -1,41 +1,33 @@
 import { Character } from './objects/character/character';
-import { gameLoop, renderer, userInput } from './core/global';
 import { gameMap } from './configs/GameMap/GameMapConfiguration';
 import { Morph } from './objects/characters/morph/morph';
+import { gameLoop, renderer, userInput } from './core/global';
 
 export class Game {
-  private _character: Character;
+  public readonly Character: Character;
 
   constructor() {
-    this._character = new Morph({
+    this.Character = new Morph({
       x: renderer.canvasSize.x / 2,
       y: renderer.canvasSize.y / 2,
     });
   }
 
-  /** В теории запускает игру и биндит клавиши. Я так понял что он собирает игру из других классов типа: Renderer, UserInput и так дальше. */
-  start() {
-    renderer.init();
+  public init(): void {
     userInput.bind();
+    this.Character.init();
 
-    this._character.init();
+    renderer.init();
     gameMap.generateCurrentLevel('start');
 
-    // DELETE ME Чисто для тестов. Фаст тревел по картах.
-    window.addEventListener('keydown', ({ code }) => {
-      if (code === 'KeyM') gameMap.nextLevel();
-      if (code === 'KeyN') gameMap.prevLevel();
-    });
-
-    // !!!FIX ME Пауза и старт когда ALT+Tab. В теории может запускать игру когда нам это не нужно
-    window.addEventListener('blur', () => {
-      gameLoop.stop();
-    });
-
-    window.addEventListener('focus', () => {
-      gameLoop.start();
-    });
-
     gameLoop.start();
+  }
+
+  public resume(): void {
+    gameLoop.start();
+  }
+
+  public pause(): void {
+    gameLoop.stop();
   }
 }

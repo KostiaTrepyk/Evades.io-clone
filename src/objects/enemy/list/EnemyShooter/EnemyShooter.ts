@@ -37,18 +37,15 @@ export class EnemyShooter extends Enemy {
     this._shootDistance = shootDistance;
   }
 
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate(deltaTime);
+  public override onUpdate(): void {
+    super.onUpdate();
 
     const playerPosition = this.getPlayerPosition();
 
     // If player is not created.
     if (playerPosition === undefined) return;
 
-    if (
-      time.timestamp - this._lastShootTimeStamp >=
-      this._shootDeltaTime * 1000
-    ) {
+    if (time.timestamp - this._lastShootTimeStamp >= this._shootDeltaTime) {
       // Check distance
       const deltaX = this.position.x - playerPosition.x;
       const deltaY = this.position.y - playerPosition.y;

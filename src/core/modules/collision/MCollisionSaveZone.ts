@@ -45,7 +45,7 @@ export class MCollisionSaveZone implements Module {
     this._onCollision = params.onCollision;
   }
 
-  public afterUpdate(deltaTime: number): void {
+  public afterUpdate(): void {
     gameObjectManager.saveZones.forEach((saveZone) => {
       const { doesCollide, collisions } =
         this.collisionWithSaveZone.bind(this)(saveZone);

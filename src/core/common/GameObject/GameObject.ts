@@ -28,9 +28,9 @@ export class GameObject<S extends Shape> implements GameObjectLoopMethods {
     this.objectModel = objectModel;
   }
 
-  public beforeUpdate?(deltaTime: number): void;
-  public onUpdate?(deltaTime: number): void;
-  public afterUpdate?(deltaTime: number): void;
+  public beforeUpdate?(): void;
+  public onUpdate?(): void;
+  public afterUpdate?(): void;
   public onRender?(ctx: CanvasRenderingContext2D): void;
 
   public init(): void {

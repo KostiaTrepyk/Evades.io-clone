@@ -45,10 +45,10 @@ export class EnemyShooterProjectile extends Projectile {
     });
   }
 
-  public override afterUpdate(deltaTime: number): void {
-    this._MCollisionPlayer.afterUpdate(deltaTime);
-    this._MCollisionSaveZone.afterUpdate(deltaTime);
-    this._MCollisionWalls.afterUpdate(deltaTime);
+  public override afterUpdate(): void {
+    this._MCollisionPlayer.afterUpdate();
+    this._MCollisionSaveZone.afterUpdate();
+    this._MCollisionWalls.afterUpdate();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

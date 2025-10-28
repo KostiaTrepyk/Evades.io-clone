@@ -52,13 +52,13 @@ export class ToggleSkill implements ISkill {
     this.condition = condition ?? (() => true);
   }
 
-  public onUpdate(deltaTime: number): void {
+  public onUpdate(): void {
     if (userInput.isKeydown(this.keyCode)) {
-      this.toggle(deltaTime);
+      this.toggle(time.deltaTime);
     }
 
     if (this.isActive) {
-      const isEnoughEnergy = this.applyContinuousEnergyUsage(deltaTime);
+      const isEnoughEnergy = this.applyContinuousEnergyUsage(time.deltaTime);
       if (isEnoughEnergy === false) this.deactivate();
     }
   }
@@ -82,10 +82,9 @@ export class ToggleSkill implements ISkill {
   }
 
   private isAvailable(deltaTime: number): boolean {
-    if (!this.condition()) return false;
+    if (this.condition() === false) return false;
 
-    // In seconds
-    const elapsedTime = (time.timestamp - this.lastUsedTimestamp) / 1000;
+    const elapsedTime = time.timestamp - this.lastUsedTimestamp;
     const isNotCooldown: boolean = elapsedTime >= this.cooldown();
 
     const playerEnergy = this.player.characteristics.energy.current;
@@ -110,9 +109,7 @@ export class ToggleSkill implements ISkill {
   }
 
   public get cooldownPercentage(): number {
-    // In seconds
-    const elapsedTime = (time.timestamp - this.lastUsedTimestamp) / 1000;
-
+    const elapsedTime = time.timestamp - this.lastUsedTimestamp;
     return Math.min(elapsedTime / this.cooldown(), 1);
   }
 }

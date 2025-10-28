@@ -38,7 +38,7 @@ export class MCollisionPlayer implements Module {
     this._onCollision = params.onCollision;
   }
 
-  public afterUpdate(deltaTime: number): void {
+  public afterUpdate(): void {
     const player = gameObjectManager.player;
 
     // Do nothing if no player

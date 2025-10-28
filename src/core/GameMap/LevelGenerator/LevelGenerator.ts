@@ -1,5 +1,4 @@
 import { SaveZone } from '../../../objects/saveZone/SaveZone';
-import { gameObjectManager, renderer } from '../../global';
 import { gameMap } from '../../../configs/GameMap/GameMapConfiguration';
 import { createEnemyBorder } from './utils/createEnemyBorder';
 import { createEnemySpeedReduction } from './utils/createEnemySpeedReduction';
@@ -18,6 +17,8 @@ import { cellSize } from '../../../consts/consts';
 import { createEnemyEnergyBurner } from './utils/createEnemyEnergyBurner';
 import { createCommonEnemy } from './utils/createCommonEnemy';
 import { createPointOrb } from './utils/createPointOrb';
+import { GameObjectManager } from '../../GameObjectManager';
+import { Renderer } from '../../Renderer';
 
 export interface GenerateLevelConfiguration {
   enemies: EnemyConfiguration[];
@@ -37,6 +38,14 @@ export interface GenerateLevelConfiguration {
 }
 
 export class LevelGenerator {
+  private _GameObjectManager: GameObjectManager;
+  private _Renderer: Renderer;
+
+  constructor(GameObjectManager: GameObjectManager, Renderer: Renderer) {
+    this._GameObjectManager = GameObjectManager;
+    this._Renderer = Renderer;
+  }
+
   public generateLevel(params: GenerateLevelConfiguration): void {
     this.clearLevel();
 
@@ -55,15 +64,15 @@ export class LevelGenerator {
   private repositionPlayer(
     playerPosition: GenerateLevelConfiguration['playerPosition']
   ): void {
-    if (gameObjectManager.player) {
-      const player = gameObjectManager.player;
+    if (this._GameObjectManager.player) {
+      const player = this._GameObjectManager.player;
       if (playerPosition === 'start') {
         player.position.x = player.objectModel.size / 2 + cellSize;
       } else if (playerPosition === 'end') {
         player.position.x =
-          renderer.canvasSize.x - player.objectModel.size / 2 - cellSize;
+          this._Renderer.canvasSize.x - player.objectModel.size / 2 - cellSize;
       }
-      player.position.y = renderer.canvasSize.y / 2;
+      player.position.y = this._Renderer.canvasSize.y / 2;
     }
   }
 
@@ -72,15 +81,15 @@ export class LevelGenerator {
   ): void {
     const { start, end } = saveZonesConfiguration;
     const saveZoneStart = new SaveZone(
-      { x: start.width / 2, y: renderer.canvasSize.y / 2 },
-      { x: start.width, y: renderer.canvasSize.y }
+      { x: start.width / 2, y: this._Renderer.canvasSize.y / 2 },
+      { x: start.width, y: this._Renderer.canvasSize.y }
     );
     const saveZoneEnd = new SaveZone(
       {
-        x: renderer.canvasSize.x - end.width / 2,
-        y: renderer.canvasSize.y / 2,
+        x: this._Renderer.canvasSize.x - end.width / 2,
+        y: this._Renderer.canvasSize.y / 2,
       },
-      { x: end.width, y: renderer.canvasSize.y }
+      { x: end.width, y: this._Renderer.canvasSize.y }
     );
     saveZoneStart.init();
     saveZoneEnd.init();
@@ -92,8 +101,8 @@ export class LevelGenerator {
   ): void {
     if (portals.prevLevel) {
       const portalToPrevLevel = createPortal({
-        startPosition: { x: cellSize / 2, y: renderer.canvasSize.y / 2 },
-        size: { x: cellSize, y: renderer.canvasSize.y },
+        startPosition: { x: cellSize / 2, y: this._Renderer.canvasSize.y / 2 },
+        size: { x: cellSize, y: this._Renderer.canvasSize.y },
         onEnter: () => gameMap.prevLevel(),
       });
       portalToPrevLevel.init();
@@ -102,10 +111,10 @@ export class LevelGenerator {
     if (portals.nextLevel) {
       const portalToNextLevel = createPortal({
         startPosition: {
-          x: renderer.canvasSize.x - cellSize / 2,
-          y: renderer.canvasSize.y / 2,
+          x: this._Renderer.canvasSize.x - cellSize / 2,
+          y: this._Renderer.canvasSize.y / 2,
         },
-        size: { x: cellSize, y: renderer.canvasSize.y },
+        size: { x: cellSize, y: this._Renderer.canvasSize.y },
         onEnter: () => gameMap.nextLevel(),
       });
       portalToNextLevel.init();
@@ -124,7 +133,7 @@ export class LevelGenerator {
       const portalToNextTunnel = createPortal({
         startPosition: {
           x: saveZones.start.width / 2,
-          y: renderer.canvasSize.y - cellSize / 2,
+          y: this._Renderer.canvasSize.y - cellSize / 2,
         },
         size: { x: saveZones.start.width, y: cellSize },
         onEnter: () => gameMap.moveToTunnel('Central Core'),
@@ -315,10 +324,10 @@ export class LevelGenerator {
 
   /** Delete all objects except player. */
   private clearLevel(): void {
-    gameObjectManager.enemies.forEach((e) => e.delete());
-    gameObjectManager.pointOrbs.forEach((p) => p.delete());
-    gameObjectManager.saveZones.forEach((s) => s.delete());
-    gameObjectManager.portals.forEach((s) => s.delete());
-    gameObjectManager.projectiles.forEach((p) => p.delete());
+    this._GameObjectManager.enemies.forEach((e) => e.delete());
+    this._GameObjectManager.pointOrbs.forEach((p) => p.delete());
+    this._GameObjectManager.saveZones.forEach((s) => s.delete());
+    this._GameObjectManager.portals.forEach((s) => s.delete());
+    this._GameObjectManager.projectiles.forEach((p) => p.delete());
   }
 }

@@ -29,10 +29,10 @@ export class CharacterCollision implements Module {
     });
   }
 
-  public afterUpdate(deltaTime: number): void {
-    this._MCollisionWalls.afterUpdate(deltaTime);
-    this._MCollisionEnemy.afterUpdate(deltaTime);
-    this._MCollisionPointOrb.afterUpdate(deltaTime);
+  public afterUpdate(): void {
+    this._MCollisionWalls.afterUpdate();
+    this._MCollisionEnemy.afterUpdate();
+    this._MCollisionPointOrb.afterUpdate();
   }
 
   private onCollisionEnemy(enemy: Enemy): void {

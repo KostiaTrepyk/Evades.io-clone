@@ -53,8 +53,8 @@ export class Rime extends Character {
     });
   }
 
-  public override beforeUpdate(deltaTime: number): void {
-    super.beforeUpdate(deltaTime);
+  public override beforeUpdate(): void {
+    super.beforeUpdate();
     this.MMoveDirection.beforeUpdate();
   }
 

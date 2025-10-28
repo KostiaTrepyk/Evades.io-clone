@@ -1,4 +1,4 @@
 export interface ISkill {
-  onUpdate: (deltaTime: number) => void;
+  onUpdate: () => void;
   cooldownPercentage: number;
 }

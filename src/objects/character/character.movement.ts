@@ -1,4 +1,4 @@
-import { userInput } from '../../core/global';
+import { time, userInput } from '../../core/global';
 import { GAMECONFIG } from '../../configs/game.config';
 import { Character } from './character';
 import { Module } from '../../core/common/Module';
@@ -12,7 +12,7 @@ export class CharacterMovement implements Module {
     this._isBlocked = false;
   }
 
-  public onUpdate(deltaTime: number): void {
+  public onUpdate(): void {
     if (this._isBlocked) return;
 
     const isPressedW: boolean = userInput.isKeypress('KeyW');
@@ -37,22 +37,22 @@ export class CharacterMovement implements Module {
 
     if (isPressedW && isMovingY) {
       this._player.prevPosition.y = this._player.position.y;
-      this._player.position.y -= normalizedSpeed * deltaTime;
+      this._player.position.y -= normalizedSpeed * time.deltaTime;
     }
 
     if (isPressedS && isMovingY) {
       this._player.prevPosition.y = this._player.position.y;
-      this._player.position.y += normalizedSpeed * deltaTime;
+      this._player.position.y += normalizedSpeed * time.deltaTime;
     }
 
     if (isPressedA && isMovingX) {
       this._player.prevPosition.x = this._player.position.x;
-      this._player.position.x -= normalizedSpeed * deltaTime;
+      this._player.position.x -= normalizedSpeed * time.deltaTime;
     }
 
     if (isPressedD && isMovingX) {
       this._player.prevPosition.x = this._player.position.x;
-      this._player.position.x += normalizedSpeed * deltaTime;
+      this._player.position.x += normalizedSpeed * time.deltaTime;
     }
   }
 

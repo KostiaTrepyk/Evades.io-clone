@@ -29,7 +29,7 @@ export class Morph extends Character {
       energyUsage: () => MORPHCONFIG.firstSpell.energyUsage,
       cooldown: () =>
         MORPHCONFIG.firstSpell.cooldown[
-          this.level.upgrades.firstSpell.current - 1
+          Math.max(0, this.level.upgrades.firstSpell.current - 1)
         ],
       condition: () => {
         if (this.isDead) return false;
@@ -44,7 +44,7 @@ export class Morph extends Character {
       energyUsage: () => MORPHCONFIG.secondSpell.energyUsage,
       cooldown: () =>
         MORPHCONFIG.secondSpell.cooldown[
-          this.level.upgrades.secondSpell.current - 1
+          Math.max(0, this.level.upgrades.secondSpell.current - 1)
         ],
       condition: () => {
         if (this.isDead) return false;
@@ -54,8 +54,8 @@ export class Morph extends Character {
     });
   }
 
-  public override beforeUpdate(deltaTime: number): void {
-    super.beforeUpdate(deltaTime);
+  public override beforeUpdate(): void {
+    super.beforeUpdate();
     this.MMoveDirection.beforeUpdate();
   }
 

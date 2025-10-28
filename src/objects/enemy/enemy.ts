@@ -9,6 +9,7 @@ import { EnemyStatus } from './enemy.status';
 import { speedPerPoint } from '../../consts/consts';
 import { MEnemyMovementDefault } from '../../core/modules/movement/enemy/MEnemyMovementDefault';
 import { AMEnemyMovement } from '../../core/modules/movement/enemy/MEnemyMovement.type';
+import { time } from '../../core/global';
 
 export interface EnemyParams {
   position: Position;
@@ -43,14 +44,14 @@ export class Enemy extends GameObject<CircleShape> {
     this.EnemyStatus = new EnemyStatus({ enemy: this });
   }
 
-  public override beforeUpdate(deltaTime: number): void {
-    super.beforeUpdate?.(deltaTime);
+  public override beforeUpdate(): void {
+    super.beforeUpdate?.();
     this.EnemyStatus.beforeUpdate();
   }
 
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate?.(deltaTime);
-    this.EnemyStatus.onUpdate(deltaTime);
+  public override onUpdate(): void {
+    super.onUpdate?.();
+    this.EnemyStatus.onUpdate();
 
     this.currentColor = this.EnemyStatus.getColor();
 
@@ -68,16 +69,16 @@ export class Enemy extends GameObject<CircleShape> {
         y: (this.velocity.y / defaultSpeed) * currentSpeed,
       };
 
-      this.position.x += currentVelocity.x * speedPerPoint * deltaTime;
-      this.position.y += currentVelocity.y * speedPerPoint * deltaTime;
+      this.position.x += currentVelocity.x * speedPerPoint * time.deltaTime;
+      this.position.y += currentVelocity.y * speedPerPoint * time.deltaTime;
     }
 
     this.objectModel.size = this.defaultSize * this.EnemyStatus.sizeScale;
   }
 
-  public override afterUpdate(deltaTime: number): void {
-    super.afterUpdate?.(deltaTime);
-    this.EnemyMovement.afterUpdate(deltaTime);
+  public override afterUpdate(): void {
+    super.afterUpdate?.();
+    this.EnemyMovement.afterUpdate();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D, hue?: number): void {

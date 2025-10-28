@@ -11,11 +11,11 @@ import { LevelGenerator } from './GameMap/LevelGenerator/LevelGenerator';
 const time = new Time();
 const userInput = new UserInput();
 const gameObjectManager = new GameObjectManager();
-const camera = new CameraController();
+const cameraController = new CameraController();
 const uiRenderer = new UIRenderer();
-const renderer = new Renderer(camera);
+const renderer = new Renderer(cameraController);
 const gameLoop = new GameLoop();
-const levelGenerator = new LevelGenerator();
+const levelGenerator = new LevelGenerator(gameObjectManager, renderer);
 
 const game = new Game();
 

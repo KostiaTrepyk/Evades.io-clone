@@ -28,8 +28,8 @@ export class EnemyEnergyBurner extends Enemy {
     });
   }
 
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate(deltaTime);
+  public override onUpdate(): void {
+    super.onUpdate();
 
     const player = gameObjectManager.player;
     if (player === undefined) return;
@@ -78,6 +78,8 @@ export class EnemyEnergyBurner extends Enemy {
   }
 
   private removeStealEnergyEffect(player: Character): void {
-    player.characteristics.MStatus.removeStatus(this._enemyEnergyBurnerEffectId);
+    player.characteristics.MStatus.removeStatus(
+      this._enemyEnergyBurnerEffectId
+    );
   }
 }

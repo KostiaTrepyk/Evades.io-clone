@@ -25,9 +25,9 @@ export class MEnemyMovementBorder implements AMEnemyMovement {
     });
   }
 
-  public afterUpdate(deltaTime: number): void {
-    this._MCollisionWalls.afterUpdate(deltaTime);
-    this._MCollisionSaveZone.afterUpdate(deltaTime);
+  public afterUpdate(): void {
+    this._MCollisionWalls.afterUpdate();
+    this._MCollisionSaveZone.afterUpdate();
   }
 
   private collisionWithWallsHandler(collision: Collision): void {

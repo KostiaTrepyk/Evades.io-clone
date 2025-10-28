@@ -43,9 +43,9 @@ export class MorphSecondSkillProjectile extends Projectile {
     });
   }
 
-  public override afterUpdate(deltaTime: number): void {
-    this.MCollisionEnemy.afterUpdate(deltaTime);
-    this.MCollisionWalls.afterUpdate(deltaTime);
+  public override afterUpdate(): void {
+    this.MCollisionEnemy.afterUpdate();
+    this.MCollisionWalls.afterUpdate();
   }
 
   private collisionWithEnemy(enemy: Enemy): void {

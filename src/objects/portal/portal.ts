@@ -25,8 +25,8 @@ export class Portal extends GameObject<'rectangle'> {
     });
   }
 
-  public override afterUpdate(deltaTime: number): void {
-    this._MCollisionPlayer.afterUpdate(deltaTime);
+  public override afterUpdate(): void {
+    this._MCollisionPlayer.afterUpdate();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

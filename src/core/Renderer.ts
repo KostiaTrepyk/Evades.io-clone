@@ -2,15 +2,15 @@ import { cellSize } from '../consts/consts';
 import { CameraController } from './CameraController';
 
 export class Renderer {
-  private _camera: CameraController;
+  private _CameraController: CameraController;
   private _ctx: CanvasRenderingContext2D;
   private _canvas: HTMLCanvasElement;
   private _canvasSize = { x: 4000, y: 800 };
 
-  constructor(camera: CameraController) {
+  constructor(CameraController: CameraController) {
+    this._CameraController = CameraController;
     this._canvas = document.getElementById('game')! as HTMLCanvasElement;
     this._ctx = this._canvas.getContext('2d')!;
-    this._camera = camera;
   }
 
   public init() {
@@ -22,9 +22,9 @@ export class Renderer {
     this._ctx.reset();
 
     // Set camera transform
-    this._camera.onRender(this._ctx);
+    this._CameraController.onRender(this._ctx);
 
-    // Set bgcolor
+    // Set bg color
     this._ctx.fillStyle = '#ffe';
     this._ctx.fillRect(0, 0, this._canvasSize.x, this._canvasSize.y);
 

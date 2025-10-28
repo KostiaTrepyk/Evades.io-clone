@@ -1,6 +1,7 @@
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { speedPerPoint } from '../../consts/consts';
 import { Module } from '../../core/common/Module';
+import { time } from '../../core/global';
 import { MStatus } from '../../core/modules/status/MStatus';
 import { CharacterLevels } from './character.levels';
 
@@ -43,7 +44,7 @@ export class CharacterCharacteristics implements Module {
   }
 
   // FIX ME Читабельность говно. Ещё и странно работает.
-  public beforeUpdate(deltaTime: number): void {
+  public beforeUpdate(): void {
     const upgrades = this._CharacterLevels.upgrades;
     const defaultCharacteristics = CHARACTERCONFIG.characteristics.default;
     const upgradesPerLevel = CHARACTERCONFIG.characteristics.upgradesPerLevel;
@@ -97,12 +98,12 @@ export class CharacterCharacteristics implements Module {
     // Energy regeneration
     this._energy.current = Math.min(
       this._energy.max,
-      Math.max(this._energy.current + energy.regeneration * deltaTime, 0)
+      Math.max(this._energy.current + energy.regeneration * time.deltaTime, 0)
     );
   }
 
-  public onUpdate(deltaTime: number): void {
-    this.MStatus.onUpdate(deltaTime);
+  public onUpdate(): void {
+    this.MStatus.onUpdate();
   }
 
   private calculateCharacteristics(): {

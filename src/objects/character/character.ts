@@ -9,6 +9,7 @@ import { CharacterCharacteristics } from './character.characteristics';
 import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
+import { time } from '../../core/global';
 
 export abstract class Character extends GameObject<CircleShape> {
   public abstract firstSkill: ISkill;
@@ -33,18 +34,18 @@ export abstract class Character extends GameObject<CircleShape> {
     this._isDead = false;
   }
 
-  public override beforeUpdate(deltaTime: number): void {
-    this.characteristics.beforeUpdate(deltaTime);
+  public override beforeUpdate(): void {
+    this.characteristics.beforeUpdate();
   }
 
-  public override onUpdate(deltaTime: number): void {
-    this.characteristics.onUpdate(deltaTime);
+  public override onUpdate(): void {
+    this.characteristics.onUpdate();
 
     // Update death timer
     if (this._isDead) {
       if (this._timeToDeath === undefined) return;
 
-      this._timeToDeath -= deltaTime;
+      this._timeToDeath -= time.deltaTime;
       if (this._timeToDeath <= 0) {
         // FIX ME GAME OVER не сделано еще!!!!!!!!!!
         // this.delete();
@@ -52,14 +53,14 @@ export abstract class Character extends GameObject<CircleShape> {
       }
     }
 
-    this.firstSkill.onUpdate(deltaTime);
-    this.secondSkill.onUpdate(deltaTime);
+    this.firstSkill.onUpdate();
+    this.secondSkill.onUpdate();
 
-    this.characterMovement.onUpdate(deltaTime);
+    this.characterMovement.onUpdate();
   }
 
-  public override afterUpdate(deltaTime: number): void {
-    this.collision.afterUpdate(deltaTime);
+  public override afterUpdate(): void {
+    this.collision.afterUpdate();
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {

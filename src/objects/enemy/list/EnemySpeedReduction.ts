@@ -26,8 +26,8 @@ export class EnemySpeedReduction extends Enemy {
     });
   }
 
-  public override onUpdate(deltaTime: number): void {
-    super.onUpdate(deltaTime);
+  public override onUpdate(): void {
+    super.onUpdate();
 
     const player = gameObjectManager.player;
     if (player === undefined) return;

@@ -39,7 +39,7 @@ export class MCollisionEnemy implements Module {
     this._onCollision = params.onCollision;
   }
 
-  public afterUpdate(deltaTime: number): void {
+  public afterUpdate(): void {
     const enemies = gameObjectManager.enemies;
     enemies.forEach((enemy) => {
       if (doItemsCollide(this._object, enemy).doesCollide === true) {
