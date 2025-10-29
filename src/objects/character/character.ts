@@ -12,6 +12,8 @@ import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { time } from '../../core/global';
 
 export abstract class Character extends GameObject<CircleShape> {
+  public override renderId: number = 4;
+
   public abstract firstSkill: ISkill;
   public abstract secondSkill: ISkill;
 

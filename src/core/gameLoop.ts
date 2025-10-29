@@ -72,7 +72,7 @@ export class GameLoop {
 
     // ====== обновления состояния ======
     time.beforeAllUpdates(deltaTime);
-    gameObjectManager.updateAll(deltaTime);
+    gameObjectManager.updateAll();
     userInput.afterUpdate();
 
     // ====== рендер игровых объектов ======

@@ -4,6 +4,8 @@ import { Position } from '../../core/types/Position';
 import { drawRectangle } from '../../core/utils/canvas/drawRectangle';
 
 export class SaveZone extends GameObject<'rectangle'> {
+  public override renderId: number = 0;
+
   constructor(position: Position, size: { x: number; y: number }) {
     super(position, { shape: 'rectangle', size });
   }

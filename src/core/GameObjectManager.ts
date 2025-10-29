@@ -7,10 +7,6 @@ import { SaveZone } from '../objects/saveZone/SaveZone';
 import { GameObject } from './common/GameObject/GameObject';
 import { Shape } from './types/Shape';
 
-/* Хочу переделать что-бы просто указывать очерёдность рендера и апдейта в файле кфг.
- * Убрать деления на разные типы если возможно, либо сделать минимальное деление,
- * а остальное закинуть в, other. */
-
 /** Отвечает за Все объекты в игре. Разделяет объекты через instanceof на разные
  * категории: player, enemies, pointOrbs и тд. За их добавление, удаление и вызывает
  * у них update и render. */
@@ -22,93 +18,135 @@ export class GameObjectManager {
   public portals: Portal[];
   public projectiles: Projectile[];
 
+  private _beforeUpdates: { o: GameObject<Shape>; f: () => void }[];
+  private _updates: { o: GameObject<Shape>; f: () => void }[];
+  private _afterUpdates: { o: GameObject<Shape>; f: () => void }[];
+  private _render: {
+    o: GameObject<Shape>;
+    f: (ctx: CanvasRenderingContext2D) => void;
+  }[][];
+
   constructor() {
     this.enemies = [];
     this.pointOrbs = [];
     this.saveZones = [];
     this.portals = [];
     this.projectiles = [];
+
+    this._beforeUpdates = [];
+    this._updates = [];
+    this._afterUpdates = [];
+
+    this._render = [];
+    for (let i = 0; i < 10; i++) {
+      this._render[i] = [];
+    }
   }
 
-  public updateAll(deltaTime: number): void {
-    // Before update
-    this.player?.beforeUpdate();
-    this.projectiles.forEach((projectile) => projectile.beforeUpdate?.());
-    this.enemies.forEach((enemy) => enemy.beforeUpdate?.());
-    this.portals.forEach((portal) => portal.beforeUpdate?.());
-
-    // Update
-    this.player?.onUpdate();
-    this.projectiles.forEach((projectile) => projectile.onUpdate());
-    this.enemies.forEach((enemy) => enemy.onUpdate());
-    this.portals.forEach((portal) => portal.afterUpdate?.());
-
-    // After update
-    this.player?.afterUpdate();
-    this.projectiles.forEach((projectile) => projectile.afterUpdate?.());
-    this.enemies.forEach((enemy) => enemy.afterUpdate?.());
-    this.portals.forEach((portal) => portal.afterUpdate?.());
+  public updateAll(): void {
+    this._beforeUpdates.forEach(({ f }) => f());
+    this._updates.forEach(({ f }) => f());
+    this._afterUpdates.forEach(({ f }) => f());
   }
 
   public renderAll(ctx: CanvasRenderingContext2D): void {
-    /* Order important. Это типа как слои которые накладываются. */
-    this.saveZones.forEach((saveZone) => saveZone.onRender(ctx));
-    this.portals.forEach((portal) => portal.onRender(ctx));
-    this.pointOrbs.forEach((pointOrb) => pointOrb.onRender(ctx));
-    this.player?.onRender(ctx);
-    this.enemies.forEach((object) => object.onRender(ctx));
-    this.projectiles.forEach((projectile) => projectile.onRender(ctx));
+    for (const renderArrays of this._render) {
+      for (const { f } of renderArrays) {
+        f(ctx);
+      }
+    }
   }
 
-  public addGameObject<S extends Shape>(gameObject: GameObject<S>): void {
+  public addGameObject<S extends Shape>(object: GameObject<S>): void {
+    this.bindObject(object);
+
     switch (true) {
-      case gameObject instanceof Character:
-        this.player = gameObject;
+      case object instanceof Character:
+        this.player = object;
         break;
-      case gameObject instanceof Enemy:
-        this.enemies.push(gameObject);
+      case object instanceof Enemy:
+        this.enemies.push(object);
         break;
-      case gameObject instanceof PointOrb:
-        this.pointOrbs.push(gameObject);
+      case object instanceof PointOrb:
+        this.pointOrbs.push(object);
         break;
-      case gameObject instanceof SaveZone:
-        this.saveZones.push(gameObject);
+      case object instanceof SaveZone:
+        this.saveZones.push(object);
         break;
-      case gameObject instanceof Portal:
-        this.portals.push(gameObject);
+      case object instanceof Portal:
+        this.portals.push(object);
         break;
-      case gameObject instanceof Projectile:
-        this.projectiles.push(gameObject);
+      case object instanceof Projectile:
+        this.projectiles.push(object);
         break;
       default:
         throw new Error('Unknown game object');
     }
   }
 
-  public removeGameObject<S extends Shape>(gameObject: GameObject<S>) {
+  public removeGameObject<S extends Shape>(object: GameObject<S>) {
+    this.unbindObject(object);
+
     switch (true) {
-      case gameObject instanceof Character:
+      case object instanceof Character:
         this.player = undefined;
         break;
-      case gameObject instanceof Enemy:
-        this.enemies = this.enemies.filter((item) => item !== gameObject);
+      case object instanceof Enemy:
+        this.enemies = this.enemies.filter((item) => item !== object);
         break;
-      case gameObject instanceof PointOrb:
-        this.pointOrbs = this.pointOrbs.filter((item) => item !== gameObject);
+      case object instanceof PointOrb:
+        this.pointOrbs = this.pointOrbs.filter((item) => item !== object);
         break;
-      case gameObject instanceof SaveZone:
-        this.saveZones = this.saveZones.filter((item) => item !== gameObject);
+      case object instanceof SaveZone:
+        this.saveZones = this.saveZones.filter((item) => item !== object);
         break;
-      case gameObject instanceof Portal:
-        this.portals = this.portals.filter((item) => item !== gameObject);
+      case object instanceof Portal:
+        this.portals = this.portals.filter((item) => item !== object);
         break;
-      case gameObject instanceof Projectile:
-        this.projectiles = this.projectiles.filter(
-          (item) => item !== gameObject
-        );
+      case object instanceof Projectile:
+        this.projectiles = this.projectiles.filter((item) => item !== object);
         break;
       default:
         throw new Error('Unknown game object');
     }
+  }
+
+  private bindObject(object: GameObject<Shape>): void {
+    if (object.beforeUpdate !== undefined)
+      this._beforeUpdates.push({
+        o: object,
+        f: object.beforeUpdate.bind(object),
+      });
+    if (object.onUpdate !== undefined)
+      this._updates.push({
+        o: object,
+        f: object.onUpdate.bind(object),
+      });
+    if (object.afterUpdate !== undefined)
+      this._afterUpdates.push({
+        o: object,
+        f: object.afterUpdate.bind(object),
+      });
+    if (object.onRender !== undefined)
+      this._render[object.renderId].push({
+        o: object,
+        f: object.onRender.bind(object),
+      });
+  }
+
+  private unbindObject(object: GameObject<Shape>): void {
+    const id1 = this._beforeUpdates.findIndex(({ o }) => o === object);
+    if (id1 !== -1) this._beforeUpdates.splice(id1, 1);
+
+    const id2 = this._updates.findIndex(({ o }) => o === object);
+    if (id2 !== -1) this._updates.splice(id2, 1);
+
+    const id3 = this._afterUpdates.findIndex(({ o }) => o === object);
+    if (id3 !== -1) this._afterUpdates.splice(id3, 1);
+
+    const id4 = this._render[object.renderId].findIndex(
+      ({ o }) => o === object
+    );
+    if (id4 !== -1) this._render[object.renderId].splice(id4, 1);
   }
 }

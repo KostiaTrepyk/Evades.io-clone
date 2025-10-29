@@ -19,6 +19,8 @@ export interface EnemyParams {
 }
 
 export class Enemy extends GameObject<CircleShape> {
+  public override renderId: number = 5;
+
   public readonly defaultColor: HSLA;
   public currentColor: HSLA;
   public readonly defaultSize: number;

@@ -5,6 +5,7 @@ import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';
 
 export class PointOrb extends GameObject<'circle'> {
+  public override renderId: number = 2;
   private _color: HSLA;
 
   constructor(startPosition: Position) {

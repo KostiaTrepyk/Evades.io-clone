@@ -12,6 +12,8 @@ export interface PortalParams {
 }
 
 export class Portal extends GameObject<'rectangle'> {
+  public override renderId: number = 1;
+
   private _onEnter: (player: Character) => void;
   private _MCollisionPlayer: MCollisionPlayer;
 
