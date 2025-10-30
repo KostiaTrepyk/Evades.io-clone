@@ -1,3 +1,5 @@
+import { cellSize } from '../../consts/consts';
+import { renderer } from '../global';
 import { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
 import { LevelConfiguration } from './types';
 
@@ -22,6 +24,15 @@ export class Stage {
       saveZones: {
         start: { width: 300 },
         end: { width: 300 },
+        other: [
+          {
+            position: {
+              x: renderer.canvasSize.x / 2,
+              y: renderer.canvasSize.y / 2,
+            },
+            size: { x: cellSize * 4, y: cellSize * 4 },
+          },
+        ],
       },
       level,
     };
