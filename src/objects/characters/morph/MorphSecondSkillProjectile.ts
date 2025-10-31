@@ -23,7 +23,7 @@ export class MorphSecondSkillProjectile extends Projectile {
 
   constructor(params: MorphSecondSkillProjectileParams) {
     const { startPosition, size, velocity, color, statusIds } = params;
-    super({ startPosition, size, velocity, color });
+    super({ startPosition, radius: size, velocity, color });
 
     this.statusIds = statusIds;
 

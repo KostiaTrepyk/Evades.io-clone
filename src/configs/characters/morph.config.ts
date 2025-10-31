@@ -4,7 +4,7 @@ export const MORPHCONFIG = {
   color: {
     default: new HSLA(110, 75, 50, 1),
   },
-  size: 46,
+  radius: 23,
 
   firstSpell: {
     energyUsage: 15,

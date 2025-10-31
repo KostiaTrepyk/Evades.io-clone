@@ -33,7 +33,7 @@ export class Enemy extends GameObject<CircleShape> {
   constructor(params: EnemyParams) {
     const { position, size, velocity, color } = params;
 
-    super(position, { shape: 'circle', size });
+    super(position, { shape: 'circle', radius: size });
 
     const enemyColor = color || ENEMYCONFIG.defaultColor.clone();
     this.defaultColor = enemyColor.clone();
@@ -75,7 +75,7 @@ export class Enemy extends GameObject<CircleShape> {
       this.position.y += currentVelocity.y * speedPerPoint * time.deltaTime;
     }
 
-    this.objectModel.size = this.defaultSize * this.EnemyStatus.sizeScale;
+    this.objectModel.radius = this.defaultSize * this.EnemyStatus.sizeScale;
   }
 
   public override afterUpdate(): void {
@@ -87,7 +87,7 @@ export class Enemy extends GameObject<CircleShape> {
     super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
-      size: this.objectModel.size,
+      radius: this.objectModel.radius,
       fill: { color: this.currentColor },
       stroke: {
         color: ENEMYCONFIG.strokeColor,

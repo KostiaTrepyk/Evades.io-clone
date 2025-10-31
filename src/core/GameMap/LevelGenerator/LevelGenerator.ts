@@ -20,7 +20,10 @@ import { createPointOrb } from './utils/createPointOrb';
 import { GameObjectManager } from '../../GameObjectManager';
 import { Renderer } from '../../Renderer';
 import { Position } from '../../types/Position';
-import { getRandomPosition } from '../../utils/other/getRandomPosition';
+import {
+  getRandomPosition,
+  GetRandomPositionParams,
+} from '../../utils/other/getRandomPosition';
 import { renderer } from '../../global';
 import { POINTORBCONFIG } from '../../../configs/pointOrb.config';
 import { ENEMYSHOOTERCONFIG } from '../../../configs/enemies/enemyShooter.config';
@@ -76,10 +79,10 @@ export class LevelGenerator {
     if (this._GameObjectManager.player) {
       const player = this._GameObjectManager.player;
       if (playerPosition === 'start') {
-        player.position.x = player.objectModel.size / 2 + cellSize;
+        player.position.x = player.objectModel.radius + cellSize;
       } else if (playerPosition === 'end') {
         player.position.x =
-          this._Renderer.canvasSize.x - player.objectModel.size / 2 - cellSize;
+          this._Renderer.canvasSize.x - player.objectModel.radius - cellSize;
       }
       player.position.y = this._Renderer.canvasSize.y / 2;
     }
@@ -230,10 +233,10 @@ export class LevelGenerator {
 
     // Create and init enemy
     Array.from({ length: count }).forEach(() => {
-      const size = getRandomSize(config.size.min, config.size.max);
+      const size = getRandomSize(config.radius.min, config.radius.max);
       const position = this.getRandomPosition(saveZones, {
-        x: size,
-        y: size,
+        x: size * 2,
+        y: size * 2,
       });
 
       const enemy = createCommonEnemy({ speed, size, position });
@@ -258,8 +261,8 @@ export class LevelGenerator {
     // Create and init enemy
     Array.from({ length: count }).forEach(() => {
       const position = this.getRandomPosition(saveZones, {
-        x: ENERGYBURNERENEMYCONFIG.size,
-        y: ENERGYBURNERENEMYCONFIG.size,
+        x: ENERGYBURNERENEMYCONFIG.radius * 2,
+        y: ENERGYBURNERENEMYCONFIG.radius * 2,
       });
       const enemy = createEnemyEnergyBurner(speed, position);
       enemy.init();
@@ -283,15 +286,15 @@ export class LevelGenerator {
     // Create and init enemy
     Array.from({ length: count }).forEach(() => {
       const position = this.getRandomPosition(saveZones, {
-        x: ENEMYSPEEDREDUCTIONCONFIG.size,
-        y: ENEMYSPEEDREDUCTIONCONFIG.size,
+        x: ENEMYSPEEDREDUCTIONCONFIG.radius * 2,
+        y: ENEMYSPEEDREDUCTIONCONFIG.radius * 2,
       });
       const enemySpeedReduction = createEnemySpeedReduction(speed, position);
       enemySpeedReduction.init();
     });
   }
 
-  /* FIX ME Что если  сейв зона будет возле стенки. */
+  /* FIX ME Что если сейв зона будет возле стенки. */
   private createAndInitAllBorderEnemies(
     config: EnemyBorderConfiguration,
     saveZones: GenerateLevelConfiguration['saveZones'],
@@ -337,8 +340,8 @@ export class LevelGenerator {
 
     Array.from({ length: count }).forEach((_, i) => {
       const position = this.getRandomPosition(saveZones, {
-        x: ENEMYSHOOTERCONFIG.size,
-        y: ENEMYSHOOTERCONFIG.size,
+        x: ENEMYSHOOTERCONFIG.radius * 2,
+        y: ENEMYSHOOTERCONFIG.radius * 2,
       });
       const enemyShooter = createEnemyShooter({
         position: position,
@@ -358,8 +361,8 @@ export class LevelGenerator {
     Array.from({ length: count }).forEach(() => {
       const pointOrb = createPointOrb(
         this.getRandomPosition(saveZones, {
-          x: POINTORBCONFIG.size,
-          y: POINTORBCONFIG.size,
+          x: POINTORBCONFIG.radius * 2,
+          y: POINTORBCONFIG.radius * 2,
         })
       );
       pointOrb.init();
@@ -373,7 +376,7 @@ export class LevelGenerator {
   ): Position {
     const halfSizeX = size.x / 2;
     const halfSizeY = size.y / 2;
-    const exclude = [];
+    const exclude: GetRandomPositionParams['exclude'] = [];
 
     if (saveZonesConfig.other !== undefined) {
       for (const saveZone of saveZonesConfig.other) {

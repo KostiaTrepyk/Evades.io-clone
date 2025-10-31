@@ -15,17 +15,17 @@ export function doesCollideWithWalls(
   gameObject: GameObject<Shape>
 ): DoesCollideWithWallsReturn {
   if (gameObject.objectModel.shape === 'circle') {
-    const halfSize = gameObject.objectModel.size / 2;
+    const radius = gameObject.objectModel.radius;
     const position = gameObject.position;
     let collisions: Collision = { x: 'no', y: 'no' };
 
-    if (position.x - halfSize < 0) collisions.x = 'left';
-    else if (position.x + halfSize > renderer.canvasSize.x)
+    if (position.x - radius < 0) collisions.x = 'left';
+    else if (position.x + radius > renderer.canvasSize.x)
       collisions.x = 'right';
     else collisions.x = 'no';
 
-    if (position.y - halfSize < 0) collisions.y = 'top';
-    else if (position.y + halfSize > renderer.canvasSize.y)
+    if (position.y - radius < 0) collisions.y = 'top';
+    else if (position.y + radius > renderer.canvasSize.y)
       collisions.y = 'bottom';
     else collisions.y = 'no';
 

@@ -3,7 +3,7 @@ import { Position } from '../../types/Position';
 import { CircleShape, RectangleShape, Shape } from '../../types/Shape';
 import { GameObjectLoopMethods } from './GameObjectLoopMethods';
 
-export type CircleProperties = { shape: CircleShape; size: number };
+export type CircleProperties = { shape: CircleShape; radius: number };
 export type RectangleProperties = {
   shape: RectangleShape;
   size: { x: number; y: number };

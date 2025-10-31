@@ -24,7 +24,7 @@ export class EnemyShooter extends Enemy {
 
     super({
       position,
-      size: ENEMYSHOOTERCONFIG.size,
+      size: ENEMYSHOOTERCONFIG.radius,
       velocity,
       color: ENEMYSHOOTERCONFIG.color.clone(),
     });

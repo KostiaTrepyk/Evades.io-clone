@@ -11,21 +11,21 @@ export function repositionObjectOnCollisionWithObject(
   // Получаем размеры объекта 1
   const object1Size = { x: 0, y: 0 };
 
-  if (typeof object1.objectModel.size === 'number')
-    object1Size.x = object1.objectModel.size;
+  if (object1.objectModel.shape === 'circle')
+    object1Size.x = object1.objectModel.radius * 2;
   else object1Size.x = object1.objectModel.size.x;
-  if (typeof object1.objectModel.size === 'number')
-    object1Size.y = object1.objectModel.size;
+  if (object1.objectModel.shape === 'circle')
+    object1Size.y = object1.objectModel.radius * 2;
   else object1Size.y = object1.objectModel.size.y;
 
   // Получаем размеры объекта 2
   const object2Size = { x: 0, y: 0 };
 
-  if (typeof object2.objectModel.size === 'number')
-    object2Size.x = object2.objectModel.size;
+  if (object2.objectModel.shape === 'circle')
+    object2Size.x = object2.objectModel.radius * 2;
   else object2Size.x = object2.objectModel.size.x;
-  if (typeof object2.objectModel.size === 'number')
-    object2Size.y = object2.objectModel.size;
+  if (object2.objectModel.shape === 'circle')
+    object2Size.y = object2.objectModel.radius * 2;
   else object2Size.y = object2.objectModel.size.y;
 
   const object2Left = object2.position.x - object2Size.x / 2;

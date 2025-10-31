@@ -35,8 +35,8 @@ export function doItemsCollide(
 
   // --- circle-circle ---
   if (shape1 === 'circle' && shape2 === 'circle') {
-    const radius1 = item1.objectModel.size / 2;
-    const radius2 = item2.objectModel.size / 2;
+    const radius1 = item1.objectModel.radius;
+    const radius2 = item2.objectModel.radius;
 
     const dx = item2.position.x - item1.position.x;
     const dy = item2.position.y - item1.position.y;
@@ -167,7 +167,7 @@ export function doItemsCollide(
   const distanceY = circle.position.y - nearestY;
   const distanceSquared = distanceX * distanceX + distanceY * distanceY;
 
-  const radius = circle.objectModel.size / 2;
+  const radius = circle.objectModel.radius;
 
   const doesCollide = distanceSquared < radius * radius;
   let rawCollisions: DoItemsCollideReturn['collisions'] = { x: 'no', y: 'no' };

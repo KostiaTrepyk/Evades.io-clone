@@ -26,7 +26,7 @@ export abstract class Character extends GameObject<CircleShape> {
   public color: { current: HSLA; readonly default: HSLA };
 
   constructor(startPosition: Position, size: number, color: HSLA) {
-    super(startPosition, { shape: Shapes.circle, size });
+    super(startPosition, { shape: Shapes.circle, radius: size });
 
     this.characterMovement = new CharacterMovement(this);
     this.level = new CharacterLevels();

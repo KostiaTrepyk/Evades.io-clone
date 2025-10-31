@@ -10,7 +10,7 @@ export function repositionObjectOnCollisionWithWalls(
 ): void {
   // applyCollision for circle
   if (object.objectModel.shape === 'circle') {
-    const halfSize = object.objectModel.size / 2;
+    const halfSize = object.objectModel.radius;
 
     if (collision.x === 'left') object.position.x = halfSize;
     else if (collision.x === 'right')

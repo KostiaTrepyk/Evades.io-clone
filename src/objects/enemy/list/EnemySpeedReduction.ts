@@ -21,7 +21,7 @@ export class EnemySpeedReduction extends Enemy {
   constructor(params: EnemySpeedReductionParams) {
     super({
       ...params,
-      size: ENEMYSPEEDREDUCTIONCONFIG.size,
+      size: ENEMYSPEEDREDUCTIONCONFIG.radius,
       color: ENEMYSPEEDREDUCTIONCONFIG.color,
     });
   }
@@ -37,7 +37,7 @@ export class EnemySpeedReduction extends Enemy {
 
     const aura = new GameObject(this.position, {
       shape: 'circle',
-      size: size * scale,
+      radius: size * scale,
     });
 
     const { doesCollide } = doItemsCollide(aura, player);
@@ -51,7 +51,7 @@ export class EnemySpeedReduction extends Enemy {
     const scale = this.EnemyStatus.sizeScale;
     drawCircle(ctx, {
       position: this.position,
-      size: size * scale,
+      radius: size * scale,
       fill: { color: ENEMYSPEEDREDUCTIONCONFIG.auraColor },
     });
 

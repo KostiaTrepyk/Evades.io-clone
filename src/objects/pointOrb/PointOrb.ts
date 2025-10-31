@@ -9,7 +9,7 @@ export class PointOrb extends GameObject<'circle'> {
   private _color: HSLA;
 
   constructor(startPosition: Position) {
-    super(startPosition, { shape: 'circle', size: POINTORBCONFIG.size });
+    super(startPosition, { shape: 'circle', radius: POINTORBCONFIG.radius });
 
     this._color = this.getRandomColor();
   }
@@ -18,7 +18,7 @@ export class PointOrb extends GameObject<'circle'> {
     super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
-      size: this.objectModel.size,
+      radius: this.objectModel.radius,
       fill: { color: this._color },
     });
   }

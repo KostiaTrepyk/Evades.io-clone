@@ -9,21 +9,21 @@ import { time } from '../../core/global';
 
 export interface ProjectileParams {
   startPosition: Position;
-  size: number;
+  radius: number;
   velocity: Velocity;
   color: HSLA;
 }
 
 export class Projectile extends GameObject<CircleShape> {
   public override renderId: number = 6;
-  
+
   public velocity: Velocity;
   private _color: HSLA;
 
   constructor(params: ProjectileParams) {
-    const { startPosition, size, velocity, color } = params;
+    const { startPosition, radius, velocity, color } = params;
 
-    super(startPosition, { shape: 'circle', size: size });
+    super(startPosition, { shape: 'circle', radius });
 
     this.velocity = velocity;
     this._color = color;
@@ -39,7 +39,7 @@ export class Projectile extends GameObject<CircleShape> {
     super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
-      size: this.objectModel.size,
+      radius: this.objectModel.radius,
       fill: { color: this._color },
     });
   }

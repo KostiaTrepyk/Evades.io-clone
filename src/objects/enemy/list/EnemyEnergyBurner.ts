@@ -22,7 +22,7 @@ export class EnemyEnergyBurner extends Enemy {
     const { position, velocity } = params;
     super({
       position,
-      size: ENERGYBURNERENEMYCONFIG.size,
+      size: ENERGYBURNERENEMYCONFIG.radius,
       velocity,
       color: ENERGYBURNERENEMYCONFIG.color,
     });
@@ -39,7 +39,7 @@ export class EnemyEnergyBurner extends Enemy {
 
     const aura = new GameObject(this.position, {
       shape: 'circle',
-      size: size * scale,
+      radius: size * scale,
     });
 
     const { doesCollide } = doItemsCollide(player, aura);
@@ -53,7 +53,7 @@ export class EnemyEnergyBurner extends Enemy {
     const scale = this.EnemyStatus.sizeScale;
     drawCircle(ctx, {
       position: this.position,
-      size: size * scale,
+      radius: size * scale,
       fill: { color: ENERGYBURNERENEMYCONFIG.auraColor },
     });
 

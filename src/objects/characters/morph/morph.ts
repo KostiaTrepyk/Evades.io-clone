@@ -19,7 +19,7 @@ export class Morph extends Character {
   private MMoveDirection: MMoveDirection;
 
   constructor(startPosition: Position) {
-    super(startPosition, MORPHCONFIG.size, MORPHCONFIG.color.default.clone());
+    super(startPosition, MORPHCONFIG.radius, MORPHCONFIG.color.default.clone());
 
     this.MMoveDirection = new MMoveDirection();
 

@@ -14,13 +14,13 @@ export function createEnemyBorder(params: {
   order: number;
   saveZones: GenerateLevelConfiguration['saveZones'];
 }): EnemyBorder {
-  const size = ENEMYBORDERCONFIG.size;
-  const halfSize = size / 2;
+  // FIX ME  WTF TYPE ERROR
+  const radius = ENEMYBORDERCONFIG.radius + 0;
 
-  const minX = params.saveZones.start.width + halfSize;
-  const maxX = renderer.canvasSize.x - params.saveZones.end.width - halfSize;
-  const minY = halfSize;
-  const maxY = renderer.canvasSize.y - halfSize;
+  const minX = params.saveZones.start.width + radius;
+  const maxX = renderer.canvasSize.x - params.saveZones.end.width - radius;
+  const minY = radius;
+  const maxY = renderer.canvasSize.y - radius;
 
   const length = {
     x: maxX - minX,

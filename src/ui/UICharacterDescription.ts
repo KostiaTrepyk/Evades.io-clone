@@ -46,7 +46,7 @@ export class UICharacterDescription {
       draw: (ctx, centeredPosition) => {
         drawCircle(ctx, {
           position: centeredPosition,
-          size: 65,
+          radius: 34,
           fill: { color: player.color.default },
         });
         drawText(ctx, player.level.currentLevel.toString(), {
@@ -400,7 +400,7 @@ export class UICharacterDescription {
       .forEach(() => {
         drawCircle(ctx, {
           position: { x: position.x + 15 * i, y: position.y },
-          size: 10,
+          radius: 5,
           stroke: { color: new HSLA(0, 0, 40, 1), width: 2 },
         });
         i++;
@@ -411,7 +411,7 @@ export class UICharacterDescription {
       .forEach(() => {
         drawCircle(ctx, {
           position: { x: position.x + 15 * i, y: position.y },
-          size: 10,
+          radius: 5,
           fill: { color: new HSLA(60, 100, 50, 1) },
         });
         i++;

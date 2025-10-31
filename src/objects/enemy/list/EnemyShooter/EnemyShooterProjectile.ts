@@ -23,7 +23,7 @@ export class EnemyShooterProjectile extends Projectile {
     super({
       startPosition: params.startPosition,
       velocity: params.velocity,
-      size: ENEMYSHOOTERCONFIG.size / 1.6,
+      radius: ENEMYSHOOTERCONFIG.radius / 1.6,
       color: ENEMYSHOOTERCONFIG.color.clone(),
     });
 
@@ -55,7 +55,7 @@ export class EnemyShooterProjectile extends Projectile {
     super.onRender(ctx);
     drawCircle(ctx, {
       position: this.position,
-      size: this.objectModel.size,
+      radius: this.objectModel.radius,
       stroke: {
         width: ENEMYCONFIG.strokeWidth / 2,
         color: ENEMYCONFIG.strokeColor.clone(),

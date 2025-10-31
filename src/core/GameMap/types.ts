@@ -17,7 +17,7 @@ export type EnemyConfiguration =
 
 export interface CommonEnemyConfiguration {
   type: typeof enemyTypes.CommonEnemy;
-  size: { min: number; max: number };
+  radius: { min: number; max: number };
   count: { init: number; perLevel: number; max: number };
   speed: { init: number; perLevel: number; max: number };
 }

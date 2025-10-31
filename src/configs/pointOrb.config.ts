@@ -1,7 +1,7 @@
 import { HSLA } from '../core/utils/hsla';
 
 export const POINTORBCONFIG = {
-  size: 30,
+  radius: 15,
   colors: [
     new HSLA(22, 85, 76, 1),
     new HSLA(120, 85, 76, 1),

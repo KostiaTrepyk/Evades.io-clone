@@ -11,7 +11,7 @@ export interface GetRandomPositionParams {
   }[];
 }
 
-/* IMPROVE ME Можно улучшить  но нужно подумать как. */
+/* FIX ME Можно улучшить но нужно подумать как. boundary  */
 export function getRandomPosition({
   minX,
   maxX,

@@ -18,7 +18,7 @@ export class Rime extends Character {
   private MMoveDirection: MMoveDirection;
 
   constructor(startPosition: Position) {
-    super(startPosition, RIMECONFIG.size, RIMECONFIG.color.default.clone());
+    super(startPosition, RIMECONFIG.radius, RIMECONFIG.color.default.clone());
 
     this.MMoveDirection = new MMoveDirection();
     this.secondSkillRangeVisibility = false;
@@ -64,7 +64,7 @@ export class Rime extends Character {
       const radius = RIMECONFIG.secondSpell.radius[currentSkillLevel - 1];
 
       drawCircle(ctx, {
-        size: radius * 2,
+        radius,
         position: this.position,
         fill: {
           color: RIMECONFIG.secondSpell.rangeColor,
@@ -109,7 +109,7 @@ export class Rime extends Character {
   private freezeEnemy(radius: number, duration: number) {
     const freezer = new GameObject(this.position, {
       shape: 'circle',
-      size: radius * 2,
+      radius: radius * 2,
     });
 
     const enemiesToFreeze = gameObjectManager.enemies.filter(

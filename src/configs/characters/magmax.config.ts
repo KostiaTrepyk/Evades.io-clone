@@ -6,7 +6,7 @@ export const MAGMAXCONFIG = {
     firstSpellActive: new HSLA(5, 85, 60, 1),
     secondSpellActive: new HSLA(0, 85, 40, 1),
   },
-  size: 46,
+  radius: 23,
 
   fistSpell: {
     speed: [3, 6, 8, 10, 12],

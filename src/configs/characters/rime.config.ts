@@ -4,7 +4,7 @@ export const RIMECONFIG = {
   color: {
     default: new HSLA(230, 85, 50, 1),
   },
-  size: 46,
+  radius: 23,
 
   fistSpell: {
     energyUsage: 10,
