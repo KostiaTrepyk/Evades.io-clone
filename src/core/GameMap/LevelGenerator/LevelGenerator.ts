@@ -20,16 +20,16 @@ import { createPointOrb } from './utils/createPointOrb';
 import { GameObjectManager } from '../../GameObjectManager';
 import { Renderer } from '../../Renderer';
 import { Position } from '../../types/Position';
-import {
-  getRandomPosition,
-  GetRandomPositionParams,
-} from '../../utils/other/getRandomPosition';
+import { getRandomPosition } from '../../utils/other/getRandomPosition';
 import { renderer } from '../../global';
 import { POINTORBCONFIG } from '../../../configs/pointOrb.config';
 import { ENEMYSHOOTERCONFIG } from '../../../configs/enemies/enemyShooter.config';
 import { ENEMYSPEEDREDUCTIONCONFIG } from '../../../configs/enemies/enemySpeedReductionconfig';
 import { ENERGYBURNERENEMYCONFIG } from '../../../configs/enemies/energyBurnerEnemy.config';
 import { getRandomSize } from '../../utils/other/getRandomSize';
+import { GameObjectUtils } from '../../common/GameObject/GameObjectsUtils';
+import { RectangleBoundary } from '../../types/Boundary';
+import { Character } from '../../../objects/character/character';
 
 export interface GenerateLevelConfiguration {
   enemies: EnemyConfiguration[];
@@ -40,6 +40,11 @@ export interface GenerateLevelConfiguration {
     nextLevel?: boolean;
     prevTunnel?: boolean;
     nextTunnel?: boolean;
+    other?: {
+      size: { x: number; y: number };
+      position: Position;
+      onEnter: (player: Character) => void;
+    }[];
   };
   saveZones: {
     start: { width: number };
@@ -63,14 +68,16 @@ export class LevelGenerator {
 
     this.repositionPlayer(params.playerPosition);
 
-    this.createAndInitAllSaveZones(params.saveZones);
+    const saveZones = this.createAndInitAllSaveZones(params.saveZones);
+    const excludedArea = saveZones.map((s) => GameObjectUtils.getBoundary(s));
     this.createAndInitAllPortals(params.portals, params.saveZones);
     this.createAndInitAllEnemies(
       params.enemies,
-      params.saveZones,
-      params.level
+      params.level,
+      excludedArea,
+      params.saveZones
     );
-    this.createAndInitAllPointOrbs(params.pointOrbCount, params.saveZones);
+    this.createAndInitAllPointOrbs(params.pointOrbCount, excludedArea);
   }
 
   private repositionPlayer(
@@ -90,12 +97,15 @@ export class LevelGenerator {
 
   private createAndInitAllSaveZones(
     config: GenerateLevelConfiguration['saveZones']
-  ): void {
+  ): SaveZone[] {
     const { start, end } = config;
+    const saveZones: SaveZone[] = [];
+
     const saveZoneStart = new SaveZone(
       { x: start.width / 2, y: this._Renderer.canvasSize.y / 2 },
       { x: start.width, y: this._Renderer.canvasSize.y }
     );
+    saveZones.push(saveZoneStart);
     saveZoneStart.init();
     const saveZoneEnd = new SaveZone(
       {
@@ -104,6 +114,7 @@ export class LevelGenerator {
       },
       { x: end.width, y: this._Renderer.canvasSize.y }
     );
+    saveZones.push(saveZoneEnd);
     saveZoneEnd.init();
 
     /* --------------- OTHER --------------- */
@@ -112,9 +123,12 @@ export class LevelGenerator {
         const saveZone = new SaveZone(saveZoneConfig.position, {
           ...saveZoneConfig.size,
         });
+        saveZones.push(saveZone);
         saveZone.init();
       });
     }
+
+    return saveZones;
   }
 
   private createAndInitAllPortals(
@@ -166,32 +180,33 @@ export class LevelGenerator {
 
   private createAndInitAllEnemies(
     enemies: GenerateLevelConfiguration['enemies'],
-    saveZones: GenerateLevelConfiguration['saveZones'],
-    level: GenerateLevelConfiguration['level']
+    level: GenerateLevelConfiguration['level'],
+    excludedArea: RectangleBoundary[],
+    saveZones: GenerateLevelConfiguration['saveZones']
   ): void {
     enemies.forEach((enemyTypeOptions) => {
       switch (enemyTypeOptions.type) {
         case enemyTypes.CommonEnemy:
           this.createAndInitAllCommonEnemies(
             enemyTypeOptions,
-            saveZones,
-            level
+            level,
+            excludedArea
           );
           break;
 
         case enemyTypes.EnemyEnergyBurner:
           this.createAndInitAllEnergyBurnerEnemies(
             enemyTypeOptions,
-            saveZones,
-            level
+            level,
+            excludedArea
           );
           break;
 
         case enemyTypes.EnemySpeedReduction:
           this.createAndInitAllSpeedReductionEnemies(
             enemyTypeOptions,
-            saveZones,
-            level
+            level,
+            excludedArea
           );
           break;
 
@@ -206,8 +221,8 @@ export class LevelGenerator {
         case enemyTypes.EnemyShooter:
           this.createAndInitAllShooterEnemies(
             enemyTypeOptions,
-            saveZones,
-            level
+            level,
+            excludedArea
           );
           break;
 
@@ -219,8 +234,8 @@ export class LevelGenerator {
 
   private createAndInitAllCommonEnemies(
     config: CommonEnemyConfiguration,
-    saveZones: GenerateLevelConfiguration['saveZones'],
-    level: number
+    level: number,
+    excludedArea: RectangleBoundary[]
   ): void {
     const count = Math.min(
       Math.floor(config.count.perLevel * level) + config.count.init,
@@ -234,10 +249,13 @@ export class LevelGenerator {
     // Create and init enemy
     Array.from({ length: count }).forEach(() => {
       const size = getRandomSize(config.radius.min, config.radius.max);
-      const position = this.getRandomPosition(saveZones, {
-        x: size * 2,
-        y: size * 2,
-      });
+      const position = this.getRandomPosition(
+        {
+          x: size * 2,
+          y: size * 2,
+        },
+        excludedArea
+      );
 
       const enemy = createCommonEnemy({ speed, size, position });
       enemy.init();
@@ -246,8 +264,8 @@ export class LevelGenerator {
 
   private createAndInitAllEnergyBurnerEnemies(
     config: EnemyEnergyBurnerConfiguration,
-    saveZones: GenerateLevelConfiguration['saveZones'],
-    level: number
+    level: number,
+    excludedArea: RectangleBoundary[]
   ): void {
     const count = Math.min(
       Math.floor(config.count.perLevel * level) + config.count.init,
@@ -260,10 +278,13 @@ export class LevelGenerator {
 
     // Create and init enemy
     Array.from({ length: count }).forEach(() => {
-      const position = this.getRandomPosition(saveZones, {
-        x: ENERGYBURNERENEMYCONFIG.radius * 2,
-        y: ENERGYBURNERENEMYCONFIG.radius * 2,
-      });
+      const position = this.getRandomPosition(
+        {
+          x: ENERGYBURNERENEMYCONFIG.radius * 2,
+          y: ENERGYBURNERENEMYCONFIG.radius * 2,
+        },
+        excludedArea
+      );
       const enemy = createEnemyEnergyBurner(speed, position);
       enemy.init();
     });
@@ -271,8 +292,8 @@ export class LevelGenerator {
 
   private createAndInitAllSpeedReductionEnemies(
     config: EnemySpeedReductionConfiguration,
-    saveZones: GenerateLevelConfiguration['saveZones'],
-    level: number
+    level: number,
+    excludedArea: RectangleBoundary[]
   ): void {
     const count = Math.min(
       Math.floor(config.count.perLevel * level) + config.count.init,
@@ -285,10 +306,13 @@ export class LevelGenerator {
 
     // Create and init enemy
     Array.from({ length: count }).forEach(() => {
-      const position = this.getRandomPosition(saveZones, {
-        x: ENEMYSPEEDREDUCTIONCONFIG.radius * 2,
-        y: ENEMYSPEEDREDUCTIONCONFIG.radius * 2,
-      });
+      const position = this.getRandomPosition(
+        {
+          x: ENEMYSPEEDREDUCTIONCONFIG.radius * 2,
+          y: ENEMYSPEEDREDUCTIONCONFIG.radius * 2,
+        },
+        excludedArea
+      );
       const enemySpeedReduction = createEnemySpeedReduction(speed, position);
       enemySpeedReduction.init();
     });
@@ -322,8 +346,8 @@ export class LevelGenerator {
 
   private createAndInitAllShooterEnemies(
     config: EnemyShooterConfiguration,
-    saveZones: GenerateLevelConfiguration['saveZones'],
-    level: number
+    level: number,
+    excludedArea: RectangleBoundary[]
   ): void {
     const count = Math.min(
       Math.floor(config.count.perLevel * level) + config.count.init,
@@ -339,16 +363,18 @@ export class LevelGenerator {
     );
 
     Array.from({ length: count }).forEach((_, i) => {
-      const position = this.getRandomPosition(saveZones, {
-        x: ENEMYSHOOTERCONFIG.radius * 2,
-        y: ENEMYSHOOTERCONFIG.radius * 2,
-      });
+      const position = this.getRandomPosition(
+        {
+          x: ENEMYSHOOTERCONFIG.radius * 2,
+          y: ENEMYSHOOTERCONFIG.radius * 2,
+        },
+        excludedArea
+      );
       const enemyShooter = createEnemyShooter({
         position: position,
         speed: speed,
         projectileSpeed: projectileSpeed,
         shootDistance: config.shootDistance,
-        saveZones,
       });
       enemyShooter.init();
     });
@@ -356,14 +382,17 @@ export class LevelGenerator {
 
   private createAndInitAllPointOrbs(
     count: number,
-    saveZones: GenerateLevelConfiguration['saveZones']
+    excludedArea: RectangleBoundary[]
   ): void {
     Array.from({ length: count }).forEach(() => {
       const pointOrb = createPointOrb(
-        this.getRandomPosition(saveZones, {
-          x: POINTORBCONFIG.radius * 2,
-          y: POINTORBCONFIG.radius * 2,
-        })
+        this.getRandomPosition(
+          {
+            x: POINTORBCONFIG.radius * 2,
+            y: POINTORBCONFIG.radius * 2,
+          },
+          excludedArea
+        )
       );
       pointOrb.init();
     });
@@ -371,38 +400,17 @@ export class LevelGenerator {
 
   /** Return random position for enemies, point orbs */
   private getRandomPosition(
-    saveZonesConfig: GenerateLevelConfiguration['saveZones'],
-    size: { x: number; y: number }
+    size: { x: number; y: number },
+    excludedArea: RectangleBoundary[]
   ): Position {
-    const excludes: GetRandomPositionParams['excludes'] = [];
-
-    if (saveZonesConfig.other !== undefined) {
-      for (const saveZone of saveZonesConfig.other) {
-        const from = {
-          x: saveZone.position.x - saveZone.size.x / 2,
-          y: saveZone.position.y - saveZone.size.y / 2,
-        };
-        const to = {
-          x: saveZone.position.x + saveZone.size.x / 2,
-          y: saveZone.position.y + saveZone.size.y / 2,
-        };
-        excludes.push({ from, to });
-      }
-    }
-
     return getRandomPosition({
       allowed: {
-        from: {
-          x: saveZonesConfig.start.width,
-          y: 0,
-        },
-        to: {
-          x: renderer.canvasSize.x - saveZonesConfig.end.width,
-          y: renderer.canvasSize.y,
-        },
+        shape: 'rectangle',
+        from: { x: 0, y: 0 },
+        to: { x: renderer.canvasSize.x, y: renderer.canvasSize.y },
       },
       size: size,
-      excludes: excludes,
+      excludes: excludedArea,
     });
   }
 

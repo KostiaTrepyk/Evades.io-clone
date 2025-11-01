@@ -1,12 +1,29 @@
-import { Boundary } from '../../types/Boundary';
+import { RectangleBoundary } from '../../types/Boundary';
 import { Position } from '../../types/Position';
 
 export interface GetRandomPositionParams {
-  allowed: Boundary;
+  allowed: RectangleBoundary;
   size: { x: number; y: number };
-  excludes?: Boundary[];
+  excludes?: RectangleBoundary[];
 }
 
+/* 
+  @param params.allowed - The boundary rectangle within which to generate the position
+  @param params.allowed.from - Starting point (top-left) of allowed area
+  @param params.allowed.to - Ending point (bottom-right) of allowed area
+  @param params.size - Size of the object to position
+  @param params.excludes - Array of rectangular areas to avoid when generating position
+  
+  @returns A Position object containing x,y coordinates within allowed area and outside excluded areas
+  
+  @remarks
+  If excludes are provided, the function splits the allowed area into rectangles that don't overlap
+  with excluded areas. It then picks one rectangle weighted by area and generates a uniform random
+  position within it. If no valid area remains after applying excludes, returns the center of the
+  allowed area.
+*/
+
+/** Generates a random position within allowed boundaries while avoiding excluded areas */
 export function getRandomPosition({
   allowed,
   size,
@@ -27,15 +44,16 @@ export function getRandomPosition({
   }
 
   // Start with full allowed rect
-  let allowedBoundary: Boundary[] = [
+  let allowedBoundary: RectangleBoundary[] = [
     {
+      shape: 'rectangle',
       from: { x: allowed.from.x, y: allowed.from.y },
       to: { x: allowed.to.x, y: allowed.to.y },
     },
   ];
 
   for (const exclude of excludes) {
-    const nextAllowed: Boundary[] = [];
+    const nextAllowed: RectangleBoundary[] = [];
 
     for (const a of allowedBoundary) {
       const isValidX = a.from.x > exclude.to.x || a.to.x < exclude.from.x;
@@ -49,6 +67,7 @@ export function getRandomPosition({
       if (a.from.y < exclude.from.y) {
         // Add top strip
         nextAllowed.push({
+          shape: 'rectangle',
           from: { x: a.from.x, y: a.from.y },
           to: { x: a.to.x, y: exclude.from.y },
         });
@@ -57,6 +76,7 @@ export function getRandomPosition({
       if (a.to.y > exclude.to.y) {
         // Add bottom strip
         nextAllowed.push({
+          shape: 'rectangle',
           from: { x: a.from.x, y: exclude.to.y },
           to: { x: a.to.x, y: a.to.y },
         });
@@ -65,6 +85,7 @@ export function getRandomPosition({
       if (a.from.x < exclude.from.x) {
         // Add left strip
         nextAllowed.push({
+          shape: 'rectangle',
           from: { x: a.from.x, y: a.from.y },
           to: { x: exclude.from.x, y: a.to.y },
         });
@@ -73,6 +94,7 @@ export function getRandomPosition({
       if (a.to.x > exclude.to.x) {
         // Add right strip
         nextAllowed.push({
+          shape: 'rectangle',
           from: { x: exclude.to.x, y: a.from.y },
           to: { x: a.to.x, y: a.to.y },
         });
@@ -94,7 +116,6 @@ export function getRandomPosition({
     };
   }
 
-  console.log(allowedBoundary);
   // Compute areas and pick one weighted by area
   const areas = allowedBoundary.map(
     (r) => (r.to.x - r.from.x) * (r.to.y - r.from.y)

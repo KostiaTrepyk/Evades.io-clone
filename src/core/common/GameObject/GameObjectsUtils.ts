@@ -3,8 +3,11 @@ import { Shape } from '../../types/Shape';
 import { GameObject } from './GameObject';
 
 export class GameObjectUtils {
-  /** Возвращает какие клетки занимает объект на карте */
-  public static getBoundary(object: GameObject<Shape>): Boundary {
+  public static getBoundary(
+    object: GameObject<'rectangle'>
+  ): Boundary<'rectangle'>;
+  public static getBoundary(object: GameObject<'circle'>): Boundary<'circle'>;
+  public static getBoundary(object: GameObject<Shape>): Boundary<Shape> {
     if (object.objectModel.shape === 'rectangle') {
       // Rectangle
       const halfSizeX = object.objectModel.size.x / 2;
@@ -20,21 +23,13 @@ export class GameObjectUtils {
         y: object.position.y + halfSizeY,
       };
 
-      return { from, to };
+      return { shape: 'rectangle', from, to } as Boundary<'rectangle'>;
     }
 
-    // Circle FIX ME - немного неправильно работает, зато быстро.
-    const radius = object.objectModel.radius;
-
-    const from = {
-      x: object.position.x - radius,
-      y: object.position.y - radius,
-    };
-    const to = {
-      x: object.position.x + radius,
-      y: object.position.y + radius,
-    };
-
-    return { from, to };
+    return {
+      shape: 'circle',
+      position: object.position,
+      radius: object.objectModel.radius,
+    } as Boundary<'circle'>;
   }
 }

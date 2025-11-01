@@ -2,14 +2,12 @@ import { CommonEnemy } from '../../../../objects/enemy/list/CommonEnemy';
 import { EnemyShooter } from '../../../../objects/enemy/list/EnemyShooter/EnemyShooter';
 import { Position } from '../../../types/Position';
 import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
-import { GenerateLevelConfiguration } from '../LevelGenerator';
 
 export interface CreateEnemyShooterParams {
   position: Position;
   speed: number;
   projectileSpeed: number;
   shootDistance: number;
-  saveZones: GenerateLevelConfiguration['saveZones'];
 }
 
 export function createEnemyShooter(

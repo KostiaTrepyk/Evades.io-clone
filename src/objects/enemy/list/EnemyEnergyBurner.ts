@@ -34,12 +34,11 @@ export class EnemyEnergyBurner extends Enemy {
     const player = gameObjectManager.player;
     if (player === undefined) return;
 
-    const size = ENERGYBURNERENEMYCONFIG.auraRadius * 2;
     const scale = this.EnemyStatus.sizeScale;
 
     const aura = new GameObject(this.position, {
       shape: 'circle',
-      radius: size * scale,
+      radius: ENERGYBURNERENEMYCONFIG.auraRadius * scale,
     });
 
     const { doesCollide } = doItemsCollide(player, aura);
@@ -49,11 +48,10 @@ export class EnemyEnergyBurner extends Enemy {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    const size = ENERGYBURNERENEMYCONFIG.auraRadius * 2;
     const scale = this.EnemyStatus.sizeScale;
     drawCircle(ctx, {
       position: this.position,
-      radius: size * scale,
+      radius: ENERGYBURNERENEMYCONFIG.auraRadius * scale,
       fill: { color: ENERGYBURNERENEMYCONFIG.auraColor },
     });
 

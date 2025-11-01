@@ -32,12 +32,11 @@ export class EnemySpeedReduction extends Enemy {
     const player = gameObjectManager.player;
     if (player === undefined) return;
 
-    const size = ENEMYSPEEDREDUCTIONCONFIG.auraRadius * 2;
     const scale = this.EnemyStatus.sizeScale;
 
     const aura = new GameObject(this.position, {
       shape: 'circle',
-      radius: size * scale,
+      radius: ENEMYSPEEDREDUCTIONCONFIG.auraRadius * scale,
     });
 
     const { doesCollide } = doItemsCollide(aura, player);
@@ -47,11 +46,10 @@ export class EnemySpeedReduction extends Enemy {
   }
 
   public override onRender(ctx: CanvasRenderingContext2D): void {
-    const size = ENEMYSPEEDREDUCTIONCONFIG.auraRadius * 2;
     const scale = this.EnemyStatus.sizeScale;
     drawCircle(ctx, {
       position: this.position,
-      radius: size * scale,
+      radius: ENEMYSPEEDREDUCTIONCONFIG.auraRadius * scale,
       fill: { color: ENEMYSPEEDREDUCTIONCONFIG.auraColor },
     });
 

@@ -1,3 +1,6 @@
+import { Character } from '../../objects/character/character';
+import { Position } from '../types/Position';
+
 export const enemyTypes = {
   CommonEnemy: 'CommonEnemy',
   EnemyEnergyBurner: 'EnemyEnergyBurner',
@@ -52,4 +55,13 @@ export interface LevelConfiguration {
   enemies: EnemyConfiguration[];
   pointOrbCount: number;
   playerPosition?: 'start' | 'end';
+  portals?: {
+    position: Position;
+    size: { x: number; y: number };
+    onEnter: (player: Character) => void;
+  }[];
+  saveZones?: {
+    position: Position;
+    size: { x: number; y: number };
+  }[];
 }
