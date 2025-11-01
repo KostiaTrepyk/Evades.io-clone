@@ -4,7 +4,7 @@ import { enemyTypes } from '../../../core/GameMap/types';
 import { tunnelNames } from '../GameMapConfiguration';
 
 const firstStage: Stage = new Stage(5, {
-  pointOrbCount: 20,
+  pointOrbCount: 25,
   enemies: [
     {
       type: enemyTypes.CommonEnemy,

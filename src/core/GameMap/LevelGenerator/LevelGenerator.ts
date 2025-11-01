@@ -374,9 +374,7 @@ export class LevelGenerator {
     saveZonesConfig: GenerateLevelConfiguration['saveZones'],
     size: { x: number; y: number }
   ): Position {
-    const halfSizeX = size.x / 2;
-    const halfSizeY = size.y / 2;
-    const exclude: GetRandomPositionParams['exclude'] = [];
+    const excludes: GetRandomPositionParams['excludes'] = [];
 
     if (saveZonesConfig.other !== undefined) {
       for (const saveZone of saveZonesConfig.other) {
@@ -388,16 +386,23 @@ export class LevelGenerator {
           x: saveZone.position.x + saveZone.size.x / 2,
           y: saveZone.position.y + saveZone.size.y / 2,
         };
-        exclude.push({ from, to });
+        excludes.push({ from, to });
       }
     }
 
     return getRandomPosition({
-      minX: saveZonesConfig.start.width + halfSizeX,
-      maxX: renderer.canvasSize.x - saveZonesConfig.end.width - halfSizeX,
-      minY: halfSizeY,
-      maxY: renderer.canvasSize.y - halfSizeY,
-      exclude: exclude,
+      allowed: {
+        from: {
+          x: saveZonesConfig.start.width,
+          y: 0,
+        },
+        to: {
+          x: renderer.canvasSize.x - saveZonesConfig.end.width,
+          y: renderer.canvasSize.y,
+        },
+      },
+      size: size,
+      excludes: excludes,
     });
   }
 
