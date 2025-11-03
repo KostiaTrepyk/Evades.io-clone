@@ -6,7 +6,7 @@ import { CommonSkill } from '../../character/skills/commonSkill';
 import { RIMECONFIG } from '../../../configs/characters/rime.config';
 import { MMoveDirection } from '../../../core/modules/movement/player/MMoveDirection';
 import { drawCircle } from '../../../core/utils/canvas/drawCircle';
-import { CircleObject } from '../../../core/common/GameObject/CircleObject';
+import { CircleObject } from '../../../core/common/CircleObject/CircleObject';
 
 const freezeStatusId = Symbol('Rime stun');
 

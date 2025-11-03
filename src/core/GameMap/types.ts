@@ -1,5 +1,5 @@
 import { Character } from '../../objects/character/character';
-import { RectangleSize } from '../common/GameObject/RectangleObject';
+import { RectangleSize } from '../common/RectangleObject/RectangleObject';
 import { Position } from '../types/Position';
 
 export const enemyTypes = {

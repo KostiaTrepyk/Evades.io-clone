@@ -1,6 +1,6 @@
 import { Character } from '../../../objects/character/character';
-import { CircleObject } from '../../common/GameObject/CircleObject';
-import { RectangleObject } from '../../common/GameObject/RectangleObject';
+import { CircleObject } from '../../common/CircleObject/CircleObject';
+import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Collision } from '../../types/Collision';

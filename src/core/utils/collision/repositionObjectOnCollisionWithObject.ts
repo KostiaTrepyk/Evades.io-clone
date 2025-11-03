@@ -1,5 +1,5 @@
-import { CircleObject } from '../../common/GameObject/CircleObject';
-import { RectangleObject } from '../../common/GameObject/RectangleObject';
+import { CircleObject } from '../../common/CircleObject/CircleObject';
+import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
 import { Collision } from '../../types/Collision';
 
 /** Мутирует object1 */

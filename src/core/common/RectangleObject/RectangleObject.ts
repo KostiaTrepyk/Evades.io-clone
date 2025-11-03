@@ -1,15 +1,20 @@
 import { gameObjectManager } from '../../global';
 import { Position } from '../../types/Position';
-import { CircleShape } from '../../types/Shape';
-import { GameObjectBase } from './GameObjectBase';
+import { RectangleShape } from '../../types/Shape';
+import { GameObjectBase } from '../GameObjectBase/GameObjectBase';
 
-export class CircleObject extends GameObjectBase {
-  public shape: CircleShape = 'circle';
-  public radius: number;
+export interface RectangleSize {
+  height: number;
+  width: number;
+}
 
-  constructor(startPosition: Position, radius: number) {
+export class RectangleObject extends GameObjectBase {
+  public shape: RectangleShape = 'rectangle';
+  public size: RectangleSize;
+
+  constructor(startPosition: Position, size: RectangleSize) {
     super(startPosition);
-    this.radius = radius;
+    this.size = size;
   }
 
   public init(): void {

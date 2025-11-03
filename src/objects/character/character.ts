@@ -8,7 +8,7 @@ import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { time } from '../../core/global';
-import { CircleObject } from '../../core/common/GameObject/CircleObject';
+import { CircleObject } from '../../core/common/CircleObject/CircleObject';
 
 export abstract class Character extends CircleObject {
   public override renderId: number = 4;

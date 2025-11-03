@@ -1,6 +1,6 @@
 import { PointOrb } from '../../../objects/pointOrb/PointOrb';
-import { CircleObject } from '../../common/GameObject/CircleObject';
-import { RectangleObject } from '../../common/GameObject/RectangleObject';
+import { CircleObject } from '../../common/CircleObject/CircleObject';
+import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { doItemsCollide } from '../../utils/collision/doItemsCollide';

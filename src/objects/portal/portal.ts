@@ -3,7 +3,7 @@ import { drawRectangle } from '../../core/utils/canvas/drawRectangle';
 import { HSLA } from '../../core/utils/hsla';
 import { MCollisionPlayer } from '../../core/modules/collision/MCollisionPlayer';
 import { Character } from '../character/character';
-import { RectangleObject } from '../../core/common/GameObject/RectangleObject';
+import { RectangleObject } from '../../core/common/RectangleObject/RectangleObject';
 
 export interface PortalParams {
   startPosition: Position;

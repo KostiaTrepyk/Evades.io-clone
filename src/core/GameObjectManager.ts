@@ -4,8 +4,8 @@ import { Enemy } from '../objects/enemy/enemy';
 import { PointOrb } from '../objects/pointOrb/PointOrb';
 import { Portal } from '../objects/portal/portal';
 import { SaveZone } from '../objects/saveZone/SaveZone';
-import { CircleObject } from './common/GameObject/CircleObject';
-import { RectangleObject } from './common/GameObject/RectangleObject';
+import { CircleObject } from './common/CircleObject/CircleObject';
+import { RectangleObject } from './common/RectangleObject/RectangleObject';
 
 /** Отвечает за Все объекты в игре. Разделяет объекты через instanceof на разные
  * категории: player, enemies, pointOrbs и тд. За их добавление, удаление и вызывает

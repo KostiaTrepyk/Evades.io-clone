@@ -8,7 +8,7 @@ import { speedPerPoint } from '../../consts/consts';
 import { MEnemyMovementDefault } from '../../core/modules/movement/enemy/MEnemyMovementDefault';
 import { AMEnemyMovement } from '../../core/modules/movement/enemy/MEnemyMovement.type';
 import { time } from '../../core/global';
-import { CircleObject } from '../../core/common/GameObject/CircleObject';
+import { CircleObject } from '../../core/common/CircleObject/CircleObject';
 
 export interface EnemyParams {
   position: Position;

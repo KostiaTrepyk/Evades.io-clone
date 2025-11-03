@@ -1,5 +1,5 @@
 import { POINTORBCONFIG } from '../../configs/pointOrb.config';
-import { CircleObject } from '../../core/common/GameObject/CircleObject';
+import { CircleObject } from '../../core/common/CircleObject/CircleObject';
 import { Position } from '../../core/types/Position';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';

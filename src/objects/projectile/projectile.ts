@@ -4,7 +4,7 @@ import { Velocity } from '../../core/types/Velocity';
 import { Position } from '../../core/types/Position';
 import { speedPerPoint } from '../../consts/consts';
 import { time } from '../../core/global';
-import { CircleObject } from '../../core/common/GameObject/CircleObject';
+import { CircleObject } from '../../core/common/CircleObject/CircleObject';
 
 export interface ProjectileParams {
   startPosition: Position;

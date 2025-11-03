@@ -27,10 +27,10 @@ import { ENEMYSHOOTERCONFIG } from '../../../configs/enemies/enemyShooter.config
 import { ENEMYSPEEDREDUCTIONCONFIG } from '../../../configs/enemies/enemySpeedReductionconfig';
 import { ENERGYBURNERENEMYCONFIG } from '../../../configs/enemies/energyBurnerEnemy.config';
 import { getRandomSize } from '../../utils/other/getRandomSize';
-import { GameObjectUtils } from '../../common/GameObject/GameObjectsUtils';
 import { RectangleBoundary } from '../../types/Boundary';
 import { Character } from '../../../objects/character/character';
-import { RectangleSize } from '../../common/GameObject/RectangleObject';
+import { RectangleSize } from '../../common/RectangleObject/RectangleObject';
+import { RectangleObjectUtils } from '../../common/RectangleObject/RectangleObjectUtils';
 
 export interface GenerateLevelConfiguration {
   enemies: EnemyConfiguration[];
@@ -70,7 +70,7 @@ export class LevelGenerator {
     this.repositionPlayer(params.playerPosition);
 
     const saveZones = this.createAndInitAllSaveZones(params.saveZones);
-    const excludedArea = saveZones.map((s) => GameObjectUtils.getBoundary(s));
+    const excludedArea = saveZones.map((s) => RectangleObjectUtils.getBoundary(s));
     this.createAndInitAllPortals(params.portals, params.saveZones);
     this.createAndInitAllEnemies(
       params.enemies,
@@ -319,7 +319,7 @@ export class LevelGenerator {
     });
   }
 
-  /* FIX ME Что если сейв зона будет возле стенки. */
+  /* FIX ME Что если сейв зона будет возле стенки (BorderEnemy). */
   private createAndInitAllBorderEnemies(
     config: EnemyBorderConfiguration,
     saveZones: GenerateLevelConfiguration['saveZones'],
@@ -399,7 +399,7 @@ export class LevelGenerator {
     });
   }
 
-  /** Return random position for enemies, point orbs */
+  /** Return random position for enemies, point orbs. */
   private getRandomPosition(
     size: { x: number; y: number },
     excludedArea: RectangleBoundary[]

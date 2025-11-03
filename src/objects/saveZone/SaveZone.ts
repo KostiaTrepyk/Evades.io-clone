@@ -2,7 +2,7 @@ import { SAVEZONECONFIG } from '../../configs/saveZone.config';
 import {
   RectangleObject,
   RectangleSize,
-} from '../../core/common/GameObject/RectangleObject';
+} from '../../core/common/RectangleObject/RectangleObject';
 import { Position } from '../../core/types/Position';
 import { drawRectangle } from '../../core/utils/canvas/drawRectangle';
 

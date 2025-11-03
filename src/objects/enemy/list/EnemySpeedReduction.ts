@@ -1,5 +1,5 @@
 import { ENEMYSPEEDREDUCTIONCONFIG } from '../../../configs/enemies/enemySpeedReductionconfig';
-import { CircleObject } from '../../../core/common/GameObject/CircleObject';
+import { CircleObject } from '../../../core/common/CircleObject/CircleObject';
 import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';

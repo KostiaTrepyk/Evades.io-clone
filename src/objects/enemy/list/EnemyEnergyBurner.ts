@@ -6,7 +6,7 @@ import { Character } from '../../character/character';
 import { Enemy } from '../enemy';
 import { ENERGYBURNERENEMYCONFIG } from '../../../configs/enemies/energyBurnerEnemy.config';
 import { drawCircle } from '../../../core/utils/canvas/drawCircle';
-import { CircleObject } from '../../../core/common/GameObject/CircleObject';
+import { CircleObject } from '../../../core/common/CircleObject/CircleObject';
 
 export interface EnemyEnergyBurnerParams {
   position: Position;
