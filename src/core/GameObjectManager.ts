@@ -4,8 +4,8 @@ import { Enemy } from '../objects/enemy/enemy';
 import { PointOrb } from '../objects/pointOrb/PointOrb';
 import { Portal } from '../objects/portal/portal';
 import { SaveZone } from '../objects/saveZone/SaveZone';
-import { GameObject } from './common/GameObject/GameObject';
-import { Shape } from './types/Shape';
+import { CircleObject } from './common/GameObject/CircleObject';
+import { RectangleObject } from './common/GameObject/RectangleObject';
 
 /** Отвечает за Все объекты в игре. Разделяет объекты через instanceof на разные
  * категории: player, enemies, pointOrbs и тд. За их добавление, удаление и вызывает
@@ -18,11 +18,14 @@ export class GameObjectManager {
   public portals: Portal[];
   public projectiles: Projectile[];
 
-  private _beforeUpdates: { o: GameObject<Shape>; f: () => void }[];
-  private _updates: { o: GameObject<Shape>; f: () => void }[];
-  private _afterUpdates: { o: GameObject<Shape>; f: () => void }[];
+  private _beforeUpdates: {
+    o: RectangleObject | CircleObject;
+    f: () => void;
+  }[];
+  private _updates: { o: RectangleObject | CircleObject; f: () => void }[];
+  private _afterUpdates: { o: RectangleObject | CircleObject; f: () => void }[];
   private _render: {
-    o: GameObject<Shape>;
+    o: RectangleObject | CircleObject;
     f: (ctx: CanvasRenderingContext2D) => void;
   }[][];
 
@@ -57,7 +60,7 @@ export class GameObjectManager {
     }
   }
 
-  public addGameObject<S extends Shape>(object: GameObject<S>): void {
+  public addGameObject(object: RectangleObject | CircleObject): void {
     this.bindObject(object);
 
     switch (true) {
@@ -84,7 +87,7 @@ export class GameObjectManager {
     }
   }
 
-  public removeGameObject<S extends Shape>(object: GameObject<S>) {
+  public removeGameObject(object: RectangleObject | CircleObject) {
     this.unbindObject(object);
 
     switch (true) {
@@ -111,7 +114,7 @@ export class GameObjectManager {
     }
   }
 
-  private bindObject(object: GameObject<Shape>): void {
+  private bindObject(object: RectangleObject | CircleObject): void {
     if (object.beforeUpdate !== undefined)
       this._beforeUpdates.push({
         o: object,
@@ -134,7 +137,7 @@ export class GameObjectManager {
       });
   }
 
-  private unbindObject(object: GameObject<Shape>): void {
+  private unbindObject(object: RectangleObject | CircleObject): void {
     const id1 = this._beforeUpdates.findIndex(({ o }) => o === object);
     if (id1 !== -1) this._beforeUpdates.splice(id1, 1);
 

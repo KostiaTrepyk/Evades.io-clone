@@ -1,5 +1,5 @@
 import { ENEMYSPEEDREDUCTIONCONFIG } from '../../../configs/enemies/enemySpeedReductionconfig';
-import { GameObject } from '../../../core/common/GameObject/GameObject';
+import { CircleObject } from '../../../core/common/GameObject/CircleObject';
 import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
 import { Velocity } from '../../../core/types/Velocity';
@@ -21,7 +21,7 @@ export class EnemySpeedReduction extends Enemy {
   constructor(params: EnemySpeedReductionParams) {
     super({
       ...params,
-      size: ENEMYSPEEDREDUCTIONCONFIG.radius,
+      radius: ENEMYSPEEDREDUCTIONCONFIG.radius,
       color: ENEMYSPEEDREDUCTIONCONFIG.color,
     });
   }
@@ -34,10 +34,10 @@ export class EnemySpeedReduction extends Enemy {
 
     const scale = this.EnemyStatus.sizeScale;
 
-    const aura = new GameObject(this.position, {
-      shape: 'circle',
-      radius: ENEMYSPEEDREDUCTIONCONFIG.auraRadius * scale,
-    });
+    const aura = new CircleObject(
+      this.position,
+      ENEMYSPEEDREDUCTIONCONFIG.auraRadius * scale
+    );
 
     const { doesCollide } = doItemsCollide(aura, player);
 

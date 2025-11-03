@@ -1,17 +1,18 @@
 import { Boundary } from '../../types/Boundary';
 import { Shape } from '../../types/Shape';
-import { GameObject } from './GameObject';
+import { CircleObject } from './CircleObject';
+import { RectangleObject } from './RectangleObject';
 
 export class GameObjectUtils {
+  public static getBoundary(object: RectangleObject): Boundary<'rectangle'>;
+  public static getBoundary(object: CircleObject): Boundary<'circle'>;
   public static getBoundary(
-    object: GameObject<'rectangle'>
-  ): Boundary<'rectangle'>;
-  public static getBoundary(object: GameObject<'circle'>): Boundary<'circle'>;
-  public static getBoundary(object: GameObject<Shape>): Boundary<Shape> {
-    if (object.objectModel.shape === 'rectangle') {
+    object: RectangleObject | CircleObject
+  ): Boundary<Shape> {
+    if (object.shape === 'rectangle') {
       // Rectangle
-      const halfSizeX = object.objectModel.size.x / 2;
-      const halfSizeY = object.objectModel.size.y / 2;
+      const halfSizeX = object.size.width / 2;
+      const halfSizeY = object.size.height / 2;
 
       const from = {
         x: object.position.x - halfSizeX,
@@ -29,7 +30,7 @@ export class GameObjectUtils {
     return {
       shape: 'circle',
       position: object.position,
-      radius: object.objectModel.radius,
+      radius: object.radius,
     } as Boundary<'circle'>;
   }
 }

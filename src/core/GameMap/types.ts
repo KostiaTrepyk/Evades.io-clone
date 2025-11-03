@@ -1,4 +1,5 @@
 import { Character } from '../../objects/character/character';
+import { RectangleSize } from '../common/GameObject/RectangleObject';
 import { Position } from '../types/Position';
 
 export const enemyTypes = {
@@ -57,11 +58,11 @@ export interface LevelConfiguration {
   playerPosition?: 'start' | 'end';
   portals?: {
     position: Position;
-    size: { x: number; y: number };
+    size: RectangleSize;
     onEnter: (player: Character) => void;
   }[];
   saveZones?: {
     position: Position;
-    size: { x: number; y: number };
+    size: RectangleSize;
   }[];
 }

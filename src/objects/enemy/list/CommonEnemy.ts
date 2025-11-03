@@ -4,7 +4,7 @@ import { Enemy } from '../enemy';
 
 export interface CommonEnemyParams {
   position: Position;
-  size: number;
+  radius: number;
   velocity: Velocity;
 }
 

@@ -1,11 +1,10 @@
-import { GameObject } from '../../core/common/GameObject/GameObject';
-import { CircleShape } from '../../core/types/Shape';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';
 import { Velocity } from '../../core/types/Velocity';
 import { Position } from '../../core/types/Position';
 import { speedPerPoint } from '../../consts/consts';
 import { time } from '../../core/global';
+import { CircleObject } from '../../core/common/GameObject/CircleObject';
 
 export interface ProjectileParams {
   startPosition: Position;
@@ -14,7 +13,7 @@ export interface ProjectileParams {
   color: HSLA;
 }
 
-export class Projectile extends GameObject<CircleShape> {
+export class Projectile extends CircleObject {
   public override renderId: number = 6;
 
   public velocity: Velocity;
@@ -23,7 +22,7 @@ export class Projectile extends GameObject<CircleShape> {
   constructor(params: ProjectileParams) {
     const { startPosition, radius, velocity, color } = params;
 
-    super(startPosition, { shape: 'circle', radius });
+    super(startPosition, radius);
 
     this.velocity = velocity;
     this._color = color;
@@ -39,7 +38,7 @@ export class Projectile extends GameObject<CircleShape> {
     super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
-      radius: this.objectModel.radius,
+      radius: this.radius,
       fill: { color: this._color },
     });
   }

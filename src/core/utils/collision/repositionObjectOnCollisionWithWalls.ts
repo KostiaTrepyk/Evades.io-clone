@@ -1,16 +1,16 @@
-import { GameObject } from '../../common/GameObject/GameObject';
+import { CircleObject } from '../../common/GameObject/CircleObject';
+import { RectangleObject } from '../../common/GameObject/RectangleObject';
 import { renderer } from '../../global';
 import { Collision } from '../../types/Collision';
-import { Shape } from '../../types/Shape';
 
 /** Мутирует object */
 export function repositionObjectOnCollisionWithWalls(
-  object: GameObject<Shape>,
+  object: RectangleObject | CircleObject,
   collision: Collision
 ): void {
   // applyCollision for circle
-  if (object.objectModel.shape === 'circle') {
-    const halfSize = object.objectModel.radius;
+  if (object.shape === 'circle') {
+    const halfSize = object.radius;
 
     if (collision.x === 'left') object.position.x = halfSize;
     else if (collision.x === 'right')
@@ -21,9 +21,9 @@ export function repositionObjectOnCollisionWithWalls(
   }
 
   // applyCollision for rectangle
-  if (object.objectModel.shape === 'rectangle') {
-    const halfSizeX = object.objectModel.size.x / 2;
-    const halfSizeY = object.objectModel.size.y / 2;
+  if (object.shape === 'rectangle') {
+    const halfSizeX = object.size.width / 2;
+    const halfSizeY = object.size.height / 2;
 
     if (collision.x === 'left') object.position.x = halfSizeX;
     else if (collision.x === 'right')

@@ -91,7 +91,7 @@ export class Morph extends Character {
       statusId: firstSkillId,
       startPosition: { x: this.position.x, y: this.position.y },
       velocity: { x: velocity.x, y: velocity.y },
-      size: MORPHCONFIG.firstSpell.projectileSize,
+      size: MORPHCONFIG.firstSpell.projectileRadius,
       color: MORPHCONFIG.firstSpell.projectileColor,
     });
     return projectile;
@@ -110,7 +110,7 @@ export class Morph extends Character {
     const projectile = new MorphSecondSkillProjectile({
       startPosition: { x: this.position.x, y: this.position.y },
       velocity: { x: velocity.x, y: velocity.y },
-      size: MORPHCONFIG.secondSpell.projectileSize,
+      size: MORPHCONFIG.secondSpell.projectileRadius,
       color: MORPHCONFIG.secondSpell.projectileColor,
       statusIds: { speed: secondSkillSpeedId, size: secondSkillSizeId },
     });

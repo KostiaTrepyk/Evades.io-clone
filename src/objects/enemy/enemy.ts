@@ -1,8 +1,6 @@
-import { GameObject } from '../../core/common/GameObject/GameObject';
 import { HSLA } from '../../core/utils/hsla';
 import { Position } from '../../core/types/Position';
 import { Velocity } from '../../core/types/Velocity';
-import { CircleShape } from '../../core/types/Shape';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { ENEMYCONFIG } from '../../configs/enemies/enemy.config';
 import { EnemyStatus } from './enemy.status';
@@ -10,15 +8,16 @@ import { speedPerPoint } from '../../consts/consts';
 import { MEnemyMovementDefault } from '../../core/modules/movement/enemy/MEnemyMovementDefault';
 import { AMEnemyMovement } from '../../core/modules/movement/enemy/MEnemyMovement.type';
 import { time } from '../../core/global';
+import { CircleObject } from '../../core/common/GameObject/CircleObject';
 
 export interface EnemyParams {
   position: Position;
-  size: number;
+  radius: number;
   velocity: Velocity;
   color?: HSLA;
 }
 
-export class Enemy extends GameObject<CircleShape> {
+export class Enemy extends CircleObject {
   public override renderId: number = 5;
 
   public readonly defaultColor: HSLA;
@@ -31,15 +30,15 @@ export class Enemy extends GameObject<CircleShape> {
   public EnemyStatus: EnemyStatus;
 
   constructor(params: EnemyParams) {
-    const { position, size, velocity, color } = params;
+    const { position, radius, velocity, color } = params;
 
-    super(position, { shape: 'circle', radius: size });
+    super(position, radius);
 
     const enemyColor = color || ENEMYCONFIG.defaultColor.clone();
     this.defaultColor = enemyColor.clone();
     this.currentColor = enemyColor.clone();
 
-    this.defaultSize = size;
+    this.defaultSize = radius;
     this._velocity = velocity;
 
     this.EnemyMovement = new MEnemyMovementDefault(this);
@@ -75,7 +74,7 @@ export class Enemy extends GameObject<CircleShape> {
       this.position.y += currentVelocity.y * speedPerPoint * time.deltaTime;
     }
 
-    this.objectModel.radius = this.defaultSize * this.EnemyStatus.sizeScale;
+    this.radius = this.defaultSize * this.EnemyStatus.sizeScale;
   }
 
   public override afterUpdate(): void {
@@ -87,7 +86,7 @@ export class Enemy extends GameObject<CircleShape> {
     super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
-      radius: this.objectModel.radius,
+      radius: this.radius,
       fill: { color: this.currentColor },
       stroke: {
         color: ENEMYCONFIG.strokeColor,

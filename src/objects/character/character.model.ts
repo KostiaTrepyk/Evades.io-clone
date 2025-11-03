@@ -10,16 +10,16 @@ export class RenderCharacterModel {
   public static showMana(ctx: CanvasRenderingContext2D, character: Character) {
     const position: Position = {
       x: character.position.x,
-      y: character.position.y - character.objectModel.radius - 8,
+      y: character.position.y - character.radius - 8,
     };
 
     const playerEnergy = character.characteristics.energy;
 
-    const manaBarSizeAdjustment = character.objectModel.radius / 22;
+    const manaBarSizeAdjustment = character.radius / 22;
     const manaPercentage = playerEnergy.current / playerEnergy.max;
 
     const manaBarWidth =
-      character.objectModel.radius * 2 + manaBarSizeAdjustment * 2;
+      character.radius * 2 + manaBarSizeAdjustment * 2;
     const manaBarHeight = 8;
     const manaBarFillPositionX =
       position.x - manaBarWidth / 2 + (manaBarWidth / 2) * manaPercentage;
@@ -45,7 +45,7 @@ export class RenderCharacterModel {
   public static default(ctx: CanvasRenderingContext2D, character: Character) {
     drawCircle(ctx, {
       position: character.position,
-      radius: character.objectModel.radius,
+      radius: character.radius,
       fill: { color: character.color.current },
     });
   }
@@ -56,7 +56,7 @@ export class RenderCharacterModel {
 
     drawCircle(ctx, {
       position: character.position,
-      radius: character.objectModel.radius,
+      radius: character.radius,
       fill: { color },
     });
 

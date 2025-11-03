@@ -1,12 +1,12 @@
 import { Enemy } from '../../../objects/enemy/enemy';
-import { GameObject } from '../../common/GameObject/GameObject';
+import { CircleObject } from '../../common/GameObject/CircleObject';
+import { RectangleObject } from '../../common/GameObject/RectangleObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
-import { Shape } from '../../types/Shape';
 import { doItemsCollide } from '../../utils/collision/doItemsCollide';
 
 interface MCollisionEnemyParams {
-  object: GameObject<Shape>;
+  object: MCollisionEnemy['_object'];
   onCollision: (enemy: Enemy) => void;
 }
 
@@ -31,7 +31,7 @@ interface MCollisionEnemyParams {
  * @param params.onCollision - The callback to execute when a collision with an enemy occurs.
  */
 export class MCollisionEnemy implements Module {
-  private _object: GameObject<Shape>;
+  private _object: RectangleObject | CircleObject;
   private _onCollision: (enemy: Enemy) => void;
 
   constructor(params: MCollisionEnemyParams) {

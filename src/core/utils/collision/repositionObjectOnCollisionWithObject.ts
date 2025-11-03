@@ -1,49 +1,48 @@
-import { GameObject } from '../../common/GameObject/GameObject';
+import { CircleObject } from '../../common/GameObject/CircleObject';
+import { RectangleObject } from '../../common/GameObject/RectangleObject';
 import { Collision } from '../../types/Collision';
-import { Shape } from '../../types/Shape';
 
 /** Мутирует object1 */
 export function repositionObjectOnCollisionWithObject(
-  object1: GameObject<Shape>,
-  object2: GameObject<Shape>,
+  object1: RectangleObject | CircleObject,
+  object2: RectangleObject | CircleObject,
   collision: Collision
-) {
+): void {
   // Получаем размеры объекта 1
-  const object1Size = { x: 0, y: 0 };
+  const object1HalfSize = { x: 0, y: 0 };
 
-  if (object1.objectModel.shape === 'circle')
-    object1Size.x = object1.objectModel.radius * 2;
-  else object1Size.x = object1.objectModel.size.x;
-  if (object1.objectModel.shape === 'circle')
-    object1Size.y = object1.objectModel.radius * 2;
-  else object1Size.y = object1.objectModel.size.y;
+  if (object1.shape === 'circle') object1HalfSize.x = object1.radius;
+  else object1HalfSize.x = object1.size.width / 2;
+  if (object1.shape === 'circle') object1HalfSize.y = object1.radius;
+  else object1HalfSize.y = object1.size.height / 2;
 
   // Получаем размеры объекта 2
-  const object2Size = { x: 0, y: 0 };
+  const object2HalfSize = { x: 0, y: 0 };
 
-  if (object2.objectModel.shape === 'circle')
-    object2Size.x = object2.objectModel.radius * 2;
-  else object2Size.x = object2.objectModel.size.x;
-  if (object2.objectModel.shape === 'circle')
-    object2Size.y = object2.objectModel.radius * 2;
-  else object2Size.y = object2.objectModel.size.y;
-
-  const object2Left = object2.position.x - object2Size.x / 2;
-  const object2Right = object2.position.x + object2Size.x / 2;
-  const object2Top = object2.position.y - object2Size.y / 2;
-  const object2Bottom = object2.position.y + object2Size.y / 2;
+  if (object2.shape === 'circle') object2HalfSize.x = object2.radius;
+  else object2HalfSize.x = object2.size.width / 2;
+  if (object2.shape === 'circle') object2HalfSize.y = object2.radius;
+  else object2HalfSize.y = object2.size.height / 2;
 
   // Обновление позиции объекта 1
   if (collision.x === 'left') {
-    object1.position.x = object2Right + object1Size.x / 2;
+    const object2Right = object2.position.x + object2HalfSize.x;
+    object1.position.x = object2Right + object1HalfSize.x;
+    return;
   }
   if (collision.x === 'right') {
-    object1.position.x = object2Left - object1Size.x / 2;
+    const object2Left = object2.position.x - object2HalfSize.x;
+    object1.position.x = object2Left - object1HalfSize.x;
+    return;
   }
   if (collision.y === 'top') {
-    object1.position.y = object2Bottom + object1Size.y / 2;
+    const object2Bottom = object2.position.y + object2HalfSize.y;
+    object1.position.y = object2Bottom + object1HalfSize.y;
+    return;
   }
   if (collision.y === 'bottom') {
-    object1.position.y = object2Top - object1Size.y / 2;
+    const object2Top = object2.position.y - object2HalfSize.y;
+    object1.position.y = object2Top - object1HalfSize.y;
+    return;
   }
 }

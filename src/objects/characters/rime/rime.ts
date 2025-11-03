@@ -1,4 +1,3 @@
-import { GameObject } from '../../../core/common/GameObject/GameObject';
 import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
 import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
@@ -7,6 +6,7 @@ import { CommonSkill } from '../../character/skills/commonSkill';
 import { RIMECONFIG } from '../../../configs/characters/rime.config';
 import { MMoveDirection } from '../../../core/modules/movement/player/MMoveDirection';
 import { drawCircle } from '../../../core/utils/canvas/drawCircle';
+import { CircleObject } from '../../../core/common/GameObject/CircleObject';
 
 const freezeStatusId = Symbol('Rime stun');
 
@@ -107,10 +107,7 @@ export class Rime extends Character {
   }
 
   private freezeEnemy(radius: number, duration: number) {
-    const freezer = new GameObject(this.position, {
-      shape: 'circle',
-      radius: radius * 2,
-    });
+    const freezer = new CircleObject(this.position, radius);
 
     const enemiesToFreeze = gameObjectManager.enemies.filter(
       (enemy) => doItemsCollide(freezer, enemy).doesCollide === true

@@ -1,4 +1,3 @@
-import { GameObject } from '../../../core/common/GameObject/GameObject';
 import { doItemsCollide } from '../../../core/utils/collision/doItemsCollide';
 import { gameObjectManager } from '../../../core/global';
 import { Position } from '../../../core/types/Position';
@@ -7,6 +6,7 @@ import { Character } from '../../character/character';
 import { Enemy } from '../enemy';
 import { ENERGYBURNERENEMYCONFIG } from '../../../configs/enemies/energyBurnerEnemy.config';
 import { drawCircle } from '../../../core/utils/canvas/drawCircle';
+import { CircleObject } from '../../../core/common/GameObject/CircleObject';
 
 export interface EnemyEnergyBurnerParams {
   position: Position;
@@ -22,7 +22,7 @@ export class EnemyEnergyBurner extends Enemy {
     const { position, velocity } = params;
     super({
       position,
-      size: ENERGYBURNERENEMYCONFIG.radius,
+      radius: ENERGYBURNERENEMYCONFIG.radius,
       velocity,
       color: ENERGYBURNERENEMYCONFIG.color,
     });
@@ -36,10 +36,10 @@ export class EnemyEnergyBurner extends Enemy {
 
     const scale = this.EnemyStatus.sizeScale;
 
-    const aura = new GameObject(this.position, {
-      shape: 'circle',
-      radius: ENERGYBURNERENEMYCONFIG.auraRadius * scale,
-    });
+    const aura = new CircleObject(
+      this.position,
+      ENERGYBURNERENEMYCONFIG.auraRadius * scale
+    );
 
     const { doesCollide } = doItemsCollide(player, aura);
 

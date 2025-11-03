@@ -1,13 +1,13 @@
 import { Character } from '../../../objects/character/character';
-import { GameObject } from '../../common/GameObject/GameObject';
+import { CircleObject } from '../../common/GameObject/CircleObject';
+import { RectangleObject } from '../../common/GameObject/RectangleObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
 import { Collision } from '../../types/Collision';
-import { Shape } from '../../types/Shape';
 import { doItemsCollide } from '../../utils/collision/doItemsCollide';
 
 interface MCollisionPlayerParams {
-  object: GameObject<Shape>;
+  object: MCollisionPlayer['_object'];
   onCollision: (player: Character, collisions: Collision) => void;
 }
 
@@ -30,7 +30,7 @@ interface MCollisionPlayerParams {
  * ```
  */
 export class MCollisionPlayer implements Module {
-  private _object: GameObject<Shape>;
+  private _object: RectangleObject | CircleObject;
   private _onCollision: (player: Character, collisions: Collision) => void;
 
   constructor(params: MCollisionPlayerParams) {

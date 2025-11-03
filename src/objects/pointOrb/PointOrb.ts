@@ -1,15 +1,15 @@
 import { POINTORBCONFIG } from '../../configs/pointOrb.config';
-import { GameObject } from '../../core/common/GameObject/GameObject';
+import { CircleObject } from '../../core/common/GameObject/CircleObject';
 import { Position } from '../../core/types/Position';
 import { drawCircle } from '../../core/utils/canvas/drawCircle';
 import { HSLA } from '../../core/utils/hsla';
 
-export class PointOrb extends GameObject<'circle'> {
+export class PointOrb extends CircleObject {
   public override renderId: number = 2;
   private _color: HSLA;
 
   constructor(startPosition: Position) {
-    super(startPosition, { shape: 'circle', radius: POINTORBCONFIG.radius });
+    super(startPosition, POINTORBCONFIG.radius);
 
     this._color = this.getRandomColor();
   }
@@ -18,7 +18,7 @@ export class PointOrb extends GameObject<'circle'> {
     super.onRender?.(ctx);
     drawCircle(ctx, {
       position: this.position,
-      radius: this.objectModel.radius,
+      radius: this.radius,
       fill: { color: this._color },
     });
   }

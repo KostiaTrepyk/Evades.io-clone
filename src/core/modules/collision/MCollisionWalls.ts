@@ -1,14 +1,14 @@
-import { GameObject } from '../../common/GameObject/GameObject';
+import { CircleObject } from '../../common/GameObject/CircleObject';
+import { RectangleObject } from '../../common/GameObject/RectangleObject';
 import { Module } from '../../common/Module';
 import { Collision } from '../../types/Collision';
-import { Shape } from '../../types/Shape';
 import { doesCollideWithWalls } from '../../utils/collision/doesCollideWithWalls';
 import { repositionObjectOnCollisionWithWalls } from '../../utils/collision/repositionObjectOnCollisionWithWalls';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 
 interface MCollisionWallsParams {
-  object: GameObject<Shape>;
+  object: MCollisionWalls['_object'];
   collisionType?: CollisionType;
   onCollision?: (collision: Collision) => void;
 }
@@ -39,7 +39,7 @@ interface MCollisionWallsParams {
  * @param params.collisionType - Determines the collision handling strategy.
  */
 export class MCollisionWalls implements Module {
-  private _object: GameObject<Shape>;
+  private _object: RectangleObject | CircleObject;
   private _onCollision?: (collision: Collision) => void;
   private _collisionType: CollisionType;
 

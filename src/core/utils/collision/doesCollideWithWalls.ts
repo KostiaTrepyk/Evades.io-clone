@@ -1,7 +1,7 @@
-import { GameObject } from '../../common/GameObject/GameObject';
+import { CircleObject } from '../../common/GameObject/CircleObject';
+import { RectangleObject } from '../../common/GameObject/RectangleObject';
 import { renderer } from '../../global';
 import { Collision } from '../../types/Collision';
-import { Shape } from '../../types/Shape';
 
 interface DoesCollideWithWallsReturn {
   doesCollide: boolean;
@@ -12,10 +12,10 @@ interface DoesCollideWithWallsReturn {
 }
 
 export function doesCollideWithWalls(
-  gameObject: GameObject<Shape>
+  gameObject: RectangleObject | CircleObject
 ): DoesCollideWithWallsReturn {
-  if (gameObject.objectModel.shape === 'circle') {
-    const radius = gameObject.objectModel.radius;
+  if (gameObject.shape === 'circle') {
+    const radius = gameObject.radius;
     const position = gameObject.position;
     let collisions: Collision = { x: 'no', y: 'no' };
 
@@ -34,9 +34,9 @@ export function doesCollideWithWalls(
     return { doesCollide, collisions };
   }
 
-  if (gameObject.objectModel.shape === 'rectangle') {
-    const halfSizeX = gameObject.objectModel.size.x / 2;
-    const halfSizeY = gameObject.objectModel.size.y / 2;
+  if (gameObject.shape === 'rectangle') {
+    const halfSizeX = gameObject.size.width / 2;
+    const halfSizeY = gameObject.size.height / 2;
     const position = gameObject.position;
     let collisions: Collision = { x: 'no', y: 'no' };
 

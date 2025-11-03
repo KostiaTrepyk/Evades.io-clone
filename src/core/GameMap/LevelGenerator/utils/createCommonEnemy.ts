@@ -3,7 +3,7 @@ import { Position } from '../../../types/Position';
 import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
 
 export interface CreateCommonEnemyParams {
-  size: number;
+  radius: number;
   speed: number;
   position: Position;
 }
@@ -13,7 +13,7 @@ export function createCommonEnemy(
 ): CommonEnemy {
   return new CommonEnemy({
     position: options.position,
-    size: options.size,
+    radius: options.radius,
     velocity: getRandomVelocity(options.speed),
   });
 }

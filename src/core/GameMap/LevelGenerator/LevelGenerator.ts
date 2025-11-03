@@ -30,6 +30,7 @@ import { getRandomSize } from '../../utils/other/getRandomSize';
 import { GameObjectUtils } from '../../common/GameObject/GameObjectsUtils';
 import { RectangleBoundary } from '../../types/Boundary';
 import { Character } from '../../../objects/character/character';
+import { RectangleSize } from '../../common/GameObject/RectangleObject';
 
 export interface GenerateLevelConfiguration {
   enemies: EnemyConfiguration[];
@@ -41,7 +42,7 @@ export interface GenerateLevelConfiguration {
     prevTunnel?: boolean;
     nextTunnel?: boolean;
     other?: {
-      size: { x: number; y: number };
+      size: RectangleSize;
       position: Position;
       onEnter: (player: Character) => void;
     }[];
@@ -49,7 +50,7 @@ export interface GenerateLevelConfiguration {
   saveZones: {
     start: { width: number };
     end: { width: number };
-    other?: { size: { x: number; y: number }; position: Position }[];
+    other?: { size: RectangleSize; position: Position }[];
   };
   level: number;
 }
@@ -86,10 +87,10 @@ export class LevelGenerator {
     if (this._GameObjectManager.player) {
       const player = this._GameObjectManager.player;
       if (playerPosition === 'start') {
-        player.position.x = player.objectModel.radius + cellSize;
+        player.position.x = player.radius + cellSize;
       } else if (playerPosition === 'end') {
         player.position.x =
-          this._Renderer.canvasSize.x - player.objectModel.radius - cellSize;
+          this._Renderer.canvasSize.x - player.radius - cellSize;
       }
       player.position.y = this._Renderer.canvasSize.y / 2;
     }
@@ -103,7 +104,7 @@ export class LevelGenerator {
 
     const saveZoneStart = new SaveZone(
       { x: start.width / 2, y: this._Renderer.canvasSize.y / 2 },
-      { x: start.width, y: this._Renderer.canvasSize.y }
+      { width: start.width, height: this._Renderer.canvasSize.y }
     );
     saveZones.push(saveZoneStart);
     saveZoneStart.init();
@@ -112,7 +113,7 @@ export class LevelGenerator {
         x: this._Renderer.canvasSize.x - end.width / 2,
         y: this._Renderer.canvasSize.y / 2,
       },
-      { x: end.width, y: this._Renderer.canvasSize.y }
+      { width: end.width, height: this._Renderer.canvasSize.y }
     );
     saveZones.push(saveZoneEnd);
     saveZoneEnd.init();
@@ -138,7 +139,7 @@ export class LevelGenerator {
     if (portals.prevLevel) {
       const portalToPrevLevel = createPortal({
         startPosition: { x: cellSize / 2, y: this._Renderer.canvasSize.y / 2 },
-        size: { x: cellSize, y: this._Renderer.canvasSize.y },
+        size: { width: cellSize, height: this._Renderer.canvasSize.y },
         onEnter: () => gameMap.prevLevel(),
       });
       portalToPrevLevel.init();
@@ -150,7 +151,7 @@ export class LevelGenerator {
           x: this._Renderer.canvasSize.x - cellSize / 2,
           y: this._Renderer.canvasSize.y / 2,
         },
-        size: { x: cellSize, y: this._Renderer.canvasSize.y },
+        size: { width: cellSize, height: this._Renderer.canvasSize.y },
         onEnter: () => gameMap.nextLevel(),
       });
       portalToNextLevel.init();
@@ -159,7 +160,7 @@ export class LevelGenerator {
     if (portals.prevTunnel) {
       const portalToPrevTunnel = createPortal({
         startPosition: { x: saveZones.start.width / 2, y: cellSize / 2 },
-        size: { x: saveZones.start.width, y: cellSize },
+        size: { width: saveZones.start.width, height: cellSize },
         onEnter: () => gameMap.moveToTunnel('Central Core'),
       });
       portalToPrevTunnel.init();
@@ -171,7 +172,7 @@ export class LevelGenerator {
           x: saveZones.start.width / 2,
           y: this._Renderer.canvasSize.y - cellSize / 2,
         },
-        size: { x: saveZones.start.width, y: cellSize },
+        size: { width: saveZones.start.width, height: cellSize },
         onEnter: () => gameMap.moveToTunnel('Central Core'),
       });
       portalToNextTunnel.init();
@@ -257,7 +258,7 @@ export class LevelGenerator {
         excludedArea
       );
 
-      const enemy = createCommonEnemy({ speed, size, position });
+      const enemy = createCommonEnemy({ speed, radius: size, position });
       enemy.init();
     });
   }

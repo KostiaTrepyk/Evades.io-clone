@@ -16,7 +16,7 @@ export class EnemyBorder extends Enemy {
     super({
       position: params.position,
       velocity: params.velocity,
-      size: ENEMYBORDERCONFIG.radius,
+      radius: ENEMYBORDERCONFIG.radius,
       color: ENEMYBORDERCONFIG.color,
     });
 

@@ -1,6 +1,4 @@
-import { CircleShape, Shapes } from '../../core/types/Shape';
 import { Position } from '../../core/types/Position';
-import { GameObject } from '../../core/common/GameObject/GameObject';
 import { HSLA } from '../../core/utils/hsla';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
@@ -10,8 +8,9 @@ import { CharacterCollision } from './character.collision';
 import { ISkill } from './skills/ISkill';
 import { CHARACTERCONFIG } from '../../configs/characters/character.config';
 import { time } from '../../core/global';
+import { CircleObject } from '../../core/common/GameObject/CircleObject';
 
-export abstract class Character extends GameObject<CircleShape> {
+export abstract class Character extends CircleObject {
   public override renderId: number = 4;
 
   public abstract firstSkill: ISkill;
@@ -25,8 +24,8 @@ export abstract class Character extends GameObject<CircleShape> {
   private _timeToDeath: number | undefined;
   public color: { current: HSLA; readonly default: HSLA };
 
-  constructor(startPosition: Position, size: number, color: HSLA) {
-    super(startPosition, { shape: Shapes.circle, radius: size });
+  constructor(startPosition: Position, radius: number, color: HSLA) {
+    super(startPosition, radius);
 
     this.characterMovement = new CharacterMovement(this);
     this.level = new CharacterLevels();

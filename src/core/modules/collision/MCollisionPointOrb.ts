@@ -1,12 +1,12 @@
 import { PointOrb } from '../../../objects/pointOrb/PointOrb';
-import { GameObject } from '../../common/GameObject/GameObject';
+import { CircleObject } from '../../common/GameObject/CircleObject';
+import { RectangleObject } from '../../common/GameObject/RectangleObject';
 import { Module } from '../../common/Module';
 import { gameObjectManager } from '../../global';
-import { Shape } from '../../types/Shape';
 import { doItemsCollide } from '../../utils/collision/doItemsCollide';
 
 interface MCollisionPointOrbParams {
-  object: GameObject<Shape>;
+  object: MCollisionPointOrb['_object'];
   onCollision: (pointOrb: PointOrb) => void;
 }
 
@@ -31,7 +31,7 @@ interface MCollisionPointOrbParams {
  * @param params.onCollision - The callback to execute when a collision with an point orb occurs.
  */
 export class MCollisionPointOrb implements Module {
-  private _object: GameObject<Shape>;
+  private _object: RectangleObject | CircleObject;
   private _onCollision: (pointOrb: PointOrb) => void;
 
   constructor(params: MCollisionPointOrbParams) {

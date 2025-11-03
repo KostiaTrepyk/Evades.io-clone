@@ -55,7 +55,7 @@ export class EnemyShooterProjectile extends Projectile {
     super.onRender(ctx);
     drawCircle(ctx, {
       position: this.position,
-      radius: this.objectModel.radius,
+      radius: this.radius,
       stroke: {
         width: ENEMYCONFIG.strokeWidth / 2,
         color: ENEMYCONFIG.strokeColor.clone(),
