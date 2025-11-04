@@ -1,7 +1,7 @@
-import { CommonEnemy } from '../../../../objects/enemy/list/CommonEnemy';
-import { EnemyShooter } from '../../../../objects/enemy/list/EnemyShooter/EnemyShooter';
-import { Position } from '../../../types/Position';
-import { getRandomVelocity } from '../../../utils/other/getRandomVelocity';
+import type { CommonEnemy } from '@game/objects/enemies/CommonEnemy';
+import { EnemyShooter } from '@game/objects/enemies/EnemyShooter/EnemyShooter';
+import type { Position } from '@shared-types/Position';
+import { getRandomVelocity } from '@utils/other/getRandomVelocity';
 
 export interface CreateEnemyShooterParams {
   position: Position;
@@ -10,9 +10,7 @@ export interface CreateEnemyShooterParams {
   shootDistance: number;
 }
 
-export function createEnemyShooter(
-  options: CreateEnemyShooterParams
-): CommonEnemy {
+export function createEnemyShooter(options: CreateEnemyShooterParams): CommonEnemy {
   return new EnemyShooter({
     position: options.position,
     velocity: getRandomVelocity(options.speed),

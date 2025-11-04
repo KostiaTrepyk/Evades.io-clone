@@ -1,9 +1,9 @@
-import { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
-import { LevelConfiguration } from './types';
+import type { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
+import type { LevelConfiguration } from './types';
 
 export class Stage {
-  private _levelCount: number;
-  private _levelConfiguration: LevelConfiguration;
+  private readonly _levelCount: number;
+  private readonly _levelConfiguration: LevelConfiguration;
 
   constructor(levelCount: number, levelConfiguration: LevelConfiguration) {
     this._levelCount = levelCount;
@@ -17,7 +17,7 @@ export class Stage {
       playerPosition: this._levelConfiguration.playerPosition || 'start',
       pointOrbCount: this._levelConfiguration.pointOrbCount,
       enemies: this._levelConfiguration.enemies,
-      portals: { other: this._levelConfiguration.portals },
+      portals: { ...this._levelConfiguration.portals },
       // FIX ME Hard coded width
       saveZones: {
         start: { width: 300 },

@@ -1,11 +1,11 @@
-import { SaveZone } from '../../../objects/saveZone/SaveZone';
-import { CircleObject } from '../../common/CircleObject/CircleObject';
-import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
-import { Module } from '../../common/Module';
-import { gameObjectManager } from '../../global';
-import { Collision } from '../../types/Collision';
-import { doItemsCollide } from '../../utils/collision/doItemsCollide';
-import { repositionObjectOnCollisionWithObject } from '../../utils/collision/repositionObjectOnCollisionWithObject';
+import type { CircleObject } from '@core/common/CircleObject/CircleObject';
+import type { Module } from '@core/common/Module';
+import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
+import { gameObjectManager } from '@core/global';
+import type { SaveZone } from '@game/objects/saveZone/SaveZone';
+import type { Collision } from '@shared-types/Collision';
+import { doItemsCollide } from '@utils/collision/doItemsCollide';
+import { repositionObjectOnCollisionWithObject } from '@utils/collision/repositionObjectOnCollisionWithObject';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 
@@ -35,9 +35,9 @@ interface MCollisionSaveZoneParams {
  * ```
  */
 export class MCollisionSaveZone implements Module {
-  private _object: RectangleObject | CircleObject;
-  private _collisionType?: CollisionType;
-  private _onCollision?: (collision: Collision) => void;
+  private readonly _object: RectangleObject | CircleObject;
+  private readonly _collisionType?: CollisionType;
+  private readonly _onCollision?: (collision: Collision) => void;
 
   constructor(params: MCollisionSaveZoneParams) {
     this._object = params.object;
@@ -46,9 +46,8 @@ export class MCollisionSaveZone implements Module {
   }
 
   public afterUpdate(): void {
-    gameObjectManager.saveZones.forEach((saveZone) => {
-      const { doesCollide, collisions } =
-        this.collisionWithSaveZone.bind(this)(saveZone);
+    gameObjectManager.saveZones.forEach(saveZone => {
+      const { doesCollide, collisions } = this.collisionWithSaveZone.bind(this)(saveZone);
 
       if (this._onCollision !== undefined && doesCollide === true) {
         this._onCollision(collisions);

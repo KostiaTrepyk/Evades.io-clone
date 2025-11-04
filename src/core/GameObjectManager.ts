@@ -1,30 +1,31 @@
-import { Character } from '../objects/character/character';
-import { Projectile } from '../objects/projectile/projectile';
-import { Enemy } from '../objects/enemy/enemy';
-import { PointOrb } from '../objects/pointOrb/PointOrb';
-import { Portal } from '../objects/portal/portal';
-import { SaveZone } from '../objects/saveZone/SaveZone';
-import { CircleObject } from './common/CircleObject/CircleObject';
-import { RectangleObject } from './common/RectangleObject/RectangleObject';
+import type { CircleObject } from './common/CircleObject/CircleObject';
+import type { RectangleObject } from './common/RectangleObject/RectangleObject';
+
+import { CharacterBase } from '@game/objects/characterBase/characterBase';
+import { EnemyBase } from '@game/objects/enemyBase/enemyBase';
+import { PointOrb } from '@game/objects/pointOrb/PointOrb';
+import { Portal } from '@game/objects/portal/portal';
+import { Projectile } from '@game/objects/projectile/projectile';
+import { SaveZone } from '@game/objects/saveZone/SaveZone';
 
 /** Отвечает за Все объекты в игре. Разделяет объекты через instanceof на разные
  * категории: player, enemies, pointOrbs и тд. За их добавление, удаление и вызывает
  * у них update и render. */
 export class GameObjectManager {
-  public player: Character | undefined;
-  public enemies: Enemy[];
+  public player: CharacterBase | undefined;
+  public enemies: EnemyBase[];
   public pointOrbs: PointOrb[];
   public saveZones: SaveZone[];
   public portals: Portal[];
   public projectiles: Projectile[];
 
-  private _beforeUpdates: {
+  private readonly _beforeUpdates: {
     o: RectangleObject | CircleObject;
     f: () => void;
   }[];
-  private _updates: { o: RectangleObject | CircleObject; f: () => void }[];
-  private _afterUpdates: { o: RectangleObject | CircleObject; f: () => void }[];
-  private _render: {
+  private readonly _updates: { o: RectangleObject | CircleObject; f: () => void }[];
+  private readonly _afterUpdates: { o: RectangleObject | CircleObject; f: () => void }[];
+  private readonly _render: {
     o: RectangleObject | CircleObject;
     f: (ctx: CanvasRenderingContext2D) => void;
   }[][];
@@ -64,10 +65,10 @@ export class GameObjectManager {
     this.bindObject(object);
 
     switch (true) {
-      case object instanceof Character:
+      case object instanceof CharacterBase:
         this.player = object;
         break;
-      case object instanceof Enemy:
+      case object instanceof EnemyBase:
         this.enemies.push(object);
         break;
       case object instanceof PointOrb:
@@ -91,23 +92,23 @@ export class GameObjectManager {
     this.unbindObject(object);
 
     switch (true) {
-      case object instanceof Character:
+      case object instanceof CharacterBase:
         this.player = undefined;
         break;
-      case object instanceof Enemy:
-        this.enemies = this.enemies.filter((item) => item !== object);
+      case object instanceof EnemyBase:
+        this.enemies = this.enemies.filter(item => item !== object);
         break;
       case object instanceof PointOrb:
-        this.pointOrbs = this.pointOrbs.filter((item) => item !== object);
+        this.pointOrbs = this.pointOrbs.filter(item => item !== object);
         break;
       case object instanceof SaveZone:
-        this.saveZones = this.saveZones.filter((item) => item !== object);
+        this.saveZones = this.saveZones.filter(item => item !== object);
         break;
       case object instanceof Portal:
-        this.portals = this.portals.filter((item) => item !== object);
+        this.portals = this.portals.filter(item => item !== object);
         break;
       case object instanceof Projectile:
-        this.projectiles = this.projectiles.filter((item) => item !== object);
+        this.projectiles = this.projectiles.filter(item => item !== object);
         break;
       default:
         throw new Error('Unknown game object');
@@ -147,9 +148,7 @@ export class GameObjectManager {
     const id3 = this._afterUpdates.findIndex(({ o }) => o === object);
     if (id3 !== -1) this._afterUpdates.splice(id3, 1);
 
-    const id4 = this._render[object.renderId].findIndex(
-      ({ o }) => o === object
-    );
+    const id4 = this._render[object.renderId].findIndex(({ o }) => o === object);
     if (id4 !== -1) this._render[object.renderId].splice(id4, 1);
   }
 }

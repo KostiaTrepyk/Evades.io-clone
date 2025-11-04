@@ -1,12 +1,7 @@
-import { GAMECONFIG } from '../configs/game.config';
-import { UICONFIG } from '../configs/ui.config';
-import {
-  gameObjectManager,
-  renderer,
-  time,
-  uiRenderer,
-  userInput,
-} from './global';
+import { gameObjectManager, renderer, time, uiRenderer, userInput } from './global';
+
+import { GAMECONFIG } from '@config/game.config';
+import { UICONFIG } from '@config/ui.config';
 
 /** Главный цикл игры */
 export class GameLoop {
@@ -76,7 +71,7 @@ export class GameLoop {
     userInput.afterUpdate();
 
     // ====== рендер игровых объектов ======
-    renderer.renderFrame((ctx) => gameObjectManager.renderAll(ctx));
+    renderer.renderFrame(ctx => gameObjectManager.renderAll(ctx));
 
     this._lastGameRenderTimestamp = timestamp;
   }

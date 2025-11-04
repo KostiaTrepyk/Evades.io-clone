@@ -14,6 +14,16 @@
     "allowUnreachableCode": false,
     "noUnusedLocals": true,
     // "noUnusedParameters": true,
+
+    "baseUrl": "src",
+    "paths": {
+      "@core/*": ["core/*"],
+      "@game/*": ["game/*"],
+      "@config/*": ["config/*"],
+      "@shared-types/*": ["shared/types/*"],
+      "@shared/*": ["shared/*"],
+      "@utils/*": ["utils/*"]
+    }
   },
-  "include": ["**/*.ts", "**/*.tsx", "webpack.config.js"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

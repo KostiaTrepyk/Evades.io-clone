@@ -1,6 +1,6 @@
-import { Character } from '../../objects/character/character';
-import { RectangleSize } from '../common/RectangleObject/RectangleObject';
-import { Position } from '../types/Position';
+import type { RectangleSize } from '@core/common/RectangleObject/RectangleObject';
+import type { CharacterBase } from '@game/objects/characterBase/characterBase';
+import type { Position } from '@shared-types/Position';
 
 export const enemyTypes = {
   CommonEnemy: 'CommonEnemy',
@@ -57,10 +57,16 @@ export interface LevelConfiguration {
   pointOrbCount: number;
   playerPosition?: 'start' | 'end';
   portals?: {
-    position: Position;
-    size: RectangleSize;
-    onEnter: (player: Character) => void;
-  }[];
+    prevLevel?: boolean;
+    nextLevel?: boolean;
+    prevTunnel?: boolean;
+    nextTunnel?: boolean;
+    other?: {
+      size: RectangleSize;
+      position: Position;
+      onEnter: (player: CharacterBase) => void;
+    }[];
+  };
   saveZones?: {
     position: Position;
     size: RectangleSize;

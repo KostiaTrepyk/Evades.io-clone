@@ -1,9 +1,9 @@
-import { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
-import { Stage } from './Stage';
+import type { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
+import type { Stage } from './Stage';
 
 export class Tunnel<TunnelNames extends Record<string, string>> {
   public readonly levelsToWin: number;
-  private _stages: Stage[];
+  private readonly _stages: Stage[];
   public readonly name: TunnelNames[keyof TunnelNames];
   public readonly type: 'Tunnel' | 'Area';
 
@@ -11,7 +11,7 @@ export class Tunnel<TunnelNames extends Record<string, string>> {
     name: TunnelNames[keyof TunnelNames],
     levelsToWin: number,
     stages: Stage[],
-    type: 'Tunnel' | 'Area'
+    type: 'Tunnel' | 'Area',
   ) {
     this.levelsToWin = levelsToWin;
     this._stages = stages;
@@ -20,10 +20,7 @@ export class Tunnel<TunnelNames extends Record<string, string>> {
   }
 
   public getLevelConfiguration(level: number): GenerateLevelConfiguration {
-    const maxLevels = this._stages.reduce(
-      (acc, stage) => acc + stage.levelCount,
-      0
-    );
+    const maxLevels = this._stages.reduce((acc, stage) => acc + stage.levelCount, 0);
 
     let levels = (level + 1) % maxLevels;
     let currentStage;

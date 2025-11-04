@@ -1,5 +1,5 @@
-import { gameMap } from './configs/GameMap/GameMapConfiguration';
-import { game } from './core/global';
+import { gameMap } from '@config/GameMap/GameMapConfiguration';
+import { game } from '@core/global';
 
 window.onload = main;
 

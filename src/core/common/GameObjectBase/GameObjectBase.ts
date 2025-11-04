@@ -1,5 +1,6 @@
-import { Position } from '../../types/Position';
-import { GameObjectLoopMethods } from './GameObjectLoopMethods';
+import type { GameObjectLoopMethods } from './GameObjectLoopMethods';
+
+import type { Position } from '@shared-types/Position';
 
 /** Каждый объект может быть только шаром либо прямоугольником. */
 export abstract class GameObjectBase implements GameObjectLoopMethods {

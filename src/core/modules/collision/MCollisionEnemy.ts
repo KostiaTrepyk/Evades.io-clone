@@ -1,13 +1,13 @@
-import { Enemy } from '../../../objects/enemy/enemy';
-import { CircleObject } from '../../common/CircleObject/CircleObject';
-import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
-import { Module } from '../../common/Module';
-import { gameObjectManager } from '../../global';
-import { doItemsCollide } from '../../utils/collision/doItemsCollide';
+import type { CircleObject } from '@core/common/CircleObject/CircleObject';
+import type { Module } from '@core/common/Module';
+import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
+import { gameObjectManager } from '@core/global';
+import type { EnemyBase } from '@game/objects/enemyBase/enemyBase';
+import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 interface MCollisionEnemyParams {
   object: MCollisionEnemy['_object'];
-  onCollision: (enemy: Enemy) => void;
+  onCollision: (enemy: EnemyBase) => void;
 }
 
 /**
@@ -31,8 +31,8 @@ interface MCollisionEnemyParams {
  * @param params.onCollision - The callback to execute when a collision with an enemy occurs.
  */
 export class MCollisionEnemy implements Module {
-  private _object: RectangleObject | CircleObject;
-  private _onCollision: (enemy: Enemy) => void;
+  private readonly _object: RectangleObject | CircleObject;
+  private readonly _onCollision: (enemy: EnemyBase) => void;
 
   constructor(params: MCollisionEnemyParams) {
     this._object = params.object;
@@ -41,7 +41,7 @@ export class MCollisionEnemy implements Module {
 
   public afterUpdate(): void {
     const enemies = gameObjectManager.enemies;
-    enemies.forEach((enemy) => {
+    enemies.forEach(enemy => {
       if (doItemsCollide(this._object, enemy).doesCollide === true) {
         this._onCollision(enemy);
       }

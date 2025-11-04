@@ -1,10 +1,11 @@
-import { levelGenerator } from '../global';
-import { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
-import { Tunnel } from './Tunnel';
+import type { GenerateLevelConfiguration } from './LevelGenerator/LevelGenerator';
+import type { Tunnel } from './Tunnel';
+
+import { levelGenerator } from '@core/global';
 
 export class GameMap<TunnelNames extends Record<string, string>> {
-  private _tunnels: Tunnel<TunnelNames>[];
-  private _playerPositionOnMap: { tunnel: number; level: number };
+  private readonly _tunnels: Tunnel<TunnelNames>[];
+  private readonly _playerPositionOnMap: { tunnel: number; level: number };
 
   constructor(tunnels: Tunnel<TunnelNames>[]) {
     this._tunnels = tunnels;
@@ -44,7 +45,7 @@ export class GameMap<TunnelNames extends Record<string, string>> {
 
   public getCurrentLevelConfiguration(): GenerateLevelConfiguration {
     return this._tunnels[this._playerPositionOnMap.tunnel].getLevelConfiguration(
-      this._playerPositionOnMap.level
+      this._playerPositionOnMap.level,
     );
   }
 
@@ -60,7 +61,7 @@ export class GameMap<TunnelNames extends Record<string, string>> {
   }
 
   private getTunnelIdByName(tunnelName: string): number {
-    const id = this._tunnels.findIndex((tunnel) => tunnel.name === tunnelName);
+    const id = this._tunnels.findIndex(tunnel => tunnel.name === tunnelName);
     if (id === -1) throw new Error('Tunnel is not found');
     return id;
   }

@@ -1,14 +1,14 @@
-import { Character } from '../../../objects/character/character';
-import { CircleObject } from '../../common/CircleObject/CircleObject';
-import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
-import { Module } from '../../common/Module';
-import { gameObjectManager } from '../../global';
-import { Collision } from '../../types/Collision';
-import { doItemsCollide } from '../../utils/collision/doItemsCollide';
+import type { CircleObject } from '@core/common/CircleObject/CircleObject';
+import type { Module } from '@core/common/Module';
+import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
+import { gameObjectManager } from '@core/global';
+import type { CharacterBase } from '@game/objects/characterBase/characterBase';
+import type { Collision } from '@shared-types/Collision';
+import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 interface MCollisionPlayerParams {
   object: MCollisionPlayer['_object'];
-  onCollision: (player: Character, collisions: Collision) => void;
+  onCollision: (player: CharacterBase, collisions: Collision) => void;
 }
 
 /**
@@ -30,8 +30,8 @@ interface MCollisionPlayerParams {
  * ```
  */
 export class MCollisionPlayer implements Module {
-  private _object: RectangleObject | CircleObject;
-  private _onCollision: (player: Character, collisions: Collision) => void;
+  private readonly _object: RectangleObject | CircleObject;
+  private readonly _onCollision: (player: CharacterBase, collisions: Collision) => void;
 
   constructor(params: MCollisionPlayerParams) {
     this._object = params.object;

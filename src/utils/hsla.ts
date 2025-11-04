@@ -1,0 +1,100 @@
+export class HSLA {
+  private _hue: number;
+  private _saturation: number;
+  private _lightness: number;
+  private _alpha: number;
+
+  constructor(hue: number, saturation: number, lightness: number, alpha: number) {
+    this._hue = this.clampValue(hue, 0, 360);
+    this._saturation = this.clampValue(saturation, 0, 100);
+    this._lightness = this.clampValue(lightness, 0, 100);
+    this._alpha = this.clampValue(alpha, 0, 1);
+  }
+
+  public static fromString(colorString: string): HSLA {
+    const [hue, saturation, light, alpha] = colorString
+      .substring(5, colorString.length - 1)
+      .split(',')
+      .map(value => parseFloat(value.trim()));
+
+    return new HSLA(hue, saturation, light, alpha);
+  }
+
+  public toString(): string {
+    return `hsla(${this._hue}, ${this._saturation}%, ${this._lightness}%, ${this._alpha})`;
+  }
+
+  public clone(): HSLA {
+    return new HSLA(this._hue, this._saturation, this._lightness, this._alpha);
+  }
+
+  static fromRGBA(r: number, g: number, b: number, a: number): HSLA {
+    const normalizedR = r / 255;
+    const normalizedG = g / 255;
+    const normalizedB = b / 255;
+
+    const cMax = Math.max(normalizedR, normalizedG, normalizedB);
+    const cMin = Math.min(normalizedR, normalizedG, normalizedB);
+    const delta = cMax - cMin;
+
+    let hue = 0;
+    if (delta !== 0) {
+      switch (cMax) {
+        case normalizedR:
+          hue = ((normalizedG - normalizedB) / delta + (normalizedG < normalizedB ? 6 : 0)) * 60;
+          break;
+        case normalizedG:
+          hue = ((normalizedB - normalizedR) / delta + 2) * 60;
+          break;
+        case normalizedB:
+          hue = ((normalizedR - normalizedG) / delta + 4) * 60;
+          break;
+      }
+    }
+
+    const light = (cMax + cMin) / 2;
+    const saturation = delta === 0 ? 0 : delta / (1 - Math.abs(2 * light - 1));
+
+    return new HSLA(Math.round(hue), Math.round(saturation * 100), Math.round(light * 100), a);
+  }
+
+  private clampValue(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  get getHue(): number {
+    return this._hue;
+  }
+
+  get getSaturation(): number {
+    return this._saturation;
+  }
+
+  get getLightness(): number {
+    return this._lightness;
+  }
+
+  get getAlpha(): number {
+    return this._alpha;
+  }
+
+  /** От 0 до 360 */
+  set setHue(hue: number) {
+    this._hue = this.clampValue(hue, 0, 360);
+  }
+
+  /** От 0 до 100 */
+  set setSaturation(saturation: number) {
+    this._saturation = this.clampValue(saturation, 0, 100);
+  }
+
+  /** От 0 до 100 */
+  set setLightness(lightness: number) {
+    this._lightness = this.clampValue(lightness, 0, 100);
+  }
+
+  /** От 0 до 1 */
+  set setAlpha(alpha: number) {
+    this._alpha = this.clampValue(alpha, 0, 1);
+  }
+}

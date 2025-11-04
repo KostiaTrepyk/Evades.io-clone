@@ -1,6 +1,6 @@
-import { Module } from '../../../common/Module';
-import { userInput } from '../../../global';
-import { MoveDirection } from '../../../types/moveDirection';
+import type { Module } from '@core/common/Module';
+import { userInput } from '@core/global';
+import type { MoveDirection } from '@shared-types/moveDirection';
 
 /**
  * Handles calculation and normalization of movement direction based on user input.
@@ -21,7 +21,7 @@ import { MoveDirection } from '../../../types/moveDirection';
  * ```
  */
 export class MMoveDirection implements Module {
-  private _moveDirection: MoveDirection;
+  private readonly _moveDirection: MoveDirection;
 
   constructor() {
     // Должно быть x:1 что-бы избежать багов таких как тп на то же самое место или снаряды которые стоят на месте так как направления нету (оно по нелям).

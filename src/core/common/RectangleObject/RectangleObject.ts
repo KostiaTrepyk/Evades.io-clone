@@ -1,7 +1,8 @@
-import { gameObjectManager } from '../../global';
-import { Position } from '../../types/Position';
-import { RectangleShape } from '../../types/Shape';
 import { GameObjectBase } from '../GameObjectBase/GameObjectBase';
+
+import { gameObjectManager } from '@core/global';
+import type { Position } from '@shared-types/Position';
+import type { RectangleShape } from '@shared-types/Shape';
 
 export interface RectangleSize {
   height: number;

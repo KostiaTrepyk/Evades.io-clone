@@ -15,9 +15,9 @@ export type KeyCode =
 
 /** FIXME Система которая позволяет легко биндить нужные клавиши.  */
 export class UserInput {
-  private _keydown: Set<KeyCode>;
-  private _keyup: Set<KeyCode>;
-  private _keypress: Set<KeyCode>;
+  private readonly _keydown: Set<KeyCode>;
+  private readonly _keyup: Set<KeyCode>;
+  private readonly _keypress: Set<KeyCode>;
 
   constructor() {
     this._keydown = new Set();
@@ -31,10 +31,7 @@ export class UserInput {
   }
 
   public unbind() {
-    document.removeEventListener(
-      'keydown',
-      this.keydownEventHandler.bind(this)
-    );
+    document.removeEventListener('keydown', this.keydownEventHandler.bind(this));
     document.removeEventListener('keyup', this.keyupEventHandler.bind(this));
 
     this._keydown.clear();

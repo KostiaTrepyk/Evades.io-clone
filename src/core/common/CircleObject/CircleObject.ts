@@ -1,7 +1,8 @@
-import { gameObjectManager } from '../../global';
-import { Position } from '../../types/Position';
-import { CircleShape } from '../../types/Shape';
 import { GameObjectBase } from '../GameObjectBase/GameObjectBase';
+
+import { gameObjectManager } from '@core/global';
+import type { Position } from '@shared-types/Position';
+import type { CircleShape } from '@shared-types/Shape';
 
 export class CircleObject extends GameObjectBase {
   public shape: CircleShape = 'circle';

@@ -1,9 +1,9 @@
-import { CircleObject } from '../../common/CircleObject/CircleObject';
-import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
-import { Module } from '../../common/Module';
-import { Collision } from '../../types/Collision';
-import { doesCollideWithWalls } from '../../utils/collision/doesCollideWithWalls';
-import { repositionObjectOnCollisionWithWalls } from '../../utils/collision/repositionObjectOnCollisionWithWalls';
+import type { CircleObject } from '@core/common/CircleObject/CircleObject';
+import type { Module } from '@core/common/Module';
+import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
+import type { Collision } from '@shared-types/Collision';
+import { doesCollideWithWalls } from '@utils/collision/doesCollideWithWalls';
+import { repositionObjectOnCollisionWithWalls } from '@utils/collision/repositionObjectOnCollisionWithWalls';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 
@@ -39,9 +39,9 @@ interface MCollisionWallsParams {
  * @param params.collisionType - Determines the collision handling strategy.
  */
 export class MCollisionWalls implements Module {
-  private _object: RectangleObject | CircleObject;
-  private _onCollision?: (collision: Collision) => void;
-  private _collisionType: CollisionType;
+  private readonly _object: RectangleObject | CircleObject;
+  private readonly _onCollision?: (collision: Collision) => void;
+  private readonly _collisionType: CollisionType;
 
   constructor(params: MCollisionWallsParams) {
     this._object = params.object;

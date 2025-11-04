@@ -1,15 +1,16 @@
-import { MCollisionSaveZone } from '../../collision/MCollisionSaveZone';
-import { MCollisionWalls } from '../../collision/MCollisionWalls';
-import { Collision } from '../../../types/Collision';
-import { Enemy } from '../../../../objects/enemy/enemy';
-import { AMEnemyMovement } from './MEnemyMovement.type';
+import type { AMEnemyMovement } from './MEnemyMovement.type';
+
+import { MCollisionSaveZone } from '@core/modules/collision/MCollisionSaveZone';
+import { MCollisionWalls } from '@core/modules/collision/MCollisionWalls';
+import type { EnemyBase } from '@game/objects/enemyBase/enemyBase';
+import type { Collision } from '@shared-types/Collision';
 
 export class MEnemyMovementDefault implements AMEnemyMovement {
-  private _enemy: Enemy;
-  private _MCollisionWalls: MCollisionWalls;
-  private _MCollisionSaveZone: MCollisionSaveZone;
+  private readonly _enemy: EnemyBase;
+  private readonly _MCollisionWalls: MCollisionWalls;
+  private readonly _MCollisionSaveZone: MCollisionSaveZone;
 
-  constructor(enemy: Enemy) {
+  constructor(enemy: EnemyBase) {
     this._enemy = enemy;
 
     this._MCollisionWalls = new MCollisionWalls({

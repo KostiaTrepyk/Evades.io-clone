@@ -1,9 +1,9 @@
-import { PointOrb } from '../../../objects/pointOrb/PointOrb';
-import { CircleObject } from '../../common/CircleObject/CircleObject';
-import { RectangleObject } from '../../common/RectangleObject/RectangleObject';
-import { Module } from '../../common/Module';
-import { gameObjectManager } from '../../global';
-import { doItemsCollide } from '../../utils/collision/doItemsCollide';
+import type { CircleObject } from '@core/common/CircleObject/CircleObject';
+import type { Module } from '@core/common/Module';
+import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
+import { gameObjectManager } from '@core/global';
+import type { PointOrb } from '@game/objects/pointOrb/PointOrb';
+import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 interface MCollisionPointOrbParams {
   object: MCollisionPointOrb['_object'];
@@ -31,8 +31,8 @@ interface MCollisionPointOrbParams {
  * @param params.onCollision - The callback to execute when a collision with an point orb occurs.
  */
 export class MCollisionPointOrb implements Module {
-  private _object: RectangleObject | CircleObject;
-  private _onCollision: (pointOrb: PointOrb) => void;
+  private readonly _object: RectangleObject | CircleObject;
+  private readonly _onCollision: (pointOrb: PointOrb) => void;
 
   constructor(params: MCollisionPointOrbParams) {
     this._object = params.object;
@@ -41,7 +41,7 @@ export class MCollisionPointOrb implements Module {
 
   public afterUpdate(): void {
     const pointOrbs = gameObjectManager.pointOrbs;
-    pointOrbs.forEach((pointOrb) => {
+    pointOrbs.forEach(pointOrb => {
       if (doItemsCollide(this._object, pointOrb).doesCollide === true) {
         this._onCollision(pointOrb);
       }

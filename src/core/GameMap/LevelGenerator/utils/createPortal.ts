@@ -1,4 +1,4 @@
-import { Portal, PortalParams } from '../../../../objects/portal/portal';
+import { type PortalParams, Portal } from '@game/objects/portal/portal';
 
 export function createPortal(options: PortalParams): Portal {
   return new Portal({

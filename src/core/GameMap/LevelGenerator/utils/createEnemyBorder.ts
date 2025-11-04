@@ -1,7 +1,8 @@
-import { ENEMYBORDERCONFIG } from '../../../../configs/enemies/enemyBorder.config';
-import { EnemyBorder } from '../../../../objects/enemy/list/EnemyBorder';
-import { renderer } from '../../../global';
-import { GenerateLevelConfiguration } from '../LevelGenerator';
+import type { GenerateLevelConfiguration } from '../LevelGenerator';
+
+import { ENEMYBORDERCONFIG } from '@config/enemies/enemyBorder.config';
+import { renderer } from '@core/global';
+import { EnemyBorder } from '@game/objects/enemies/EnemyBorder';
 
 /** Создаёт врага createEnemyBorder. В зависимости от количества этих врагов будет просчитываться их начальная позиция, так-как расстояние между врагами должно быть одинаковое.
  *  @argument params.speed - скорость врага которого создаём. В идеале скорость всех врагов данного типа на одном уровне должна быть одинаковая (Может быть разной, если так задумано).

@@ -1,10 +1,11 @@
-import { cellSize } from '../consts/consts';
-import { CameraController } from './CameraController';
+import type { CameraController } from './CameraController';
+
+import { GAMECONFIG } from '@config/game.config';
 
 export class Renderer {
-  private _CameraController: CameraController;
-  private _ctx: CanvasRenderingContext2D;
-  private _canvas: HTMLCanvasElement;
+  private readonly _CameraController: CameraController;
+  private readonly _ctx: CanvasRenderingContext2D;
+  private readonly _canvas: HTMLCanvasElement;
   private _canvasSize = { x: 4000, y: 800 };
 
   constructor(CameraController: CameraController) {
@@ -40,16 +41,16 @@ export class Renderer {
 
   /** FIX ME Походу можно ускорить. Нужно позже подумать */
   private drawCells(ctx: CanvasRenderingContext2D) {
-    const horizontalCells = this._canvasSize.x / cellSize;
-    const verticalCells = this._canvasSize.y / cellSize;
+    const horizontalCells = this._canvasSize.x / GAMECONFIG.cellSize;
+    const verticalCells = this._canvasSize.y / GAMECONFIG.cellSize;
 
     ctx.strokeStyle = '#ddddddff';
     ctx.lineWidth = 3;
     for (let i = 0; i < horizontalCells; i++) {
       for (let j = 0; j < verticalCells; j++) {
-        const x = i * cellSize;
-        const y = j * cellSize;
-        ctx.strokeRect(x, y, cellSize, cellSize);
+        const x = i * GAMECONFIG.cellSize;
+        const y = j * GAMECONFIG.cellSize;
+        ctx.strokeRect(x, y, GAMECONFIG.cellSize, GAMECONFIG.cellSize);
       }
     }
   }
@@ -59,8 +60,7 @@ export class Renderer {
   }
 
   set setCanvasSize(newCanvasSize: { x: number; y: number }) {
-    if (newCanvasSize.x < 500 || newCanvasSize.y < 300)
-      console.warn('Canvas size si too small');
+    if (newCanvasSize.x < 500 || newCanvasSize.y < 300) console.warn('Canvas size si too small');
 
     this._canvasSize = { ...newCanvasSize };
   }

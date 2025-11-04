@@ -1,12 +1,13 @@
-import { Game } from '../Game';
-import { UIRenderer } from '../ui/UIRenderer';
-import { GameLoop } from './GameLoop';
-import { GameObjectManager } from './GameObjectManager';
-import { UserInput } from './UserInput';
-import { Renderer } from './Renderer';
 import { CameraController } from './CameraController';
-import { Time } from './Time';
+import { GameLoop } from './GameLoop';
 import { LevelGenerator } from './GameMap/LevelGenerator/LevelGenerator';
+import { GameObjectManager } from './GameObjectManager';
+import { Renderer } from './Renderer';
+import { Time } from './Time';
+import { UserInput } from './UserInput';
+
+import { Game } from '@game/Game';
+import { UIRenderer } from '@game/ui/UIRenderer';
 
 const time = new Time();
 const userInput = new UserInput();
@@ -19,13 +20,4 @@ const levelGenerator = new LevelGenerator(gameObjectManager, renderer);
 
 const game = new Game();
 
-export {
-  gameLoop,
-  userInput,
-  renderer,
-  gameObjectManager,
-  uiRenderer,
-  time,
-  game,
-  levelGenerator,
-};
+export { gameLoop, userInput, renderer, gameObjectManager, uiRenderer, time, game, levelGenerator };

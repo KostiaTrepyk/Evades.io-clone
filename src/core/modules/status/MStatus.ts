@@ -1,5 +1,5 @@
-import { Module } from '../../common/Module';
-import { time } from '../../global';
+import type { Module } from '@core/common/Module';
+import { time } from '@core/global';
 
 export interface MStatusParams<StatusName extends string> {
   availableStatusNames: readonly StatusName[];
@@ -8,12 +8,8 @@ export interface MStatusParams<StatusName extends string> {
   isDisableAllStatuses?: boolean;
 }
 
-export class MStatus<
-  StatusName extends string,
-  Effect extends Record<string, any>
-> implements Module
-{
-  private _availableStatusNames: readonly StatusName[];
+export class MStatus<StatusName extends string, Effect> implements Module {
+  private readonly _availableStatusNames: readonly StatusName[];
   private _statuses: Status<StatusName, Effect>[];
   private _isDisabledAllStatuses: boolean;
 
@@ -21,12 +17,12 @@ export class MStatus<
     const { availableStatusNames, isDisableAllStatuses } = params;
 
     this._availableStatusNames = availableStatusNames;
-    this._isDisabledAllStatuses = isDisableAllStatuses || false;
+    this._isDisabledAllStatuses = isDisableAllStatuses === true || false;
     this._statuses = [];
   }
 
   public onUpdate(): void {
-    this.statuses.forEach((status) => status.onUpdate(time.deltaTime));
+    this.statuses.forEach(status => status.onUpdate());
   }
 
   /** Enables application of new statuses.  */
@@ -45,7 +41,7 @@ export class MStatus<
     if (this._isDisabledAllStatuses === true) return false;
 
     // If exists
-    const foundStatus = this.statuses.find((s) => s.id === status.id);
+    const foundStatus = this.statuses.find(s => s.id === status.id);
     if (foundStatus !== undefined) {
       foundStatus.refreshDuration();
       return true;
@@ -64,15 +60,15 @@ export class MStatus<
   }
 
   public removeStatus(id: Symbol): void {
-    this._statuses = this._statuses.filter((status) => status.id !== id);
+    this._statuses = this._statuses.filter(status => status.id !== id);
   }
 
   public isAppliedStatusById(id: Symbol): boolean {
-    return Boolean(this._statuses.find((status) => status.id === id));
+    return Boolean(this._statuses.find(status => status.id === id));
   }
 
   public isAppliedStatusByName(name: StatusName): boolean {
-    return Boolean(this._statuses.find((status) => status.name === name));
+    return Boolean(this._statuses.find(status => status.name === name));
   }
 
   // FIX ME Позволит мутировать
@@ -89,10 +85,7 @@ export class MStatus<
   }
 }
 
-export interface StatusParams<
-  StatusName extends string,
-  Effect extends Record<string, any>
-> {
+export interface StatusParams<StatusName extends string, Effect> {
   /** Id по которому можно убирать не нужные эффекты не боясь убрать то что ещё нужно. */
   id: Symbol;
   /** От имени зависит цвет эффекта. */
@@ -102,18 +95,18 @@ export interface StatusParams<
   duration?: number;
 }
 
-class Status<StatusName extends string, Effect extends Record<string, any>> {
+class Status<StatusName extends string, Effect> {
   /** Id по которому можно убирать не нужные эффекты не боясь убрать то что ещё нужно. */
   public readonly id: Symbol;
   /** От имени зависит цвет эффекта. */
   public readonly name: StatusName;
-  private _effects: Effect | undefined;
+  private readonly _effects: Effect | undefined;
   /** Время в секундах, сколько должен висеть данный эффект. */
   public readonly duration: number | undefined;
   /** Время создания эффекта. */
   private appliedAtTimeStamp: number;
   /** Ссылка на модуль что-бы получить его возможности (удалить, добавить...) */
-  private MStatus: MStatus<StatusName, Effect>;
+  private readonly MStatus: MStatus<StatusName, Effect>;
 
   constructor(params: {
     id: Symbol;
@@ -131,7 +124,7 @@ class Status<StatusName extends string, Effect extends Record<string, any>> {
     this.appliedAtTimeStamp = time.timestamp;
   }
 
-  public onUpdate(deltaTime: number): void {
+  public onUpdate(): void {
     if (this.duration === undefined) return;
     if (time.timestamp >= this.duration + this.appliedAtTimeStamp) {
       this.MStatus.removeStatus(this.id);
