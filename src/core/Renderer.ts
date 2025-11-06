@@ -1,4 +1,5 @@
 import type { CameraController } from './CameraController';
+import type { RectangleSize } from './common/RectangleObject/RectangleObject';
 
 import { GAMECONFIG } from '@config/game.config';
 
@@ -6,7 +7,7 @@ export class Renderer {
   private readonly _CameraController: CameraController;
   private readonly _ctx: CanvasRenderingContext2D;
   private readonly _canvas: HTMLCanvasElement;
-  private _canvasSize = { x: 4000, y: 800 };
+  private _canvasSize: RectangleSize = { width: 4000, height: 800 };
 
   constructor(CameraController: CameraController) {
     this._CameraController = CameraController;
@@ -27,7 +28,7 @@ export class Renderer {
 
     // Set bg color
     this._ctx.fillStyle = '#ffe';
-    this._ctx.fillRect(0, 0, this._canvasSize.x, this._canvasSize.y);
+    this._ctx.fillRect(0, 0, this._canvasSize.width, this._canvasSize.height);
 
     this.drawCells(this._ctx);
 
@@ -41,8 +42,8 @@ export class Renderer {
 
   /** FIX ME Походу можно ускорить. Нужно позже подумать */
   private drawCells(ctx: CanvasRenderingContext2D) {
-    const horizontalCells = this._canvasSize.x / GAMECONFIG.cellSize;
-    const verticalCells = this._canvasSize.y / GAMECONFIG.cellSize;
+    const horizontalCells = this._canvasSize.width / GAMECONFIG.cellSize;
+    const verticalCells = this._canvasSize.height / GAMECONFIG.cellSize;
 
     ctx.strokeStyle = '#ddddddff';
     ctx.lineWidth = 3;
@@ -55,12 +56,13 @@ export class Renderer {
     }
   }
 
-  get canvasSize(): { x: number; y: number } {
+  get canvasSize(): RectangleSize {
     return this._canvasSize;
   }
 
-  set setCanvasSize(newCanvasSize: { x: number; y: number }) {
-    if (newCanvasSize.x < 500 || newCanvasSize.y < 300) console.warn('Canvas size si too small');
+  set setCanvasSize(newCanvasSize: RectangleSize) {
+    if (newCanvasSize.width < 500 || newCanvasSize.height < 300)
+      console.warn('Canvas size is too small');
 
     this._canvasSize = { ...newCanvasSize };
   }

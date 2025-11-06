@@ -84,9 +84,9 @@ export class LevelGenerator {
       if (playerPosition === 'start') {
         player.position.x = player.radius + GAMECONFIG.cellSize;
       } else if (playerPosition === 'end') {
-        player.position.x = this._Renderer.canvasSize.x - player.radius - GAMECONFIG.cellSize;
+        player.position.x = this._Renderer.canvasSize.width - player.radius - GAMECONFIG.cellSize;
       }
-      player.position.y = this._Renderer.canvasSize.y / 2;
+      player.position.y = this._Renderer.canvasSize.height / 2;
     }
   }
 
@@ -95,17 +95,17 @@ export class LevelGenerator {
     const saveZones: SaveZone[] = [];
 
     const saveZoneStart = new SaveZone(
-      { x: start.width / 2, y: this._Renderer.canvasSize.y / 2 },
-      { width: start.width, height: this._Renderer.canvasSize.y },
+      { x: start.width / 2, y: this._Renderer.canvasSize.height / 2 },
+      { width: start.width, height: this._Renderer.canvasSize.height },
     );
     saveZones.push(saveZoneStart);
     saveZoneStart.init();
     const saveZoneEnd = new SaveZone(
       {
-        x: this._Renderer.canvasSize.x - end.width / 2,
-        y: this._Renderer.canvasSize.y / 2,
+        x: this._Renderer.canvasSize.width - end.width / 2,
+        y: this._Renderer.canvasSize.height / 2,
       },
-      { width: end.width, height: this._Renderer.canvasSize.y },
+      { width: end.width, height: this._Renderer.canvasSize.height },
     );
     saveZones.push(saveZoneEnd);
     saveZoneEnd.init();
@@ -130,8 +130,8 @@ export class LevelGenerator {
   ): void {
     if (portals.prevLevel === true) {
       const portalToPrevLevel = createPortal({
-        startPosition: { x: GAMECONFIG.cellSize / 2, y: this._Renderer.canvasSize.y / 2 },
-        size: { width: GAMECONFIG.cellSize, height: this._Renderer.canvasSize.y },
+        startPosition: { x: GAMECONFIG.cellSize / 2, y: this._Renderer.canvasSize.height / 2 },
+        size: { width: GAMECONFIG.cellSize, height: this._Renderer.canvasSize.height },
         onEnter: () => gameMap.prevLevel(),
       });
       portalToPrevLevel.init();
@@ -140,10 +140,10 @@ export class LevelGenerator {
     if (portals.nextLevel === true) {
       const portalToNextLevel = createPortal({
         startPosition: {
-          x: this._Renderer.canvasSize.x - GAMECONFIG.cellSize / 2,
-          y: this._Renderer.canvasSize.y / 2,
+          x: this._Renderer.canvasSize.width - GAMECONFIG.cellSize / 2,
+          y: this._Renderer.canvasSize.height / 2,
         },
-        size: { width: GAMECONFIG.cellSize, height: this._Renderer.canvasSize.y },
+        size: { width: GAMECONFIG.cellSize, height: this._Renderer.canvasSize.height },
         onEnter: () => gameMap.nextLevel(),
       });
       portalToNextLevel.init();
@@ -162,7 +162,7 @@ export class LevelGenerator {
       const portalToNextTunnel = createPortal({
         startPosition: {
           x: saveZones.start.width / 2,
-          y: this._Renderer.canvasSize.y - GAMECONFIG.cellSize / 2,
+          y: this._Renderer.canvasSize.height - GAMECONFIG.cellSize / 2,
         },
         size: { width: saveZones.start.width, height: GAMECONFIG.cellSize },
         onEnter: () => gameMap.moveToTunnel('Central Core'),
@@ -362,7 +362,7 @@ export class LevelGenerator {
       allowed: {
         shape: 'rectangle',
         from: { x: 0, y: 0 },
-        to: { x: renderer.canvasSize.x, y: renderer.canvasSize.y },
+        to: { x: renderer.canvasSize.width, y: renderer.canvasSize.height },
       },
       size: size,
       excludes: excludedArea,

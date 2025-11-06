@@ -1,9 +1,9 @@
+import { GameCollision } from '@core/collision/GameCollision';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
 import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import { gameObjectManager } from '@core/global';
 import type { EnemyBase } from '@game/objects/enemyBase/enemyBase';
-import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 interface MCollisionEnemyParams {
   object: MCollisionEnemy['_object'];
@@ -42,7 +42,7 @@ export class MCollisionEnemy implements Module {
   public afterUpdate(): void {
     const enemies = gameObjectManager.enemies;
     enemies.forEach(enemy => {
-      if (doItemsCollide(this._object, enemy).doesCollide === true) {
+      if (GameCollision.checkCollisions(this._object, enemy).doesCollide === true) {
         this._onCollision(enemy);
       }
     });

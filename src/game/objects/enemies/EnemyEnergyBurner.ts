@@ -2,12 +2,12 @@ import type { CharacterBase } from '../characterBase/characterBase';
 import { EnemyBase } from '../enemyBase/enemyBase';
 
 import { ENERGYBURNERENEMYCONFIG } from '@config/enemies/energyBurnerEnemy.config';
+import { GameCollision } from '@core/collision/GameCollision';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { gameObjectManager } from '@core/global';
 import type { Position } from '@shared-types/Position';
 import type { Velocity } from '@shared-types/Velocity';
 import { drawCircle } from '@utils/canvas/drawCircle';
-import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 export interface EnemyEnergyBurnerParams {
   position: Position;
@@ -34,10 +34,9 @@ export class EnemyEnergyBurner extends EnemyBase {
     if (player === undefined) return;
 
     const scale = this.EnemyStatus.sizeScale;
-
     const aura = new CircleObject(this.position, ENERGYBURNERENEMYCONFIG.auraRadius * scale);
 
-    const { doesCollide } = doItemsCollide(player, aura);
+    const { doesCollide } = GameCollision.checkCollisions(player, aura);
 
     if (doesCollide === true) this.applyStealEnergyEffect(player);
     else this.removeStealEnergyEffect(player);

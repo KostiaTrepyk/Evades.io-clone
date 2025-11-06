@@ -1,3 +1,4 @@
+import { GameCollision } from './collision/GameCollision';
 import { gameObjectManager, renderer, time, uiRenderer, userInput } from './global';
 
 import { GAMECONFIG } from '@config/game.config';
@@ -69,6 +70,7 @@ export class GameLoop {
     time.beforeAllUpdates(deltaTime);
     gameObjectManager.updateAll();
     userInput.afterUpdate();
+    GameCollision.clearCollisions();
 
     // ====== рендер игровых объектов ======
     renderer.renderFrame(ctx => gameObjectManager.renderAll(ctx));

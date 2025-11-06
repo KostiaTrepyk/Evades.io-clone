@@ -1,10 +1,10 @@
+import { GameCollision } from '@core/collision/GameCollision';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
 import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import { gameObjectManager } from '@core/global';
 import type { CharacterBase } from '@game/objects/characterBase/characterBase';
 import type { Collision } from '@shared-types/Collision';
-import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 interface MCollisionPlayerParams {
   object: MCollisionPlayer['_object'];
@@ -44,8 +44,8 @@ export class MCollisionPlayer implements Module {
     // Do nothing if no player
     if (player === undefined) return;
 
-    const { doesCollide, collisions } = doItemsCollide(this._object, player);
+    const { doesCollide, collision } = GameCollision.checkCollisions(this._object, player);
 
-    if (doesCollide === true) this._onCollision(player, collisions);
+    if (doesCollide === true) this._onCollision(player, collision);
   }
 }

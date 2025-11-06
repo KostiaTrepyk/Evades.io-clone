@@ -1,9 +1,9 @@
+import { GameCollision } from '@core/collision/GameCollision';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
 import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import { gameObjectManager } from '@core/global';
 import type { PointOrb } from '@game/objects/pointOrb/PointOrb';
-import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 interface MCollisionPointOrbParams {
   object: MCollisionPointOrb['_object'];
@@ -42,7 +42,7 @@ export class MCollisionPointOrb implements Module {
   public afterUpdate(): void {
     const pointOrbs = gameObjectManager.pointOrbs;
     pointOrbs.forEach(pointOrb => {
-      if (doItemsCollide(this._object, pointOrb).doesCollide === true) {
+      if (GameCollision.checkCollisions(this._object, pointOrb).doesCollide === true) {
         this._onCollision(pointOrb);
       }
     });

@@ -2,12 +2,12 @@ import type { CharacterBase } from '../characterBase/characterBase';
 import { EnemyBase } from '../enemyBase/enemyBase';
 
 import { ENEMYSPEEDREDUCTIONCONFIG } from '@config/enemies/enemySpeedReductionconfig';
+import { GameCollision } from '@core/collision/GameCollision';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { gameObjectManager } from '@core/global';
 import type { Position } from '@shared-types/Position';
 import type { Velocity } from '@shared-types/Velocity';
 import { drawCircle } from '@utils/canvas/drawCircle';
-import { doItemsCollide } from '@utils/collision/doItemsCollide';
 
 interface EnemySpeedReductionParams {
   position: Position;
@@ -35,7 +35,7 @@ export class EnemySpeedReduction extends EnemyBase {
 
     const aura = new CircleObject(this.position, ENEMYSPEEDREDUCTIONCONFIG.auraRadius * scale);
 
-    const { doesCollide } = doItemsCollide(aura, player);
+    const { doesCollide } = GameCollision.checkCollisions(aura, player);
 
     if (doesCollide === true) this.applySpeedReductionEffect(player);
     else this.removeSpeedReductionEffect(player);

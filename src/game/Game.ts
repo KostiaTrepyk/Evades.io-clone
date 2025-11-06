@@ -8,8 +8,8 @@ export class Game {
 
   constructor() {
     this.Character = new Morph({
-      x: renderer.canvasSize.x / 2,
-      y: renderer.canvasSize.y / 2,
+      x: renderer.canvasSize.width / 2,
+      y: renderer.canvasSize.height / 2,
     });
   }
 

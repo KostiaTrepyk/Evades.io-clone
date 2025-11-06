@@ -3,7 +3,6 @@ import type { RectangleObject } from '@core/common/RectangleObject/RectangleObje
 import { renderer } from '@core/global';
 import type { Collision } from '@shared-types/Collision';
 
-/** Мутирует object */
 export function repositionObjectOnCollisionWithWalls(
   object: RectangleObject | CircleObject,
   collision: Collision,
@@ -13,9 +12,9 @@ export function repositionObjectOnCollisionWithWalls(
     const halfSize = object.radius;
 
     if (collision.x === 'left') object.position.x = halfSize;
-    else if (collision.x === 'right') object.position.x = renderer.canvasSize.x - halfSize;
+    else if (collision.x === 'right') object.position.x = renderer.canvasSize.width - halfSize;
     if (collision.y === 'top') object.position.y = halfSize;
-    else if (collision.y === 'bottom') object.position.y = renderer.canvasSize.y - halfSize;
+    else if (collision.y === 'bottom') object.position.y = renderer.canvasSize.height - halfSize;
   }
 
   // applyCollision for rectangle
@@ -24,8 +23,8 @@ export function repositionObjectOnCollisionWithWalls(
     const halfSizeY = object.size.height / 2;
 
     if (collision.x === 'left') object.position.x = halfSizeX;
-    else if (collision.x === 'right') object.position.x = renderer.canvasSize.x - halfSizeX;
+    else if (collision.x === 'right') object.position.x = renderer.canvasSize.width - halfSizeX;
     if (collision.y === 'top') object.position.y = halfSizeY;
-    else if (collision.y === 'bottom') object.position.y = renderer.canvasSize.y - halfSizeY;
+    else if (collision.y === 'bottom') object.position.y = renderer.canvasSize.height - halfSizeY;
   }
 }

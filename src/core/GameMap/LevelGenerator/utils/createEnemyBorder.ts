@@ -19,9 +19,9 @@ export function createEnemyBorder(params: {
   const radius = ENEMYBORDERCONFIG.radius + 0;
 
   const minX = params.saveZones.start.width + radius;
-  const maxX = renderer.canvasSize.x - params.saveZones.end.width - radius;
+  const maxX = renderer.canvasSize.width - params.saveZones.end.width - radius;
   const minY = radius;
-  const maxY = renderer.canvasSize.y - radius;
+  const maxY = renderer.canvasSize.height - radius;
 
   const length = {
     x: maxX - minX,

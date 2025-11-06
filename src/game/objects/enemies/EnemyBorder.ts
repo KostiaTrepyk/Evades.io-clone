@@ -21,6 +21,7 @@ export class EnemyBorder extends EnemyBase {
       color: ENEMYBORDERCONFIG.color,
     });
 
+    // Overrides the movement module to use border-specific movement behavior.
     this.EnemyMovement = new MEnemyMovementBorder(this);
 
     // Disables application of all statuses.
