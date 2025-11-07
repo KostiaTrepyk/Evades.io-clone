@@ -1,9 +1,9 @@
 import { GameCollision } from '@core/collision/GameCollision';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
-import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import { gameObjectManager } from '@core/global';
 import type { PointOrb } from '@game/objects/pointOrb/PointOrb';
+import type { Module } from 'modules/Module';
 
 interface MCollisionPointOrbParams {
   object: MCollisionPointOrb['_object'];

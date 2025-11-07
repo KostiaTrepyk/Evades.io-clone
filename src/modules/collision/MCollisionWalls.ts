@@ -1,9 +1,9 @@
+import { doesCollideWithWalls } from '@core/collision/utils/doesCollideWithWalls';
+import { repositionObjectOnCollisionWithWalls } from '@core/collision/utils/repositionObjectOnCollisionWithWalls';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
-import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import type { Collision } from '@shared-types/Collision';
-import { doesCollideWithWalls } from '@utils/collision/doesCollideWithWalls';
-import { repositionObjectOnCollisionWithWalls } from '@utils/collision/repositionObjectOnCollisionWithWalls';
+import type { Module } from 'modules/Module';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 

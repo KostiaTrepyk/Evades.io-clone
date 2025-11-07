@@ -2,9 +2,9 @@ import type { CharacterLevels } from './character.levels';
 
 import { CHARACTERCONFIG } from '@config/characters/character.config';
 import { GAMECONFIG } from '@config/game.config';
-import type { Module } from '@core/common/Module';
 import { time } from '@core/global';
-import { MStatus } from '@core/modules/status/MStatus';
+import type { Module } from '@modules/Module';
+import { MStatus } from '@modules/status/MStatus';
 
 const statusNames = [
   'immortal',

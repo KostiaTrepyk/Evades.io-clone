@@ -5,6 +5,7 @@ import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
 
 import { CHARACTERCONFIG } from '@config/characters/character.config';
+import { GAMECONFIG } from '@config/game.config';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { time } from '@core/global';
 import type { ISkill } from '@game/skills/ISkill';
@@ -12,7 +13,7 @@ import type { Position } from '@shared-types/Position';
 import type { HSLA } from '@utils/hsla';
 
 export abstract class CharacterBase extends CircleObject {
-  public override renderId: number = 4;
+  public override renderId: number = GAMECONFIG.renderingOrder.player;
 
   public abstract firstSkill: ISkill;
   public abstract secondSkill: ISkill;

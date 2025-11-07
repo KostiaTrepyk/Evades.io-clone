@@ -1,6 +1,6 @@
-import type { Module } from '@core/common/Module';
 import { userInput } from '@core/global';
 import type { MoveDirection } from '@shared-types/moveDirection';
+import type { Module } from 'modules/Module';
 
 /**
  * Handles calculation and normalization of movement direction based on user input.

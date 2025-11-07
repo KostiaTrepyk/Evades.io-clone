@@ -7,4 +7,13 @@ export const GAMECONFIG = {
   speedPerPoint: 50,
   /** Game FPS */
   fpsGame: 180,
+
+  renderingOrder: {
+    player: 4,
+    enemy: 5,
+    projectile: 6,
+    pointOrb: 2,
+    saveZone: 0,
+    portal: 1,
+  },
 } as const;

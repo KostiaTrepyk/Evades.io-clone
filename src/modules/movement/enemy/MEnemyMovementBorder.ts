@@ -1,9 +1,9 @@
 import type { AMEnemyMovement } from './MEnemyMovement.type';
 
-import { MCollisionSaveZone } from '@core/modules/collision/MCollisionSaveZone';
-import { MCollisionWalls } from '@core/modules/collision/MCollisionWalls';
 import type { EnemyBase } from '@game/objects/enemyBase/enemyBase';
 import type { Collision } from '@shared-types/Collision';
+import { MCollisionSaveZone } from 'modules/collision/MCollisionSaveZone';
+import { MCollisionWalls } from 'modules/collision/MCollisionWalls';
 
 export class MEnemyMovementBorder implements AMEnemyMovement {
   private readonly _enemy: EnemyBase;

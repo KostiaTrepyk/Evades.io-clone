@@ -1,10 +1,10 @@
 import { GameCollision } from '@core/collision/GameCollision';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
-import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import { gameObjectManager } from '@core/global';
 import type { CharacterBase } from '@game/objects/characterBase/characterBase';
 import type { Collision } from '@shared-types/Collision';
+import type { Module } from 'modules/Module';
 
 interface MCollisionPlayerParams {
   object: MCollisionPlayer['_object'];

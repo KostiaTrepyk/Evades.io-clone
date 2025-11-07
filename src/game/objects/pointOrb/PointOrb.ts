@@ -1,3 +1,4 @@
+import { GAMECONFIG } from '@config/game.config';
 import { POINTORBCONFIG } from '@config/pointOrb.config';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import type { Position } from '@shared-types/Position';
@@ -5,7 +6,7 @@ import { drawCircle } from '@utils/canvas/drawCircle';
 import type { HSLA } from '@utils/hsla';
 
 export class PointOrb extends CircleObject {
-  public override renderId: number = 2;
+  public override renderId: number = GAMECONFIG.renderingOrder.pointOrb;
   private readonly _color: HSLA;
 
   constructor(startPosition: Position) {

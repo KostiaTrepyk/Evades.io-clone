@@ -1,8 +1,8 @@
 import type { CharacterBase } from './characterBase';
 
 import { GAMECONFIG } from '@config/game.config';
-import type { Module } from '@core/common/Module';
 import { userInput, time } from '@core/global';
+import type { Module } from '@modules/Module';
 
 export class CharacterMovement implements Module {
   private readonly _player: CharacterBase;

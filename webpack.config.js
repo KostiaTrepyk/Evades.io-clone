@@ -37,6 +37,7 @@ export default {
       '@core': path.resolve(__dirname, 'src/core'),
       '@game': path.resolve(__dirname, 'src/game'),
       '@config': path.resolve(__dirname, 'src/config'),
+      '@modules': path.resolve(__dirname, 'src/modules'),
       '@shared-types': path.resolve(__dirname, 'src/shared/types'),
       '@shared': path.resolve(__dirname, 'src/shared'),
       '@utils': path.resolve(__dirname, 'src/utils'),

@@ -20,6 +20,7 @@
       "@core/*": ["core/*"],
       "@game/*": ["game/*"],
       "@config/*": ["config/*"],
+      "@modules/*": ["modules/*"],
       "@shared-types/*": ["shared/types/*"],
       "@shared/*": ["shared/*"],
       "@utils/*": ["utils/*"]

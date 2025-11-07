@@ -1,7 +1,8 @@
 import type { CharacterBase } from '../characterBase/characterBase';
 
+import { GAMECONFIG } from '@config/game.config';
 import { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
-import { MCollisionPlayer } from '@core/modules/collision/MCollisionPlayer';
+import { MCollisionPlayer } from '@modules/collision/MCollisionPlayer';
 import type { Position } from '@shared-types/Position';
 import { drawRectangle } from '@utils/canvas/drawRectangle';
 import { HSLA } from '@utils/hsla';
@@ -13,7 +14,7 @@ export interface PortalParams {
 }
 
 export class Portal extends RectangleObject {
-  public override renderId: number = 1;
+  public override renderId: number = GAMECONFIG.renderingOrder.portal;
 
   private readonly _onEnter: (player: CharacterBase) => void;
   private readonly _MCollisionPlayer: MCollisionPlayer;

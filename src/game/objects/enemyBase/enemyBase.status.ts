@@ -1,7 +1,7 @@
 import type { EnemyBase } from './enemyBase';
 
-import type { Module } from '@core/common/Module';
-import { MStatus } from '@core/modules/status/MStatus';
+import type { Module } from '@modules/Module';
+import { MStatus } from '@modules/status/MStatus';
 import type { HSLA } from '@utils/hsla';
 
 // Статусы для врагов.

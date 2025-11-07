@@ -1,11 +1,11 @@
 import { GameCollision } from '@core/collision/GameCollision';
+import { repositionObjectOnCollisionWithObject } from '@core/collision/utils/repositionObjectOnCollisionWithObject';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
-import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import { gameObjectManager } from '@core/global';
 import type { SaveZone } from '@game/objects/saveZone/SaveZone';
 import type { Collision } from '@shared-types/Collision';
-import { repositionObjectOnCollisionWithObject } from '@utils/collision/repositionObjectOnCollisionWithObject';
+import type { Module } from 'modules/Module';
 
 type CollisionType = 'applyCollision' | 'onlyAfterCollision';
 
@@ -59,7 +59,10 @@ export class MCollisionSaveZone implements Module {
     doesCollide: boolean;
     collisions: Collision;
   } {
-    const { doesCollide, collision: collisions } = GameCollision.checkCollisions(this._object, saveZone);
+    const { doesCollide, collision: collisions } = GameCollision.checkCollisions(
+      this._object,
+      saveZone,
+    );
 
     if (this._collisionType === 'applyCollision' && doesCollide === true) {
       repositionObjectOnCollisionWithObject(this._object, saveZone, collisions);

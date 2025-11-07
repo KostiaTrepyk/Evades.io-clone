@@ -1,10 +1,10 @@
 import { ENEMYCONFIG } from '@config/enemies/enemy.config';
 import { ENEMYSHOOTERCONFIG } from '@config/enemies/enemyShooter.config';
-import { MCollisionPlayer } from '@core/modules/collision/MCollisionPlayer';
-import { MCollisionSaveZone } from '@core/modules/collision/MCollisionSaveZone';
-import { MCollisionWalls } from '@core/modules/collision/MCollisionWalls';
 import type { CharacterBase } from '@game/objects/characterBase/characterBase';
 import { Projectile } from '@game/objects/projectile/projectile';
+import { MCollisionPlayer } from '@modules/collision/MCollisionPlayer';
+import { MCollisionSaveZone } from '@modules/collision/MCollisionSaveZone';
+import { MCollisionWalls } from '@modules/collision/MCollisionWalls';
 import type { Position } from '@shared-types/Position';
 import type { Velocity } from '@shared-types/Velocity';
 import { drawCircle } from '@utils/canvas/drawCircle';

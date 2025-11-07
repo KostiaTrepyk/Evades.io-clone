@@ -4,8 +4,8 @@ import { ENEMYCONFIG } from '@config/enemies/enemy.config';
 import { GAMECONFIG } from '@config/game.config';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { time } from '@core/global';
-import type { AMEnemyMovement } from '@core/modules/movement/enemy/MEnemyMovement.type';
-import { MEnemyMovementDefault } from '@core/modules/movement/enemy/MEnemyMovementDefault';
+import type { AMEnemyMovement } from '@modules/movement/enemy/MEnemyMovement.type';
+import { MEnemyMovementDefault } from '@modules/movement/enemy/MEnemyMovementDefault';
 import type { Position } from '@shared-types/Position';
 import type { Velocity } from '@shared-types/Velocity';
 import { drawCircle } from '@utils/canvas/drawCircle';
@@ -19,7 +19,7 @@ export interface EnemyParams {
 }
 
 export class EnemyBase extends CircleObject {
-  public override renderId: number = 5;
+  public override renderId: number = GAMECONFIG.renderingOrder.enemy;
 
   public readonly defaultColor: HSLA;
   public currentColor: HSLA;

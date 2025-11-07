@@ -6,8 +6,8 @@ import { Renderer } from './Renderer';
 import { Time } from './Time';
 import { UserInput } from './UserInput';
 
+import { UIRenderer } from '@core/ui/UIRenderer';
 import { Game } from '@game/Game';
-import { UIRenderer } from '@game/ui/UIRenderer';
 
 const time = new Time();
 const userInput = new UserInput();

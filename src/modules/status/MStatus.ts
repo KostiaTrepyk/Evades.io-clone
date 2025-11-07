@@ -1,5 +1,5 @@
-import type { Module } from '@core/common/Module';
 import { time } from '@core/global';
+import type { Module } from 'modules/Module';
 
 export interface MStatusParams<StatusName extends string> {
   availableStatusNames: readonly StatusName[];

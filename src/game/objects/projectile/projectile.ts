@@ -14,7 +14,7 @@ export interface ProjectileParams {
 }
 
 export class Projectile extends CircleObject {
-  public override renderId: number = 6;
+  public override renderId: number = GAMECONFIG.renderingOrder.projectile;
 
   public velocity: Velocity;
   private readonly _color: HSLA;

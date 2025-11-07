@@ -1,9 +1,9 @@
 import { GameCollision } from '@core/collision/GameCollision';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
-import type { Module } from '@core/common/Module';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import { gameObjectManager } from '@core/global';
 import type { EnemyBase } from '@game/objects/enemyBase/enemyBase';
+import type { Module } from 'modules/Module';
 
 interface MCollisionEnemyParams {
   object: MCollisionEnemy['_object'];

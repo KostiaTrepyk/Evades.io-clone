@@ -3,10 +3,10 @@ import type { PointOrb } from '../pointOrb/PointOrb';
 
 import type { CharacterBase } from './characterBase';
 
-import type { Module } from '@core/common/Module';
-import { MCollisionEnemy } from '@core/modules/collision/MCollisionEnemy';
-import { MCollisionPointOrb } from '@core/modules/collision/MCollisionPointOrb';
-import { MCollisionWalls } from '@core/modules/collision/MCollisionWalls';
+import type { Module } from '@modules/Module';
+import { MCollisionEnemy } from '@modules/collision/MCollisionEnemy';
+import { MCollisionPointOrb } from '@modules/collision/MCollisionPointOrb';
+import { MCollisionWalls } from '@modules/collision/MCollisionWalls';
 
 export class CharacterCollision implements Module {
   private readonly _player: CharacterBase;

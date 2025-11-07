@@ -1,4 +1,4 @@
-import { doItemsCollide } from '@core/collision/doItemsCollide';
+import { doItemsCollide } from '@core/collision/utils/doItemsCollide';
 import type { CircleObject } from '@core/common/CircleObject/CircleObject';
 import type { RectangleObject } from '@core/common/RectangleObject/RectangleObject';
 import type { Collision } from '@shared-types/Collision';

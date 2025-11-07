@@ -1,8 +1,8 @@
 import { MORPHCONFIG } from '@config/characters/morph.config';
-import { MCollisionEnemy } from '@core/modules/collision/MCollisionEnemy';
-import { MCollisionWalls } from '@core/modules/collision/MCollisionWalls';
 import type { EnemyBase } from '@game/objects/enemyBase/enemyBase';
 import { Projectile } from '@game/objects/projectile/projectile';
+import { MCollisionEnemy } from '@modules/collision/MCollisionEnemy';
+import { MCollisionWalls } from '@modules/collision/MCollisionWalls';
 import type { Position } from '@shared-types/Position';
 import type { Velocity } from '@shared-types/Velocity';
 import type { HSLA } from '@utils/hsla';
