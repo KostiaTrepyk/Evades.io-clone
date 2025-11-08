@@ -1,7 +1,7 @@
 import type { CharacterBase } from '../characterBase/characterBase';
 import { EnemyBase } from '../enemyBase/enemyBase';
 
-import { ENERGYBURNERENEMYCONFIG } from '@config/enemies/energyBurnerEnemy.config';
+import { ENERGYBURNERENEMYCONFIG } from '@config/objects/enemies/energyBurnerEnemy.config';
 import { GameCollision } from '@core/collision/GameCollision';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { gameObjectManager } from '@core/global';

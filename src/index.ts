@@ -1,10 +1,10 @@
 import { gameMap } from '@config/GameMap/GameMapConfiguration';
-import { game } from '@core/global';
+import { game, gameMenu } from '@core/global';
 
 window.onload = main;
 
 function main() {
-  game.init();
+  gameMenu.showChooseHeroMenu();
 
   // DELETE ME Чисто для тестов. Фаст тревел по картах.
   window.addEventListener('keydown', ({ code }) => {

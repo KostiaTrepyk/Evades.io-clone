@@ -4,12 +4,11 @@ import { CharacterLevels } from './character.levels';
 import { RenderCharacterModel } from './character.model';
 import { CharacterMovement } from './character.movement';
 
-import { CHARACTERCONFIG } from '@config/characters/character.config';
 import { GAMECONFIG } from '@config/game.config';
+import { CHARACTERCONFIG } from '@config/objects/character.config';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { time } from '@core/global';
 import type { ISkill } from '@game/skills/ISkill';
-import type { Position } from '@shared-types/Position';
 import type { HSLA } from '@utils/hsla';
 
 export abstract class CharacterBase extends CircleObject {
@@ -26,8 +25,9 @@ export abstract class CharacterBase extends CircleObject {
   private _timeToDeath: number | undefined;
   public color: { current: HSLA; readonly default: HSLA };
 
-  constructor(startPosition: Position, radius: number, color: HSLA) {
-    super(startPosition, radius);
+  constructor(radius: number, color: HSLA) {
+    // Start position will be set by LevelGenerator
+    super({ x: 0, y: 0 }, radius);
 
     this._characterMovement = new CharacterMovement(this);
     this.level = new CharacterLevels();

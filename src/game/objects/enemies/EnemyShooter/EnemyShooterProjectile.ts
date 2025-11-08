@@ -1,5 +1,5 @@
-import { ENEMYCONFIG } from '@config/enemies/enemy.config';
-import { ENEMYSHOOTERCONFIG } from '@config/enemies/enemyShooter.config';
+import { ENEMYSHOOTERCONFIG } from '@config/objects/enemies/enemyShooter.config';
+import { ENEMYCONFIG } from '@config/objects/enemy.config';
 import type { CharacterBase } from '@game/objects/characterBase/characterBase';
 import { Projectile } from '@game/objects/projectile/projectile';
 import { MCollisionPlayer } from '@modules/collision/MCollisionPlayer';

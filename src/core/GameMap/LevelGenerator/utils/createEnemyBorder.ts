@@ -1,6 +1,6 @@
 import type { GenerateLevelConfiguration } from '../LevelGenerator';
 
-import { ENEMYBORDERCONFIG } from '@config/enemies/enemyBorder.config';
+import { ENEMYBORDERCONFIG } from '@config/objects/enemies/enemyBorder.config';
 import { renderer } from '@core/global';
 import { EnemyBorder } from '@game/objects/enemies/EnemyBorder';
 

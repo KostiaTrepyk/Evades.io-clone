@@ -1,11 +1,10 @@
 import { MorphFirstSkillProjectile } from './MorphFirstSkillProjectile';
 import { MorphSecondSkillProjectile } from './MorphSecondSkillProjectile';
 
-import { MORPHCONFIG } from '@config/characters/morph.config';
+import { MORPHCONFIG } from '@config/objects/characters/morph.config';
 import { CharacterBase } from '@game/objects/characterBase/characterBase';
 import { CommonSkill } from '@game/skills/commonSkill';
 import { MMoveDirection } from '@modules/movement/player/MMoveDirection';
-import type { Position } from '@shared-types/Position';
 import type { Velocity } from '@shared-types/Velocity';
 import type { MoveDirection } from '@shared-types/moveDirection';
 
@@ -19,8 +18,8 @@ export class Morph extends CharacterBase {
 
   private readonly MMoveDirection: MMoveDirection;
 
-  constructor(startPosition: Position) {
-    super(startPosition, MORPHCONFIG.radius, MORPHCONFIG.color.default.clone());
+  constructor() {
+    super(MORPHCONFIG.radius, MORPHCONFIG.color.default.clone());
 
     this.MMoveDirection = new MMoveDirection();
 

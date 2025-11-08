@@ -1,4 +1,4 @@
-import { MORPHCONFIG } from '@config/characters/morph.config';
+import { MORPHCONFIG } from '@config/objects/characters/morph.config';
 import type { EnemyBase } from '@game/objects/enemyBase/enemyBase';
 import { Projectile } from '@game/objects/projectile/projectile';
 import { MCollisionEnemy } from '@modules/collision/MCollisionEnemy';

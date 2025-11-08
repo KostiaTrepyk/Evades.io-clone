@@ -1,7 +1,7 @@
 import { EnemyBaseStatus } from './enemyBase.status';
 
-import { ENEMYCONFIG } from '@config/enemies/enemy.config';
 import { GAMECONFIG } from '@config/game.config';
+import { ENEMYCONFIG } from '@config/objects/enemy.config';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { time } from '@core/global';
 import type { AMEnemyMovement } from '@modules/movement/enemy/MEnemyMovement.type';

@@ -1,7 +1,7 @@
 import type { CharacterBase } from '../characterBase/characterBase';
 import { EnemyBase } from '../enemyBase/enemyBase';
 
-import { ENEMYSPEEDREDUCTIONCONFIG } from '@config/enemies/enemySpeedReductionconfig';
+import { ENEMYSPEEDREDUCTIONCONFIG } from '@config/objects/enemies/enemySpeedReductionconfig';
 import { GameCollision } from '@core/collision/GameCollision';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { gameObjectManager } from '@core/global';

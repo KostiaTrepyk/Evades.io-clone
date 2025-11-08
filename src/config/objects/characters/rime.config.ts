@@ -1,6 +1,7 @@
 import { HSLA } from '@utils/hsla';
 
 export const RIMECONFIG = {
+  title: 'Rime',
   color: {
     default: new HSLA(230, 85, 50, 1),
   },

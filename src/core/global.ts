@@ -6,6 +6,7 @@ import { Renderer } from './Renderer';
 import { Time } from './Time';
 import { UserInput } from './UserInput';
 
+import { GameMenu } from '@core/GameMenu/GameMenu';
 import { UIRenderer } from '@core/ui/UIRenderer';
 import { Game } from '@game/Game';
 
@@ -19,5 +20,16 @@ const gameLoop = new GameLoop();
 const levelGenerator = new LevelGenerator(gameObjectManager, renderer);
 
 const game = new Game();
+const gameMenu = new GameMenu();
 
-export { gameLoop, userInput, renderer, gameObjectManager, uiRenderer, time, game, levelGenerator };
+export {
+  gameLoop,
+  userInput,
+  renderer,
+  gameObjectManager,
+  uiRenderer,
+  time,
+  game,
+  levelGenerator,
+  gameMenu,
+};

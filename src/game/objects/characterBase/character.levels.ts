@@ -1,4 +1,4 @@
-import { CHARACTERCONFIG } from '@config/characters/character.config';
+import { CHARACTERCONFIG } from '@config/objects/character.config';
 
 export type Upgrade = {
   current: number;

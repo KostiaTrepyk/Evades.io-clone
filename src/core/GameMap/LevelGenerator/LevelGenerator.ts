@@ -17,11 +17,11 @@ import { createPointOrb } from './utils/createPointOrb';
 import { createPortal } from './utils/createPortal';
 
 import { gameMap } from '@config/GameMap/GameMapConfiguration';
-import { ENEMYSHOOTERCONFIG } from '@config/enemies/enemyShooter.config';
-import { ENEMYSPEEDREDUCTIONCONFIG } from '@config/enemies/enemySpeedReductionconfig';
-import { ENERGYBURNERENEMYCONFIG } from '@config/enemies/energyBurnerEnemy.config';
 import { GAMECONFIG } from '@config/game.config';
-import { POINTORBCONFIG } from '@config/pointOrb.config';
+import { ENEMYSHOOTERCONFIG } from '@config/objects/enemies/enemyShooter.config';
+import { ENEMYSPEEDREDUCTIONCONFIG } from '@config/objects/enemies/enemySpeedReductionconfig';
+import { ENERGYBURNERENEMYCONFIG } from '@config/objects/enemies/energyBurnerEnemy.config';
+import { POINTORBCONFIG } from '@config/objects/pointOrb.config';
 import type { GameObjectManager } from '@core/GameObjectManager';
 import type { Renderer } from '@core/Renderer';
 import type { RectangleSize } from '@core/common/RectangleObject/RectangleObject';

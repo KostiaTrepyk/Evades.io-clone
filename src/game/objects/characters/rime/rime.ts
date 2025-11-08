@@ -1,11 +1,10 @@
-import { RIMECONFIG } from '@config/characters/rime.config';
+import { RIMECONFIG } from '@config/objects/characters/rime.config';
 import { GameCollision } from '@core/collision/GameCollision';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import { gameObjectManager } from '@core/global';
 import { CharacterBase } from '@game/objects/characterBase/characterBase';
 import { CommonSkill } from '@game/skills/commonSkill';
 import { MMoveDirection } from '@modules/movement/player/MMoveDirection';
-import type { Position } from '@shared-types/Position';
 import { drawCircle } from '@utils/canvas/drawCircle';
 
 const freezeStatusId = Symbol('Rime stun');
@@ -17,8 +16,8 @@ export class Rime extends CharacterBase {
 
   private readonly MMoveDirection: MMoveDirection;
 
-  constructor(startPosition: Position) {
-    super(startPosition, RIMECONFIG.radius, RIMECONFIG.color.default.clone());
+  constructor() {
+    super(RIMECONFIG.radius, RIMECONFIG.color.default.clone());
 
     this.MMoveDirection = new MMoveDirection();
     this.secondSkillRangeVisibility = false;

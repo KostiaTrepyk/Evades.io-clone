@@ -1,7 +1,6 @@
-import { MAGMAXCONFIG } from '@config/characters/magmax.config';
+import { MAGMAXCONFIG } from '@config/objects/characters/magmax.config';
 import { CharacterBase } from '@game/objects/characterBase/characterBase';
 import { ToggleSkill } from '@game/skills/toggleSkill';
-import type { Position } from '@shared-types/Position';
 
 const magmaxFirstSkillId = Symbol('Magmax speed boost');
 const magmaxSecondSkillId = Symbol('Magmax immortality');
@@ -21,8 +20,8 @@ export class Magmax extends CharacterBase {
     },
   };
 
-  constructor(startPosition: Position) {
-    super(startPosition, MAGMAXCONFIG.radius, MAGMAXCONFIG.color.default);
+  constructor() {
+    super(MAGMAXCONFIG.radius, MAGMAXCONFIG.color.default);
 
     this.firstSkill = new ToggleSkill(this, {
       keyCode: 'KeyJ',

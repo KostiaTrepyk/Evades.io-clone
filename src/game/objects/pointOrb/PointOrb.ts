@@ -1,5 +1,5 @@
 import { GAMECONFIG } from '@config/game.config';
-import { POINTORBCONFIG } from '@config/pointOrb.config';
+import { POINTORBCONFIG } from '@config/objects/pointOrb.config';
 import { CircleObject } from '@core/common/CircleObject/CircleObject';
 import type { Position } from '@shared-types/Position';
 import { drawCircle } from '@utils/canvas/drawCircle';

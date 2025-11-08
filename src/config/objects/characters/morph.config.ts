@@ -1,6 +1,7 @@
 import { HSLA } from '@utils/hsla';
 
 export const MORPHCONFIG = {
+  title: 'Morph',
   color: {
     default: new HSLA(110, 75, 50, 1),
   },

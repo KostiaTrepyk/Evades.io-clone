@@ -1,6 +1,6 @@
 import { EnemyShooterProjectile } from './EnemyShooterProjectile';
 
-import { ENEMYSHOOTERCONFIG } from '@config/enemies/enemyShooter.config';
+import { ENEMYSHOOTERCONFIG } from '@config/objects/enemies/enemyShooter.config';
 import { time, gameObjectManager } from '@core/global';
 import { EnemyBase } from '@game/objects/enemyBase/enemyBase';
 import type { Position } from '@shared-types/Position';

@@ -1,5 +1,5 @@
 import { GAMECONFIG } from '@config/game.config';
-import { SAVEZONECONFIG } from '@config/saveZone.config';
+import { SAVEZONECONFIG } from '@config/objects/saveZone.config';
 import { RectangleObject, type RectangleSize } from '@core/common/RectangleObject/RectangleObject';
 import type { Position } from '@shared-types/Position';
 import { drawRectangle } from '@utils/canvas/drawRectangle';

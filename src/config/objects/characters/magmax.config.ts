@@ -1,6 +1,7 @@
 import { HSLA } from '@utils/hsla';
 
 export const MAGMAXCONFIG = {
+  title: 'Magmax',
   color: {
     default: new HSLA(0, 85, 50, 1),
     firstSpellActive: new HSLA(5, 85, 60, 1),

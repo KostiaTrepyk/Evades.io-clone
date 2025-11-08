@@ -1,6 +1,6 @@
 import type { CharacterBase } from './characterBase';
 
-import { CHARACTERCONFIG } from '@config/characters/character.config';
+import { CHARACTERCONFIG } from '@config/objects/character.config';
 import { UICONFIG } from '@config/ui.config';
 import type { Position } from '@shared-types/Position';
 import { drawCircle } from '@utils/canvas/drawCircle';

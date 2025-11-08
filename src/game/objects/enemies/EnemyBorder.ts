@@ -1,6 +1,6 @@
 import { EnemyBase } from '../enemyBase/enemyBase';
 
-import { ENEMYBORDERCONFIG } from '@config/enemies/enemyBorder.config';
+import { ENEMYBORDERCONFIG } from '@config/objects/enemies/enemyBorder.config';
 import { MEnemyMovementBorder } from '@modules/movement/enemy/MEnemyMovementBorder';
 import type { Position } from '@shared-types/Position';
 import type { Velocity } from '@shared-types/Velocity';

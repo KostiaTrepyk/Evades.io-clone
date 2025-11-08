@@ -1,7 +1,7 @@
 import type { CharacterLevels } from './character.levels';
 
-import { CHARACTERCONFIG } from '@config/characters/character.config';
 import { GAMECONFIG } from '@config/game.config';
+import { CHARACTERCONFIG } from '@config/objects/character.config';
 import { time } from '@core/global';
 import type { Module } from '@modules/Module';
 import { MStatus } from '@modules/status/MStatus';
