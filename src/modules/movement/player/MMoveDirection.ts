@@ -16,7 +16,7 @@ import type { Module } from 'modules/Module';
  * @example
  * ```typescript
  * const moveDir = new MMoveDirection();
- * moveDir.onUpdate();
+ * moveDir.beforeUpdate();
  * const direction = moveDir.moveDirection; // { x: number, y: number }
  * ```
  */

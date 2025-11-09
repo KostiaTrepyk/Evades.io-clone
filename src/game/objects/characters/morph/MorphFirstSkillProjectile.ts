@@ -10,7 +10,7 @@ import type { HSLA } from '@utils/hsla';
 export interface MorphFirstSkillProjectileParams {
   statusId: Symbol;
   startPosition: Position;
-  size: number;
+  radius: number;
   velocity: Velocity;
   color: HSLA;
 }
@@ -22,8 +22,8 @@ export class MorphFirstSkillProjectile extends Projectile {
   private readonly MCollisionWalls: MCollisionWalls;
 
   constructor(params: MorphFirstSkillProjectileParams) {
-    const { startPosition, size, velocity, color, statusId } = params;
-    super({ startPosition, radius: size, velocity, color });
+    const { startPosition, radius, velocity, color, statusId } = params;
+    super({ startPosition, radius, velocity, color });
 
     this.statusId = statusId;
 

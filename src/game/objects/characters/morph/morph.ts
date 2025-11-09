@@ -5,23 +5,22 @@ import { MORPHCONFIG } from '@config/objects/characters/morph.config';
 import { CharacterBase } from '@game/objects/characterBase/characterBase';
 import { CommonSkill } from '@game/skills/commonSkill';
 import { MMoveDirection } from '@modules/movement/player/MMoveDirection';
-import type { Velocity } from '@shared-types/Velocity';
-import type { MoveDirection } from '@shared-types/moveDirection';
+import { determineProjectileTrajectory } from '@utils/determineProjectileTrajectory';
 
 const firstSkillId = Symbol('Morph change move direction');
 const secondSkillSpeedId = Symbol('Morph size reduction');
 const secondSkillSizeId = Symbol('Morph speed reduction');
 
 export class Morph extends CharacterBase {
-  override firstSkill: CommonSkill;
-  override secondSkill: CommonSkill;
+  public override firstSkill: CommonSkill;
+  public override secondSkill: CommonSkill;
 
-  private readonly MMoveDirection: MMoveDirection;
+  private readonly _MMoveDirection: MMoveDirection;
 
   constructor() {
     super(MORPHCONFIG.radius, MORPHCONFIG.color.default.clone());
 
-    this.MMoveDirection = new MMoveDirection();
+    this._MMoveDirection = new MMoveDirection();
 
     this.firstSkill = new CommonSkill(this, {
       keyCode: 'KeyJ',
@@ -52,7 +51,7 @@ export class Morph extends CharacterBase {
 
   public override beforeUpdate(): void {
     super.beforeUpdate();
-    this.MMoveDirection.beforeUpdate();
+    this._MMoveDirection.beforeUpdate();
   }
 
   private firstSkillHandler(): void {
@@ -77,8 +76,8 @@ export class Morph extends CharacterBase {
     x: number;
     y: number;
   }): MorphFirstSkillProjectile {
-    const velocity = this.computeProjectileVelocity(
-      this.MMoveDirection.moveDirection,
+    const velocity = determineProjectileTrajectory(
+      this._MMoveDirection.moveDirection,
       velocityRatio,
       MORPHCONFIG.firstSpell.projectileSpeed,
     );
@@ -87,7 +86,7 @@ export class Morph extends CharacterBase {
       statusId: firstSkillId,
       startPosition: { x: this.position.x, y: this.position.y },
       velocity: { x: velocity.x, y: velocity.y },
-      size: MORPHCONFIG.firstSpell.projectileRadius,
+      radius: MORPHCONFIG.firstSpell.projectileRadius,
       color: MORPHCONFIG.firstSpell.projectileColor,
     });
     return projectile;
@@ -97,8 +96,8 @@ export class Morph extends CharacterBase {
     x: number;
     y: number;
   }): MorphSecondSkillProjectile {
-    const velocity = this.computeProjectileVelocity(
-      this.MMoveDirection.moveDirection,
+    const velocity = determineProjectileTrajectory(
+      this._MMoveDirection.moveDirection,
       velocityRatio,
       MORPHCONFIG.secondSpell.projectileSpeed,
     );
@@ -106,41 +105,10 @@ export class Morph extends CharacterBase {
     const projectile = new MorphSecondSkillProjectile({
       startPosition: { x: this.position.x, y: this.position.y },
       velocity: { x: velocity.x, y: velocity.y },
-      size: MORPHCONFIG.secondSpell.projectileRadius,
+      radius: MORPHCONFIG.secondSpell.projectileRadius,
       color: MORPHCONFIG.secondSpell.projectileColor,
       statusIds: { speed: secondSkillSpeedId, size: secondSkillSizeId },
     });
     return projectile;
-  }
-
-  /* Это получается что мы берём два вектора: вектор направления игрока и его перпендикуляр вправо.
-      1)  Вектор направления игрока умножаем на ratio.x   <- это движение вперёд
-      2)  Перпендикуляр умножаем на ratio.y   <- это движение вправо
-      3)  Складываем оба вектора и получаем x, y но полученный вектор не нормализован.
-      4)  Считаем длину вектора.
-      5)  Делим x, y на длину вектора (длина вектора должна быть равна 1 что-бы не искажать скорость. 
-          Если будет равна например 2, тогда скорость будет в два раза выше).
-      
-      Ниже написано сокращенно.
-  */
-  /** Compute projectile velocity in world coords from local ratio */
-  private computeProjectileVelocity(
-    moveDirection: MoveDirection,
-    ratio: { x: number; y: number },
-    speed: number,
-  ): Velocity {
-    // right perpendicular
-    const perp = { x: -moveDirection.y, y: moveDirection.x };
-
-    // local -> world combination
-    const worldX = moveDirection.x * ratio.x + perp.x * ratio.y;
-    const worldY = moveDirection.y * ratio.x + perp.y * ratio.y;
-
-    // normalize world direction to unit vector.
-    const worldLen = Math.hypot(worldX, worldY) || 1;
-    const nx = worldX / worldLen;
-    const ny = worldY / worldLen;
-
-    return { x: nx * speed, y: ny * speed };
   }
 }

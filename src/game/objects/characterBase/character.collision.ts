@@ -44,6 +44,6 @@ export class CharacterCollision implements Module {
 
   private onCollisionPointOrb(pointOrb: PointOrb): void {
     pointOrb.delete();
-    this._player.level.addPointOrb();
+    this._player.level.eatPointOrb();
   }
 }

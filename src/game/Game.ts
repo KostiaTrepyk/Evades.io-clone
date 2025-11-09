@@ -1,9 +1,11 @@
 import { Magmax } from './objects/characters/magmax/magmax';
+import { Necro } from './objects/characters/necro/necro';
 import { Rime } from './objects/characters/rime/rime';
 
 import { gameMap } from '@config/GameMap/GameMapConfiguration';
 import { MAGMAXCONFIG } from '@config/objects/characters/magmax.config';
 import { MORPHCONFIG } from '@config/objects/characters/morph.config';
+import { NECROCONFIG } from '@config/objects/characters/necro.config';
 import { RIMECONFIG } from '@config/objects/characters/rime.config';
 import { renderer, userInput, gameLoop } from '@core/global';
 import type { CharacterBase } from '@game/objects/characterBase/characterBase';
@@ -42,6 +44,7 @@ export class Game {
       { title: MAGMAXCONFIG.title, color: MAGMAXCONFIG.color.default, class: Magmax },
       { title: RIMECONFIG.title, color: RIMECONFIG.color.default, class: Rime },
       { title: MORPHCONFIG.title, color: MORPHCONFIG.color.default, class: Morph },
+      { title: NECROCONFIG.title, color: NECROCONFIG.color.default, class: Necro },
     ];
   }
 }

@@ -37,7 +37,7 @@ export const MORPHCONFIG = {
       ],
     ] as { x: number; y: number }[][],
     projectileSpeed: 28,
-    projectileRadius: 25,
+    projectileRadius: 22,
     projectileColor: new HSLA(110, 75, 50, 1),
   },
 
@@ -71,7 +71,7 @@ export const MORPHCONFIG = {
       ],
     ] as { x: number; y: number }[][],
     projectileSpeed: 28,
-    projectileRadius: 25,
+    projectileRadius: 22,
     projectileColor: new HSLA(200, 75, 50, 1),
   },
 } as const;

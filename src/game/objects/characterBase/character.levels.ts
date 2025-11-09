@@ -8,6 +8,7 @@ export type Upgrade = {
 export class CharacterLevels {
   private _currentLevel: number;
   private _atePointOrbs: number;
+  private _pointOrbsToNextLevel: number;
   private _upgradePoints: number;
   private readonly _upgrades: {
     speed: Upgrade;
@@ -22,6 +23,8 @@ export class CharacterLevels {
 
     this._currentLevel = 1;
     this._atePointOrbs = 0;
+    // FIX ME Hard code
+    this._pointOrbsToNextLevel = 4;
     this._upgradePoints = 100;
     this._upgrades = {
       speed: { current: 0, max: maxUpgrades.speed },
@@ -36,17 +39,17 @@ export class CharacterLevels {
     window.addEventListener('keydown', this.handlerKeydown.bind(this), false);
   }
 
-  public addPointOrb() {
+  public eatPointOrb() {
     this._atePointOrbs++;
-    const nextLVLReq = this.levelUpReq;
+    this._pointOrbsToNextLevel--;
 
-    if (this._atePointOrbs >= nextLVLReq) {
+    if (this._pointOrbsToNextLevel <= 0) {
       this.levelUp();
     }
   }
 
   private levelUp() {
-    this._atePointOrbs -= this.levelUpReq;
+    this._pointOrbsToNextLevel = this.levelUpReq;
     this._currentLevel++;
     this._upgradePoints += 1;
   }
@@ -84,7 +87,8 @@ export class CharacterLevels {
     }
   }
 
-  get levelUpReq(): number {
+  public get levelUpReq(): number {
+    // FIX ME Hard code
     if (this._currentLevel < 3) return 4;
     if (this._currentLevel < 5) return 6;
     if (this._currentLevel < 10) return 10;
@@ -93,19 +97,24 @@ export class CharacterLevels {
     return 22;
   }
 
-  get upgradePoints(): number {
+  public get upgradePoints(): number {
     return this._upgradePoints;
   }
 
-  get currentLevel(): number {
+  public get currentLevel(): number {
     return this._currentLevel;
   }
 
-  get atePointOrbs(): number {
+  public get atePointOrbs(): number {
     return this._atePointOrbs;
   }
 
   public get upgrades(): CharacterLevels['_upgrades'] {
     return structuredClone(this._upgrades);
+  }
+
+  /** Get the percentage of the next level progress */
+  public get nextLevelPercentage(): number {
+    return (this.levelUpReq - this._pointOrbsToNextLevel) / this.levelUpReq;
   }
 }

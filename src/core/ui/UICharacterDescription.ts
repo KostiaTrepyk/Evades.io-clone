@@ -205,8 +205,7 @@ export class UICharacterDescription {
       player,
       position: barPosition,
       barWidth,
-      value: player.level.atePointOrbs,
-      maxValue: player.level.levelUpReq,
+      percentage: player.level.nextLevelPercentage,
     });
 
     // Draw Sections
@@ -217,13 +216,12 @@ export class UICharacterDescription {
     ctx: CanvasRenderingContext2D,
     params: {
       position: Position;
-      value: number;
-      maxValue: number;
+      percentage: number;
       player: CharacterBase;
       barWidth: number;
     },
   ): void {
-    const { player, barWidth, position, value, maxValue } = params;
+    const { player, barWidth, position, percentage } = params;
 
     ctx.beginPath();
     ctx.lineWidth = 1;
@@ -232,7 +230,7 @@ export class UICharacterDescription {
     ctx.fillRect(
       position.x,
       position.y - this._expBarHeight,
-      barWidth * (value / maxValue),
+      barWidth * percentage,
       this._expBarHeight,
     );
     ctx.strokeRect(
